@@ -62,7 +62,6 @@ class Router
 
                     $controllerValue['var'] = $listVars;
                 }
-
             }//end if
         }//end foreach
 

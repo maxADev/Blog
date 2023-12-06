@@ -5,6 +5,7 @@ namespace Entity;
 // User Entity.
 class UserEntity
 {
+
     /**
      *
      * @var userId user id
@@ -54,7 +55,7 @@ class UserEntity
      * @param $arrayValue value
      * @return void
      */
-    function __construct($arrayValue=[])
+    public function __construct($arrayValue=[])
     {
         $this->hydrate($arrayValue);
 

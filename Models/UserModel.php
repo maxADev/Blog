@@ -8,6 +8,7 @@ use \PDO;
 class UserModel extends Model
 {
 
+
     /**
      * Get database connection
      *
@@ -16,6 +17,7 @@ class UserModel extends Model
     public function __construct()
     {
         $this->getConnection();
+
     }//end __construct()
 
 
@@ -44,6 +46,7 @@ class UserModel extends Model
                 $return = true;
             }
         }
+
         return $return;
 
     }//end createUser()
@@ -75,4 +78,4 @@ class UserModel extends Model
     }//end userExist()
 
 
-}
+}//end class
