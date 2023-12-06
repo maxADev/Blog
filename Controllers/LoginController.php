@@ -4,11 +4,26 @@ namespace Controllers;
 
 use Entity\UserEntity;
 use Models\UserModel;
+use App\Superglobal;
 
 // Login Controller.
 class LoginController
 {
 
+    private $userModel;
+    private $superglobals;
+
+
+    /**
+     * Construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->userModel = new UserModel;
+        $this->superglobals = new Superglobal;
+    }//end __construct()
 
     /**
      * Registration
@@ -17,17 +32,20 @@ class LoginController
      */
     public function registration()
     {
-        $utilisateurModel = new UserModel;
+        $error_log = '';
+        
+        if ($this->superglobals->postExist() === true) {
 
-        if (isset($_POST) === true && empty($_POST) === false) {
             $user = [];
             $errors = [];
 
-            foreach ($_POST as $key => $value) {
+            $postValue = $this->superglobals->getPost();
+
+            foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = $key;
                 } else {
-                    $user[$key] = $_POST[$key];
+                    $user[$key] = $this->superglobals->getPostData($key);
                 }
             }
 
@@ -36,19 +54,18 @@ class LoginController
 
                 $userValues = new UserEntity($user);
 
-                if ($utilisateurModel->createUser($userValues) === true) {
+                if ($this->userModel->createUser($userValues) === true) {
                     header('Location: Connexion-Redirect-true');
                 } else {
-                   $error_log = "Error create user";
+                    $error_log = "Error create user";
                 }
-            } else {
-                var_dump($errors);
             }
         }//end if
 
         $view = [];
         $view['folder'] = 'connexion';
         $view['file'] = 'inscription.twig';
+        $view['var'] = $error_log;
         return $view;
 
     }//end registration()
@@ -62,8 +79,14 @@ class LoginController
     public function login()
     {
         $messageValue = '';
+        $getValue = '';
 
-        if (isset($_GET['redirect']) === true && $_GET['redirect'] === 'true') {
+        if($this->superglobals->getExist())
+        {
+            $getValue = $this->superglobals->getGetData('redirect');
+        }
+
+        if ($getValue === 'true') {
             $messageValue = "Votre compte à bien été créé, vous pouvez vous connecter";
         }
 
