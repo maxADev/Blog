@@ -26,8 +26,7 @@ class LoginController
             foreach ($_POST as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = $key;
-                }
-                else
+                } else
                 {
                     $user[$key] = $_POST[$key];
                 }
