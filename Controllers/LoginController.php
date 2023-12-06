@@ -9,8 +9,16 @@ use App\Superglobal;
 // Login Controller.
 class LoginController
 {
-
+    /**
+     *
+     * @var $userModel for UserModel class
+     */
     private $userModel;
+
+    /**
+     *
+     * @var $superglobals for Superglobal class
+     */
     private $superglobals;
 
 
@@ -23,7 +31,9 @@ class LoginController
     {
         $this->userModel = new UserModel;
         $this->superglobals = new Superglobal;
+
     }//end __construct()
+
 
     /**
      * Registration
@@ -33,9 +43,8 @@ class LoginController
     public function registration()
     {
         $error_log = '';
-        
-        if ($this->superglobals->postExist() === true) {
 
+        if ($this->superglobals->postExist() === true) {
             $user = [];
             $errors = [];
 
@@ -81,8 +90,7 @@ class LoginController
         $messageValue = '';
         $getValue = '';
 
-        if($this->superglobals->getExist())
-        {
+        if ($this->superglobals->getExist() === true) {
             $getValue = $this->superglobals->getGetData('redirect');
         }
 

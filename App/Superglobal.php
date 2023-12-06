@@ -11,13 +11,13 @@ class Superglobal
      *
      * @var $_POST $_POST value
      */
-    private $_POST;
+    private $POST;
 
     /**
      *
      * @var $_GET $_GET value
      */
-    private $_GET;
+    private $GET;
 
 
     /**
@@ -28,18 +28,25 @@ class Superglobal
     public function __construct()
     {
         $this->createSuperglobal();
+
     }//end __construct()
 
 
     /**
      * Create a superglobal
-     * 
+     *
      * @return mixed
      */
     private function createSuperglobal()
     {
-        $this->_POST = (isset($_POST)) ? $_POST : null;
-        $this->_GET = (isset($_GET)) ? $_GET : null;
+        if (isset($_POST) === true) {
+            $this->POST = $_POST;
+        }
+
+        if (isset($_GET) === true) {
+            $this->GET = $_GET;
+        }
+
     }//end createSuperglobal()
 
 
@@ -50,7 +57,10 @@ class Superglobal
      */
     public function postExist()
     {
-        return !empty($this->_POST);
+        if (empty($this->POST) === false) {
+            return true;
+        }
+
     }//end postExist()
 
 
@@ -61,7 +71,9 @@ class Superglobal
      */
     public function getPost()
     {
-        return !empty($this->_POST) ? $this->_POST : null;
+        if (empty($this->POST) === false) {
+            return $this->POST;
+        }
 
     }//end getPost()
 
@@ -74,7 +86,10 @@ class Superglobal
      */
     public function getPostData($key)
     {
-        return isset($this->_POST[$key]) ? $this->_POST[$key] : null;
+        if (isset($this->POST[$key]) === true)
+        {
+            return $this->POST[$key];
+        }
 
     }//end postData()
     
@@ -85,7 +100,10 @@ class Superglobal
      */
     public function getExist()
     {
-        return !empty($this->_GET);
+        if (empty($this->GET) === false) {
+            return true;
+        }
+
     }//end getExist()
 
 
@@ -96,7 +114,9 @@ class Superglobal
      */
     public function getGet()
     {
-        return !empty($this->_GET) ? $this->_GET : null;
+        if (empty($this->GET) === false) {
+            return $this->GET;
+        }
 
     }//end getGet()
 
@@ -109,8 +129,11 @@ class Superglobal
      */
     public function getGetData($key)
     {
-        return isset($this->_GET[$key]) ? $this->_GET[$key] : null;
+        if(isset($this->GET[$key]) === true) {
+            return $this->GET[$key];
+        }
 
     }//end getGetData()
+
 
 }//end class
