@@ -65,6 +65,7 @@ class UserEntity
     /**
      * Add value
      *
+     * @param $data value
      * @return void
      */
     public function hydrate($data)
@@ -88,6 +89,7 @@ class UserEntity
     public function setUserId($userId)
     {
         $this->userId = $userId;
+
     }
 
 
@@ -99,6 +101,7 @@ class UserEntity
     public function setUserLastName($userLastName)
     {
         $this->userLastName = $userLastName;
+
     }
 
 
@@ -110,6 +113,7 @@ class UserEntity
     public function setUserFirstName($userFirstName)
     {
         $this->userFirstName = $userFirstName;
+
     }
 
 
@@ -121,6 +125,7 @@ class UserEntity
     public function setUserLogin($userLogin)
     {
         $this->userLogin = $userLogin;
+
     }
 
 
@@ -132,6 +137,7 @@ class UserEntity
     public function setUserEmail($userEmail)
     {
         $this->userEmail = $userEmail;
+
     }
 
 
@@ -143,6 +149,7 @@ class UserEntity
     public function setUserPassword($userPassword)
     {
         $this->userPassword = $userPassword;
+
     }
 
 
@@ -154,6 +161,7 @@ class UserEntity
     public function setUserFKIdTypeUser($FKIdTypeUser)
     {
         $this->FKIdTypeUser = $FKIdTypeUser;
+
     }
 
 
@@ -166,6 +174,7 @@ class UserEntity
     public function getUserId()
     {
         return $this->user_id;
+
     }
 
 
@@ -177,6 +186,7 @@ class UserEntity
     public function getUserLastName()
     {
         return $this->userLastName;
+
     }
 
 
@@ -188,6 +198,7 @@ class UserEntity
     public function getUserFirstName()
     {
         return $this->userFirstName;
+
     }
 
 
@@ -199,6 +210,7 @@ class UserEntity
     public function getUserLogin()
     {
         return $this->userLogin;
+
     }
 
 
@@ -210,6 +222,7 @@ class UserEntity
     public function getUserEmail()
     {
         return $this->userEmail;
+
     }
 
 
@@ -221,6 +234,7 @@ class UserEntity
     public function getUserPassword()
     {
         return $this->userPassword;
+
     }
 
 
@@ -232,6 +246,7 @@ class UserEntity
     public function getUserFKIdTypeUser()
     {
         return $this->FKIdTypeUser;
+
     }
 
 

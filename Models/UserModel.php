@@ -42,7 +42,7 @@ class UserModel extends Model
             $request->bindValue(":password", $userValues->getUserPassword(), PDO::PARAM_STR);
             $request->bindValue(":FKTypeUserId", $userValues->getUserFKIdTypeUser(), PDO::PARAM_INT);
 
-            if ($request->execute()) {
+            if ($request->execute() === true) {
                 $return = true;
             }
         }

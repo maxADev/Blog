@@ -6,7 +6,6 @@ namespace App;
 class Superglobal
 {
 
-
     /**
      *
      * @var $_POST $_POST value
@@ -90,8 +89,9 @@ class Superglobal
             return $this->POST[$key];
         }
 
-    }//end postData()
-    
+    }//end getPostData()
+
+
     /**
      * Check if $_GET exist
      *

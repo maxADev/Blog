@@ -1,10 +1,30 @@
 <?php
 
 namespace App;
+use App\Superglobal;
 
 // Router.
 class Router
 {
+
+
+    /**
+     *
+     * @var $superglobals for Superglobal class
+     */
+    private $superglobals;
+
+
+    /**
+     * Construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->superglobals = new Superglobal;
+
+    }//end __construct()
 
 
     /**

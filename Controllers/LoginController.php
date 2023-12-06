@@ -9,6 +9,7 @@ use App\Superglobal;
 // Login Controller.
 class LoginController
 {
+
     /**
      *
      * @var $userModel for UserModel class
