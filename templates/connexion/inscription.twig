@@ -1,0 +1,33 @@
+{% extends "layout.twig" %}
+{% block head %}
+    <title>Inscription</title>
+{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+    <form action="" method="post">
+        <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" class="form-control" id="nom" name="nom" placeholder="Votre nom">
+        </div>
+        <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Votre prénom">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Votre email">
+        </div>
+         <div class="form-group">
+            <label for="identifiant">Identifiant</label>
+            <input type="text" class="form-control" id="identifiant" name="identifiant" placeholder="Votre identifiant">
+        </div>
+        <div class="form-group">
+            <label for="mot_de_passe">Mot de passe</label>
+            <input type="mot_de_passe" class="form-control" id="mot_de_passe" name="mot_de_passe" placeholder="Votre mot de passe">
+        </div>
+        <button type="submit" class="btn btn-primary">Valider</button>
+    </form>
+</div>
+{% endblock %}
+
