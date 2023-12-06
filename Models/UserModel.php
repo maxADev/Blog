@@ -1,8 +1,8 @@
 <?php
 
 namespace Models;
-Use App\Model;
-Use \PDO;
+use App\Model;
+use \PDO;
 
 // Utilisateur Model.
 class UserModel extends Model
@@ -18,6 +18,7 @@ class UserModel extends Model
         $this->getConnection();
     }//end __construct()
 
+
     /**
      * Create user
      *
@@ -26,29 +27,25 @@ class UserModel extends Model
      */
     public function createUser($userValues)
     {
-        if($this->userExist($userValues)) {
+        $return = false;
+        if ($this->userExist($userValues) === true) {
+            $return = true;
             $sql = 'INSERT INTO user (last_name, first_name, login, email, password, FK_type_user_id) VALUES (:last_name, :first_name, :login, :email, :password, :FKTypeUserId)';
 
-            $request = $this->_connexion->prepare($sql);
+            $request = $this->connection->prepare($sql);
             $request->bindValue(":last_name", $userValues->getUserLastName(), PDO::PARAM_STR);
             $request->bindValue(":first_name", $userValues->getUserFirstName(), PDO::PARAM_STR);
             $request->bindValue(":login", $userValues->getUserLogin(), PDO::PARAM_STR);
             $request->bindValue(":email", $userValues->getUserEmail(), PDO::PARAM_STR);
             $request->bindValue(":password", $userValues->getUserPassword(), PDO::PARAM_STR);
             $request->bindValue(":FKTypeUserId", $userValues->getUserFKIdTypeUser(), PDO::PARAM_INT);
-        
-            if($request->execute()) {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+
+            if ($request->execute()) {
+                $return = true;
+            } 
         }
-        else
-        {
-            return false;
-        }
+        return $return;
+
     }//end createUser()
 
 
@@ -60,21 +57,21 @@ class UserModel extends Model
      */
     public function userExist($userValues)
     {
+        $return = false;
         $sql = 'SELECT * FROM user WHERE last_name = :last_name AND first_name = :first_name';
 
-        $request = $this->_connexion->prepare($sql);
+        $request = $this->connection->prepare($sql);
         $request->bindValue(":last_name", $userValues->getUserLastName(), PDO::PARAM_STR);
         $request->bindValue(":first_name", $userValues->getUserFirstName(), PDO::PARAM_STR);
         $request->execute();
         $userVerification = $request->fetch(PDO::FETCH_ASSOC);
 
-        if(!empty($userVerification)) {
-            return false;
+        if(empty($userVerification)) {
+            $return = true;
         }
-        else
-        {
-            return true;
-        }
+
+        return $return;
+
     }//end userExist()
 
 

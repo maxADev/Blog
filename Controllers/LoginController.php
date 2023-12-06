@@ -17,41 +17,32 @@ class LoginController {
     {
         $utilisateurModel = new UserModel;
 
-        if(isset($_POST) && !empty($_POST))
-        {
+        if (isset($_POST) === true && !empty($_POST) === true) {
+            $user = [];
             $errors = [];
 
-            foreach ($_POST as $key => $value)
-            {
-                if(empty($value))
-                {
+            foreach ($_POST as $key => $value) {
+                if (empty($value)) {
                     $errors[] = $key;
                 }
             }
 
-            if(empty($errors))
-            {
-                $utilisateur['lastName'] = $_POST['nom'];
-                $utilisateur['firstName'] = $_POST['prenom'];
-                $utilisateur['email'] = $_POST['email'];
-                $utilisateur['login'] = $_POST['identifiant'];
-                $utilisateur['password'] = $_POST['mot_de_passe'];
-                $utilisateur['FKIdTypeUser'] = 1;
+            if (empty($errors)) {
+                $user['lastName'] = $_POST['nom'];
+                $user['firstName'] = $_POST['prenom'];
+                $user['email'] = $_POST['email'];
+                $user['login'] = $_POST['identifiant'];
+                $user['password'] = $_POST['mot_de_passe'];
+                $user['FKIdTypeUser'] = 1;
                 
-                $utilisateur_values = new UserEntity($utilisateur);
+                $userValues = new UserEntity($user);
 
-                if($utilisateurModel->createUser($utilisateur_values))
-                {
+                if ($utilisateurModel->createUser($userValues)) {
                     header('Location: Connexion-Redirect-true');
-                    exit;
-                }
-                else
-                {
+                } else {
                     echo 'Erreur';
                 }
-            }
-            else
-            {
+            } else {
                 var_dump($errors);
             }
         }
@@ -70,18 +61,17 @@ class LoginController {
      */
     public function login()
     {
-        $inscription_message_value = '';
+        $messageValue = '';
 
-        if(isset($_GET['redirect']) and $_GET['redirect'] == 'true')
-        {
-            $inscription_message_value = "Votre compte à bien été créé, vous pouvez vous connecter";
+        if (isset($_GET['redirect']) and $_GET['redirect'] == 'true') {
+            $messageValue = "Votre compte à bien été créé, vous pouvez vous connecter";
         }
-        
+
         $view = [];
         $view['folder'] = 'connexion';
         $view['file'] = 'connexion.twig';
-        $view['var'] = ['inscription_message' => $inscription_message_value];
-        return $view;   
+        $view['var'] = ['inscription_message' => $messageValue];
+        return $view;
     }//end login()
 
 

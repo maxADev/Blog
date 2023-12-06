@@ -83,7 +83,6 @@ class Router
      */
     public function run($twig)
     {
-        $routeVar = [];
         $viewVar = [];
         
         $routeValue = $this->getRoute();
@@ -94,21 +93,18 @@ class Router
             $routeController = $routeValue['controller'];
             $routeAction = $routeValue['action'];
 
-            if(empty($routeValue['var']) !== true)
-            {
+            if (empty($routeValue['var']) !== true) {
                 $_GET = array_merge($_GET, $routeValue['var']);
             }
             
             // Use controller based on route.
             $controller = new $routeController;
             $viewPath = $controller->$routeAction();
-            if(empty($viewPath['var']) !== true)
-            {
+            if (empty($viewPath['var']) !== true) {
                 $viewVar = $viewPath['var'];
             }
             $view = $viewPath['folder'].'\\'.$viewPath['file'];
         }
-
 
         $viewValue = $twig->render($view, ['varList' => $viewVar]);
         return $viewValue;

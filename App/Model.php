@@ -7,16 +7,33 @@ use PDO;
 abstract class Model
 {
 
-    // Database login.
+    /**
+     *
+     * @var _host database host
+     */
     private $_host = "projetfmablog.mysql.db:3306";
-    private $_db_name = "projetfmablog";
+    /**
+     *
+     * @var _dbName database name
+     */
+    private $_dbName = "projetfmablog";
+    /**
+     *
+     * @var _username database login
+     */
     private $_username = "projetfmablog";
+    /**
+     *
+     * @var _password database password
+     */
     private $_password = "PshOtondKED7VMo";
 
-    protected $_connexion;
+    /**
+     *
+     * @var connection database connection
+     */
+    protected $connection;
 
-    public $table;
-    public $id;
 
     /**
      * Create database connection
@@ -25,16 +42,14 @@ abstract class Model
      */
     public function getConnection()
     {
-        $this->_connexion = null;
+        $this->connection = null;
 
-        try
-        {
-            $this->_connexion = new PDO("mysql:host=" . $this->_host . ";dbname=" . $this->_db_name, $this->_username, $this->_password);
-            $this->_connexion->exec("set names utf8");
-        }
-        catch(PDOException $exception)
-        {
-            echo "Erreur de connexion : " . $exception->getMessage();
+        try {
+            $this->connection = new PDO("mysql:host=" . $this->_host . ";dbname=" . $this->_dbName, $this->_username, $this->_password);
+            $this->connection->exec("set names utf8");
+        } catch (PDOException $exception) {
+            $dbError = "Erreur de connection : " . $exception->getMessage();
+            return $dbError;
         }
 
     }//end getConnection()
