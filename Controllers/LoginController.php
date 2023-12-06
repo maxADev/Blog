@@ -2,11 +2,13 @@
 
 namespace Controllers;
 
-Use Entity\UserEntity;
-Use Models\UserModel;
+use Entity\UserEntity;
+use Models\UserModel;
 
 // Login Controller.
-class LoginController {
+class LoginController
+{
+
 
     /**
      * Registration
@@ -17,7 +19,7 @@ class LoginController {
     {
         $utilisateurModel = new UserModel;
 
-        if (isset($_POST) === true && !empty($_POST) === true) {
+        if (isset($_POST) === true && empty($_POST) === false) {
             $user = [];
             $errors = [];
 
@@ -25,14 +27,13 @@ class LoginController {
                 if (empty($value) === true) {
                     $errors[] = $key;
                 }
+                else
+                {
+                    $user[$key] = $_POST[$key];
+                }
             }
 
             if (empty($errors) === true) {
-                $user['lastName'] = $_POST['nom'];
-                $user['firstName'] = $_POST['prenom'];
-                $user['email'] = $_POST['email'];
-                $user['login'] = $_POST['identifiant'];
-                $user['password'] = $_POST['mot_de_passe'];
                 $user['FKIdTypeUser'] = 1;
                 
                 $userValues = new UserEntity($user);
@@ -50,7 +51,8 @@ class LoginController {
         $view = [];
         $view['folder'] = 'connexion';
         $view['file'] = 'inscription.twig';
-        return $view;   
+        return $view;
+
     }//end registration()
 
 
@@ -63,7 +65,7 @@ class LoginController {
     {
         $messageValue = '';
 
-        if (isset($_GET['redirect']) === true and $_GET['redirect'] === true) {
+        if (isset($_GET['redirect']) === true && $_GET['redirect'] === 'true') {
             $messageValue = "Votre compte à bien été créé, vous pouvez vous connecter";
         }
 
@@ -72,7 +74,8 @@ class LoginController {
         $view['file'] = 'connexion.twig';
         $view['var'] = ['inscription_message' => $messageValue];
         return $view;
+
     }//end login()
 
 
-}
+}//end class

@@ -10,31 +10,37 @@ class UserEntity
      * @var userId user id
      */
     public $userId;
+
     /**
      *
      * @var userLastName user last name
      */
     public $userLastName;
+
     /**
      *
      * @var userFirstName user first name
      */
     public $userFirstName;
+
     /**
      *
      * @var userLogin user login
      */
     public $userLogin;
+
     /**
      *
      * @var userEmail user email
      */
     public $userEmail;
+
     /**
      *
      * @var userPassword user password
      */
     public $userPassword;
+
     /**
      *
      * @var FKIdTypeUser fk id type user
@@ -48,7 +54,7 @@ class UserEntity
      * @param $arrayValue value
      * @return void
      */
-    function __construct($arrayValue=array())
+    function __construct($arrayValue=[])
     {
         $this->hydrate($arrayValue);
 
@@ -68,6 +74,7 @@ class UserEntity
                 $this->$method($value);
             }
         }
+
     }
 
 
@@ -82,6 +89,7 @@ class UserEntity
         $this->userId = $userId;
     }
 
+
     /**
      * Add value user last name
      *
@@ -91,6 +99,7 @@ class UserEntity
     {
         $this->userLastName = $userLastName;
     }
+
 
     /**
      * Add value user first name
@@ -102,6 +111,7 @@ class UserEntity
         $this->userFirstName = $userFirstName;
     }
 
+
     /**
      * Add value user login
      *
@@ -111,6 +121,7 @@ class UserEntity
     {
         $this->userLogin = $userLogin;
     }
+
 
     /**
      * Add value user email
@@ -122,6 +133,7 @@ class UserEntity
         $this->userEmail = $userEmail;
     }
 
+
     /**
      * Add value user password
      *
@@ -132,6 +144,7 @@ class UserEntity
         $this->userPassword = $userPassword;
     }
 
+
     /**
      * Add value user fk id type user
      *
@@ -141,6 +154,7 @@ class UserEntity
     {
         $this->FKIdTypeUser = $FKIdTypeUser;
     }
+
 
     // Getters.
     /**
@@ -153,6 +167,7 @@ class UserEntity
         return $this->user_id;
     }
 
+
     /**
      * Get value user last name
      *
@@ -162,6 +177,7 @@ class UserEntity
     {
         return $this->userLastName;
     }
+
 
     /**
      * Get value user first name
@@ -173,6 +189,7 @@ class UserEntity
         return $this->userFirstName;
     }
 
+
     /**
      * Get value user login
      *
@@ -182,6 +199,7 @@ class UserEntity
     {
         return $this->userLogin;
     }
+
 
     /**
      * Get value user email
@@ -193,6 +211,7 @@ class UserEntity
         return $this->userEmail;
     }
 
+
     /**
      * Get value user password
      *
@@ -202,6 +221,7 @@ class UserEntity
     {
         return $this->userPassword;
     }
+
 
     /**
      * Get value user fk id type user
@@ -213,4 +233,5 @@ class UserEntity
         return $this->FKIdTypeUser;
     }
 
-}
+
+}//end class

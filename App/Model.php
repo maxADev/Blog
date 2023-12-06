@@ -9,24 +9,27 @@ abstract class Model
 
     /**
      *
-     * @var _host database host
+     * @var host database host
      */
-    private $_host = "projetfmablog.mysql.db:3306";
+    private $host = "projetfmablog.mysql.db:3306";
+
     /**
      *
      * @var dbName database name
      */
     private $dbName = "projetfmablog";
+
     /**
      *
-     * @var _username database login
+     * @var username database login
      */
-    private $_username = "projetfmablog";
+    private $username = "projetfmablog";
+
     /**
      *
-     * @var _password database password
+     * @var password database password
      */
-    private $_password = "PshOtondKED7VMo";
+    private $password = "PshOtondKED7VMo";
 
     /**
      *
@@ -45,7 +48,7 @@ abstract class Model
         $this->connection = null;
 
         try {
-            $this->connection = new PDO("mysql:host=".$this->_host.";dbname=".$this->dbName,$this->_username,$this->_password);
+            $this->connection = new PDO("mysql:host=".$this->host.";dbname=".$this->dbName,$this->username,$this->password);
             $this->connection->exec("set names utf8");
         } catch (PDOException $exception) {
             $dbError = "Erreur de connection : ".$exception->getMessage();
@@ -55,4 +58,4 @@ abstract class Model
     }//end getConnection()
 
 
-}
+}//end class
