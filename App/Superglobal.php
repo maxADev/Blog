@@ -86,8 +86,7 @@ class Superglobal
      */
     public function getPostData($key)
     {
-        if (isset($this->POST[$key]) === true)
-        {
+        if (isset($this->POST[$key]) === true) {
             return $this->POST[$key];
         }
 
@@ -129,7 +128,7 @@ class Superglobal
      */
     public function getGetData($key)
     {
-        if(isset($this->GET[$key]) === true) {
+        if (isset($this->GET[$key]) === true) {
             return $this->GET[$key];
         }
 
