@@ -42,7 +42,7 @@ class UserModel extends Model
 
             if ($request->execute()) {
                 $return = true;
-            } 
+            }
         }
         return $return;
 
@@ -66,7 +66,7 @@ class UserModel extends Model
         $request->execute();
         $userVerification = $request->fetch(PDO::FETCH_ASSOC);
 
-        if(empty($userVerification)) {
+        if (empty($userVerification) === true) {
             $return = true;
         }
 

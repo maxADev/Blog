@@ -45,13 +45,15 @@ class UserEntity
     /**
      * Create a user
      *
-     * @param arrayValue value
+     * @param $arrayValue value
      * @return void
      */
     function __construct($arrayValue=array())
     {
         $this->hydrate($arrayValue);
+
     }//end __construct()
+
 
     /**
      * Add value
@@ -62,11 +64,12 @@ class UserEntity
     {
         foreach ($data as $attribut => $value) {
             $method = 'setUser'.str_replace(' ', '', $attribut);
-            if (is_callable(array($this, $method))) {
+            if (is_callable([$this, $method]) === true) {
                 $this->$method($value);
             }
         }
     }
+
 
     // Setters.
     /**

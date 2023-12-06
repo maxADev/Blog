@@ -14,9 +14,9 @@ abstract class Model
     private $_host = "projetfmablog.mysql.db:3306";
     /**
      *
-     * @var _dbName database name
+     * @var dbName database name
      */
-    private $_dbName = "projetfmablog";
+    private $dbName = "projetfmablog";
     /**
      *
      * @var _username database login
@@ -45,10 +45,10 @@ abstract class Model
         $this->connection = null;
 
         try {
-            $this->connection = new PDO("mysql:host=" . $this->_host . ";dbname=" . $this->_dbName, $this->_username, $this->_password);
+            $this->connection = new PDO("mysql:host=".$this->_host.";dbname=".$this->dbName,$this->_username,$this->_password);
             $this->connection->exec("set names utf8");
         } catch (PDOException $exception) {
-            $dbError = "Erreur de connection : " . $exception->getMessage();
+            $dbError = "Erreur de connection : ".$exception->getMessage();
             return $dbError;
         }
 

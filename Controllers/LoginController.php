@@ -22,12 +22,12 @@ class LoginController {
             $errors = [];
 
             foreach ($_POST as $key => $value) {
-                if (empty($value)) {
+                if (empty($value) === true) {
                     $errors[] = $key;
                 }
             }
 
-            if (empty($errors)) {
+            if (empty($errors) === true) {
                 $user['lastName'] = $_POST['nom'];
                 $user['firstName'] = $_POST['prenom'];
                 $user['email'] = $_POST['email'];
@@ -37,7 +37,7 @@ class LoginController {
                 
                 $userValues = new UserEntity($user);
 
-                if ($utilisateurModel->createUser($userValues)) {
+                if ($utilisateurModel->createUser($userValues) === true) {
                     header('Location: Connexion-Redirect-true');
                 } else {
                     echo 'Erreur';
@@ -63,7 +63,7 @@ class LoginController {
     {
         $messageValue = '';
 
-        if (isset($_GET['redirect']) and $_GET['redirect'] == 'true') {
+        if (isset($_GET['redirect']) === true and $_GET['redirect'] === true) {
             $messageValue = "Votre compte à bien été créé, vous pouvez vous connecter";
         }
 
