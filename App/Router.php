@@ -10,9 +10,9 @@ class Router
 
     /**
      *
-     * @var $superglobals for Superglobal class
+     * @var $superglobal for Superglobal class
      */
-    private $superglobals;
+    private $superglobal;
 
 
     /**
@@ -22,7 +22,7 @@ class Router
      */
     public function __construct()
     {
-        $this->superglobals = new Superglobal;
+        $this->superglobal = new Superglobal;
 
     }//end __construct()
 

@@ -18,9 +18,9 @@ class LoginController
 
     /**
      *
-     * @var $superglobals for Superglobal class
+     * @var $superglobal for Superglobal class
      */
-    private $superglobals;
+    private $superglobal;
 
 
     /**
@@ -31,7 +31,7 @@ class LoginController
     public function __construct()
     {
         $this->userModel = new UserModel;
-        $this->superglobals = new Superglobal;
+        $this->superglobal = new Superglobal;
 
     }//end __construct()
 
@@ -45,19 +45,21 @@ class LoginController
     {
         $error_log = '';
 
-        if ($this->superglobals->postExist() === true) {
+        if ($this->superglobal->postExist() === true) {
             $user = [];
             $errors = [];
 
-            $postValue = $this->superglobals->getPost();
+            $postValue = $this->superglobal->getPost();
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = $key;
                 } else {
-                    $user[$key] = $this->superglobals->getPostData($key);
+                    $user[$key] = $this->superglobal->getPostData($key);
                 }
             }
+
+            $error_log = ['error' => $errors];
 
             if (empty($errors) === true) {
                 $user['FKIdTypeUser'] = 1;
@@ -67,7 +69,7 @@ class LoginController
                 if ($this->userModel->createUser($userValues) === true) {
                     header('Location: Connexion-Redirect-true');
                 } else {
-                    $error_log = "Error create user";
+                    $error_log = ['error_message' => "Cet utilisateur existe déjà"];
                 }
             }
         }//end if
@@ -91,8 +93,8 @@ class LoginController
         $messageValue = '';
         $getValue = '';
 
-        if ($this->superglobals->getExist() === true) {
-            $getValue = $this->superglobals->getGetData('redirect');
+        if ($this->superglobal->getExist() === true) {
+            $getValue = $this->superglobal->getGetData('redirect');
         }
 
         if ($getValue === 'true') {
