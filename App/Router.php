@@ -7,7 +7,6 @@ use App\Superglobal;
 class Router
 {
 
-
     /**
      *
      * @var $superglobal for Superglobal class
