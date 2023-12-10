@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <routes>
   <route url="/" controller="Home" action="index"></route>
+  <route url="/Inscription" controller="Login" action="registration"></route>
+  <route url="/Connexion" controller="Login" action="login"></route>
+  <route url="/Connexion-Redirect-([a-zA-Z0-9]+)" controller="Login" action="login" vars="redirect"></route>
 </routes>

@@ -1,9 +1,29 @@
 <?php
 
 namespace App;
+use App\Superglobal;
+
 // Router.
 class Router
 {
+
+    /**
+     *
+     * @var $superglobal for Superglobal class
+     */
+    private $superglobal;
+
+
+    /**
+     * Construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->superglobal = new Superglobal;
+
+    }//end __construct()
 
 
     /**
@@ -29,7 +49,6 @@ class Router
 
         // For each routes from xml file.
         foreach ($routes as $route) {
-            $controllerValue = [];
             $routeUrl = $route->getAttribute('url');
 
             if ($route->hasAttribute('vars') === true) {
@@ -38,6 +57,7 @@ class Router
 
             // If url = route.
             if (preg_match('`^'.$routeUrl.'$`', $httpRequest, $matches) === 1) {
+                $controllerValue = [];
                 $routeController = $route->getAttribute('controller');
                 $routeAction = $route->getAttribute('action');
                 $routeExist = true;
@@ -47,7 +67,7 @@ class Router
 
                 $controllerValue['controller'] = $requireController;
                 $controllerValue['action'] = $routeAction;
-                $controllerValue['vars'] = $listVars;
+                $controllerValue['var'] = '';
 
                 // Add match value to name value.
                 $routeUrlVarsValue = $matches;
@@ -58,6 +78,8 @@ class Router
                             $listVars[$routeVars[($key - 1)]] = $match;
                         }
                     }
+
+                    $controllerValue['var'] = $listVars;
                 }
             }//end if
         }//end foreach
@@ -79,24 +101,30 @@ class Router
      */
     public function run($twig)
     {
+        $viewVar = [];
+        
         $routeValue = $this->getRoute();
 
         $view = 'error\error.twig';
 
         if (empty($routeValue['controller']) === false) {
-            $routeVars = [];
             $routeController = $routeValue['controller'];
             $routeAction = $routeValue['action'];
-            $routeVars = $routeValue['vars'];
- 
+
+            if (empty($routeValue['var']) !== true) {
+                $_GET = array_merge($_GET, $routeValue['var']);
+            }
+            
             // Use controller based on route.
             $controller = new $routeController;
             $viewPath = $controller->$routeAction();
+            if (empty($viewPath['var']) !== true) {
+                $viewVar = $viewPath['var'];
+            }
             $view = $viewPath['folder'].'\\'.$viewPath['file'];
         }
 
-        $viewValue = $twig->render($view, ['value' => $routeVars]);
-
+        $viewValue = $twig->render($view, ['varList' => $viewVar]);
         return $viewValue;
 
     }//end run()

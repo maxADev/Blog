@@ -5,9 +5,10 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/",
-            "Controllers\\":"Controllers/",
-            "Models\\": "Models/"
+            "App\\": "App/",
+            "Controllers\\": "Controllers/",
+            "Models\\": "Models/",
+            "Entity\\": "Entity/"
         }
     }
 }

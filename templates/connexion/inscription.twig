@@ -1,0 +1,50 @@
+{% extends "layout.twig" %}
+{% block head %}
+    <title>Inscription</title>
+{% endblock %}
+
+{% block content %}
+
+{% if varList.error is defined %}
+    <div class="container text-center text-danger mt-3">
+        <p>Erreur<p>
+        {% for error in varList.error %}
+            <p>Le champ : {{error}} est obligatoire</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if varList.error_message is defined %}
+    <div class="container text-center text-danger mt-3">
+        <p>Erreur<p>
+        <p>{{varList.error_message}}</p>
+    </div>
+{% endif %}
+
+<div class="container text-center">
+    <form action="" method="post">
+        <div class="form-group">
+            <label for="lastName">Nom</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Votre nom">
+        </div>
+        <div class="form-group">
+            <label for="firstName">Prénom</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Votre prénom">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Votre email">
+        </div>
+         <div class="form-group">
+            <label for="login">Identifiant</label>
+            <input type="text" class="form-control" id="login" name="login" placeholder="Votre identifiant">
+        </div>
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Votre mot de passe">
+        </div>
+        <button type="submit" class="btn btn-primary">Valider</button>
+    </form>
+</div>
+{% endblock %}
+
