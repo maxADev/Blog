@@ -121,7 +121,7 @@ class UserModel extends Model
     /**
      * Check user exist
      *
-     * @param $login user login
+     * @param $login    user login
      * @param $password user password
      * @return void
      */
@@ -135,12 +135,12 @@ class UserModel extends Model
         $user = $request->fetch(PDO::FETCH_ASSOC);
 
         if (empty($user) === false) {
-            if(password_verify($password, $user['password'])) {
+            if (password_verify($password, $user['password']) === true) {
                 return $user;
-            } 
+            }
         }
 
-    }//end userExist()
+    }//end login()
 
 
     /**

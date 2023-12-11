@@ -5,6 +5,7 @@ namespace Controllers;
 use Entity\UserEntity;
 use Models\UserModel;
 use App\Superglobal;
+use App\Redirect;
 
 // Login Controller.
 class LoginController
@@ -24,6 +25,13 @@ class LoginController
 
 
     /**
+     *
+     * @var $redirect for Redirect class
+     */
+    private $redirect;
+
+
+    /**
      * Construct
      *
      * @return void
@@ -32,6 +40,7 @@ class LoginController
     {
         $this->userModel = new UserModel;
         $this->superglobal = new Superglobal;
+        $this->redirect = new Redirect;
 
     }//end __construct()
 
@@ -69,7 +78,7 @@ class LoginController
 
                 if ($createUser !== false) {
                     $this->sendEmailRegistration($createUser);
-                    header('Location: connexion-redirect-true');
+                    $this->redirect->getRedirect('connexion-redirect-true');
                 } else {
                     $error_log = ['error_message' => "Cet utilisateur existe déjà"];
                 }
@@ -96,9 +105,8 @@ class LoginController
         $getValueRedirect = '';
         $getValueLogout = '';
         $getValueToken = '';
-        $getValueUserId = '';
-        
-    
+        $getValueUserId = ''; 
+
         if ($this->superglobal->getExist() === true) {
             $getValueRedirect = $this->superglobal->getGetData('redirect');
         }
@@ -134,7 +142,7 @@ class LoginController
                 $user = $this->userModel->login($postValue['login'], $postValue['password']);
                 if (empty($user) === false) {
                     $this->superglobal->createSession($user);
-                    header('Location: monCompte');
+                    $this->redirect->getRedirect('mon-compte');
                 }
             }
         }
@@ -175,7 +183,7 @@ class LoginController
     public function logout()
     {
         session_destroy();
-        header('Location: connexion-logout-true');
+        $this->redirect->getRedirect('connexion-logout-true');
 
     }//end logout()
 

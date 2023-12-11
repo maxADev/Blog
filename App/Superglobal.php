@@ -77,14 +77,15 @@ class Superglobal
     /**
      * Create a $_GET
      *
+     * @param $getValue $_GET value
      * @return void
      */
     public function createGet($getValue)
     {
         $_GET = $getValue;
         $this->GET = $_GET;
-      
-    }//end createSession()
+
+    }//end createGet()
 
 
     /**
@@ -140,15 +141,13 @@ class Superglobal
      */
     public function createSession($sessionValue)
     {
-        if(isset($_SESSION['auth']) === false) {
+        if (isset($_SESSION['auth']) === false) {
             $_SESSION['auth'] = $sessionValue;
             $this->SESSION = $_SESSION;
-        }
-        else
-        {
+        } else {
             $this->SESSION = $_SESSION;
         }
-      
+
     }//end createSession()
 
 
@@ -181,11 +180,7 @@ class Superglobal
 
         return $return;
 
-    }//end getSession()
+    }//end authSessionExist()
 
-    public function destroySession()
-    {
-        session_destroy();
-    }
 
 }//end class

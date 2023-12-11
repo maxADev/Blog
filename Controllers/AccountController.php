@@ -2,17 +2,24 @@
 
 namespace Controllers;
 use App\Superglobal;
+use App\Redirect;
 
 // Account Controller.
 class AccountController
 {
-
 
     /**
      *
      * @var $superglobal for Superglobal class
      */
     private $superglobal;
+
+
+    /**
+     *
+     * @var $redirect for Redirect class
+     */
+    private $redirect;
 
 
     /**
@@ -23,6 +30,7 @@ class AccountController
     public function __construct()
     {
         $this->superglobal = new Superglobal;
+        $this->redirect = new Redirect;
 
     }//end __construct()
 
@@ -34,8 +42,8 @@ class AccountController
      */
     public function index()
     {
-        if($this->superglobal->authSessionExist() === false) {
-            header('Location: connexion');
+        if ($this->superglobal->authSessionExist() === false) {
+            $this->redirect->getRedirect('connexion');
         };
 
         $session = $this->superglobal->getSession();
