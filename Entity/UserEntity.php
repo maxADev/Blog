@@ -44,6 +44,12 @@ class UserEntity
 
     /**
      *
+     * @var userToken user token
+     */
+    public $userToken;
+
+    /**
+     *
      * @var FKIdTypeUser fk id type user
      */
     public $FKIdTypeUser;
@@ -77,7 +83,7 @@ class UserEntity
             }
         }
 
-    }
+    }//end hydrate()
 
 
     // Setters.
@@ -149,6 +155,18 @@ class UserEntity
     public function setUserPassword($userPassword)
     {
         $this->userPassword = $userPassword;
+
+    }
+
+
+    /**
+     * Add value user token
+     *
+     * @return void
+     */
+    public function setUserToken($userToken)
+    {
+        $this->userToken = $userToken;
 
     }
 
@@ -234,6 +252,18 @@ class UserEntity
     public function getUserPassword()
     {
         return $this->userPassword;
+
+    }
+
+
+    /**
+     * Get value user token
+     *
+     * @return userToken
+     */
+    public function getUserToken()
+    {
+        return $this->userToken;
 
     }
 

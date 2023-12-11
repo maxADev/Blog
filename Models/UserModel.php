@@ -24,7 +24,7 @@ class UserModel extends Model
     /**
      * Create user
      *
-     * @param $userValues user
+     * @param  $userValues user
      * @return void
      */
     public function createUser($userValues)
@@ -45,7 +45,10 @@ class UserModel extends Model
             $request->bindValue(":FKTypeUserId", $userValues->getUserFKIdTypeUser(), PDO::PARAM_INT);
 
             if ($request->execute() === true) {
-                $return = true;
+                $usersId = $this->connection->lastInsertId();
+                $return = ['userId' => $usersId,
+                           'userEmail' => $userValues->getUserEmail(),
+                           'userToken' => $userToken];
             }
         }
 
@@ -57,7 +60,7 @@ class UserModel extends Model
     /**
      * Check user exist
      *
-     * @param $userValues user
+     * @param  $userValues user
      * @return void
      */
     public function userExist($userValues)
@@ -79,10 +82,47 @@ class UserModel extends Model
 
     }//end userExist()
 
+
+    /**
+     * Validation user
+     *
+     * @param  $userId    user id
+     * @param  $userToken user token
+     * 
+     * @return void
+     */
+    public function validationUser($userId, $userToken)
+    {
+        $return = false;
+        $sql = 'UPDATE user SET FK_type_user_id = :FK_type_user_id WHERE id = :id AND token = :token';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":FK_type_user_id", 1, PDO::PARAM_INT);
+        $request->bindValue(":token", $userToken, PDO::PARAM_STR);
+        $request->bindValue(":id", $userId, PDO::PARAM_INT);
+
+        if ($request->execute() === true) {
+            $sql = 'UPDATE user SET token = :token WHERE id = :id';
+
+            $request = $this->connection->prepare($sql);
+            $request->bindValue(":token", null, PDO::PARAM_STR);
+            $request->bindValue(":id", $userId, PDO::PARAM_INT);
+
+            if ($request->execute() === true) {
+                $return = true;
+            };
+        }
+
+        return $return;
+
+    }//end validationUser()
+
+
     /**
      * Create a random token
      *
-     * @param $length length of token
+     * @param  $length length of token
+     * 
      * @return string
      */
     public function randomToken($length)

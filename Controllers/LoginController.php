@@ -62,12 +62,14 @@ class LoginController
             $error_log = ['error' => $errors];
 
             if (empty($errors) === true) {
-                $user['FKIdTypeUser'] = 1;
+                $user['FKIdTypeUser'] = 3;
 
                 $userValues = new UserEntity($user);
+                $createUser = $this->userModel->createUser($userValues);
 
-                if ($this->userModel->createUser($userValues) === true) {
-                    header('Location: Connexion-Redirect-true');
+                if ($createUser !== false) {
+                    $this->sendEmailRegistration($createUser);
+                    header('Location: connexion-redirect-true');
                 } else {
                     $error_log = ['error_message' => "Cet utilisateur existe déjà"];
                 }
@@ -88,17 +90,30 @@ class LoginController
      *
      * @return void
      */
-    public function login()
+    public function loginPage()
     {
         $messageValue = '';
-        $getValue = '';
+        $getValueRedirect = '';
+        $getValueToken = '';
+        $getValueUserId = '';
 
         if ($this->superglobal->getExist() === true) {
-            $getValue = $this->superglobal->getGetData('redirect');
+            $getValueRedirect = $this->superglobal->getGetData('redirect');
         }
 
-        if ($getValue === 'true') {
-            $messageValue = "Votre compte à bien été créé, vous pouvez vous connecter";
+        if ($getValueRedirect === 'true') {
+            $messageValue = "Un email vous a été envoyé pour valider votre compte.";
+        }
+
+        if ($this->superglobal->getExist() === true) {
+            $getValueToken = $this->superglobal->getGetData('token');
+            $getValueUserId = $this->superglobal->getGetData('userId');
+        }
+
+        if (empty($getValueUserId) !== true && empty($getValueToken) !== true) {
+            if ($this->userModel->validationUser($getValueUserId, $getValueToken) === true) {
+                $messageValue = 'Votre compte a bien été validé, vous pouvez vous connecter.';
+            }
         }
 
         $view = [];
@@ -107,7 +122,26 @@ class LoginController
         $view['var'] = ['inscription_message' => $messageValue];
         return $view;
 
-    }//end login()
+    }//end loginPage()
+
+
+    /**
+     * Send Email Registration
+     *
+     * @param $createUser array with userID, userToken and userEmail
+     * @return void
+     */
+    public function sendEmailRegistration($createUser)
+    {
+        $userId = $createUser['userId'];
+        $userToken = $createUser['userToken'];
+        $userEmail = $createUser['userEmail'];
+
+        $message = 'Valider votre compte en cliquant sur le lien : http://mablog.projetformationma.com/connexion-validation-'.$userId.'-'.$userToken.'';
+
+        mail($userEmail, 'Ma-Blog inscription', $message);
+
+    }//end sendEmailRegistration()
 
 
 }//end class
