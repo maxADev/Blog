@@ -83,7 +83,7 @@ class UserEntity
             }
         }
 
-    }
+    }//end hydrate()
 
 
     // Setters.

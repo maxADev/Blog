@@ -67,7 +67,7 @@ class LoginController
                 $userValues = new UserEntity($user);
                 $createUser = $this->userModel->createUser($userValues);
 
-                if ($createUser !== false) {;
+                if ($createUser !== false) {
                     $this->sendEmailRegistration($createUser);
                     header('Location: Connexion-Redirect-true');
                 } else {
@@ -122,12 +122,13 @@ class LoginController
         $view['var'] = ['inscription_message' => $messageValue];
         return $view;
 
-    }//end login()
+    }//end loginPage()
 
 
     /**
      * Send Email Registration
-     *
+     * 
+     * @param $createUser array with userID, userToken and userEmail
      * @return void
      */
     public function sendEmailRegistration($createUser)
@@ -137,8 +138,10 @@ class LoginController
         $userEmail = $createUser['userEmail'];
 
         $message = 'Valider votre compte en cliquant sur le lien : http://mablog.projetformationma.com/Connexion-Validation-'.$userId.'-'.$userToken.'';
-    
+
         mail($userEmail, 'Ma-Blog inscription', $message);
-    }
+
+    }//end sendEmailRegistration()
+
 
 }//end class

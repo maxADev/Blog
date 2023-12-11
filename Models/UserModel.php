@@ -24,7 +24,7 @@ class UserModel extends Model
     /**
      * Create user
      *
-     * @param $userValues user
+     * @param  $userValues user
      * @return void
      */
     public function createUser($userValues)
@@ -46,7 +46,9 @@ class UserModel extends Model
 
             if ($request->execute() === true) {
                 $usersId = $this->connection->lastInsertId();
-                $return = ['userId' => $usersId, 'userEmail' => $userValues->getUserEmail(), 'userToken' => $userToken];
+                $return = ['userId' => $usersId,
+                            'userEmail' => $userValues->getUserEmail(),
+                            'userToken' => $userToken];
             }
         }
 
@@ -58,7 +60,7 @@ class UserModel extends Model
     /**
      * Check user exist
      *
-     * @param $userValues user
+     * @param  $userValues user
      * @return void
      */
     public function userExist($userValues)
@@ -84,8 +86,9 @@ class UserModel extends Model
     /**
      * Validation user
      *
-     * @param $userId user id
-     * @param $userToken user token
+     * @param  $userId    user id
+     * @param  $userToken user token
+     * 
      * @return void
      */
     public function validationUser($userId, $userToken)
@@ -102,7 +105,7 @@ class UserModel extends Model
             $sql = 'UPDATE user SET token = :token WHERE id = :id';
 
             $request = $this->connection->prepare($sql);
-            $request->bindValue(":token", NULL, PDO::PARAM_STR);
+            $request->bindValue(":token", null, PDO::PARAM_STR);
             $request->bindValue(":id", $userId, PDO::PARAM_INT);
 
             if ($request->execute() === true) {
@@ -118,7 +121,8 @@ class UserModel extends Model
     /**
      * Create a random token
      *
-     * @param $length length of token
+     * @param  $length length of token
+     * 
      * @return string
      */
     public function randomToken($length)
