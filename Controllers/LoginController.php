@@ -69,7 +69,7 @@ class LoginController
 
                 if ($createUser !== false) {
                     $this->sendEmailRegistration($createUser);
-                    header('Location: Connexion-Redirect-true');
+                    header('Location: connexion-redirect-true');
                 } else {
                     $error_log = ['error_message' => "Cet utilisateur existe déjà"];
                 }
@@ -127,7 +127,7 @@ class LoginController
 
     /**
      * Send Email Registration
-     * 
+     *
      * @param $createUser array with userID, userToken and userEmail
      * @return void
      */
@@ -137,7 +137,7 @@ class LoginController
         $userToken = $createUser['userToken'];
         $userEmail = $createUser['userEmail'];
 
-        $message = 'Valider votre compte en cliquant sur le lien : http://mablog.projetformationma.com/Connexion-Validation-'.$userId.'-'.$userToken.'';
+        $message = 'Valider votre compte en cliquant sur le lien : http://mablog.projetformationma.com/connexion-validation-'.$userId.'-'.$userToken.'';
 
         mail($userEmail, 'Ma-Blog inscription', $message);
 
