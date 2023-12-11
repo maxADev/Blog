@@ -14,7 +14,6 @@ class AccountController
      */
     private $superglobal;
 
-
     /**
      *
      * @var $redirect for Redirect class

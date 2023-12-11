@@ -23,7 +23,6 @@ class LoginController
      */
     private $superglobal;
 
-
     /**
      *
      * @var $redirect for Redirect class
@@ -105,7 +104,7 @@ class LoginController
         $getValueRedirect = '';
         $getValueLogout = '';
         $getValueToken = '';
-        $getValueUserId = ''; 
+        $getValueUserId = '';
 
         if ($this->superglobal->getExist() === true) {
             $getValueRedirect = $this->superglobal->getGetData('redirect');
