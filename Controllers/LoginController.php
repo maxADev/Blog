@@ -109,7 +109,7 @@ class LoginController
         if ($this->superglobal->getExist() === true) {
             $getValueRedirect = $this->superglobal->getGetData('redirect');
         }
-        
+
         if ($getValueRedirect === 'true') {
             $messageValue = "Un email vous a été envoyé pour valider votre compte.";
         }
