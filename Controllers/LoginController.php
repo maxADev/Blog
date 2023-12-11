@@ -94,15 +94,25 @@ class LoginController
     {
         $messageValue = '';
         $getValueRedirect = '';
+        $getValueLogout = '';
         $getValueToken = '';
         $getValueUserId = '';
-
+        
+    
         if ($this->superglobal->getExist() === true) {
             $getValueRedirect = $this->superglobal->getGetData('redirect');
         }
-
+        
         if ($getValueRedirect === 'true') {
             $messageValue = "Un email vous a été envoyé pour valider votre compte.";
+        }
+
+        if ($this->superglobal->getExist() === true) {
+            $getValueLogout = $this->superglobal->getGetData('logout');
+        }
+
+        if ($getValueLogout === 'true') {
+            $messageValue = "Vous êtes bien déconnecté";
         }
 
         if ($this->superglobal->getExist() === true) {
@@ -113,6 +123,19 @@ class LoginController
         if (empty($getValueUserId) !== true && empty($getValueToken) !== true) {
             if ($this->userModel->validationUser($getValueUserId, $getValueToken) === true) {
                 $messageValue = 'Votre compte a bien été validé, vous pouvez vous connecter.';
+            }
+        }
+
+        if ($this->superglobal->postExist() === true) {
+
+            $postValue = $this->superglobal->getPost();
+
+            if (empty($postValue['login']) === false && empty($postValue['password']) === false) {
+                $user = $this->userModel->login($postValue['login'], $postValue['password']);
+                if (empty($user) === false) {
+                    $this->superglobal->createSession($user);
+                    header('Location: monCompte');
+                }
             }
         }
 
@@ -142,6 +165,19 @@ class LoginController
         mail($userEmail, 'Ma-Blog inscription', $message);
 
     }//end sendEmailRegistration()
+
+
+    /**
+     * Logout
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        session_destroy();
+        header('Location: connexion-logout-true');
+
+    }//end logout()
 
 
 }//end class

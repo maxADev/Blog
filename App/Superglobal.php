@@ -2,6 +2,8 @@
 
 namespace App;
 
+session_start();
+
 // Superglobal.
 class Superglobal
 {
@@ -18,35 +20,11 @@ class Superglobal
      */
     private $GET;
 
-
     /**
-     * Create a superglobal
      *
-     * @return void
+     * @var $_SESSION $_SESSION value
      */
-    public function __construct()
-    {
-        $this->createSuperglobal();
-
-    }//end __construct()
-
-
-    /**
-     * Create a superglobal
-     *
-     * @return mixed
-     */
-    private function createSuperglobal()
-    {
-        if (isset($_POST) === true) {
-            $this->POST = $_POST;
-        }
-
-        if (isset($_GET) === true) {
-            $this->GET = $_GET;
-        }
-
-    }//end createSuperglobal()
+    private $SESSION;
 
 
     /**
@@ -56,9 +34,13 @@ class Superglobal
      */
     public function postExist()
     {
-        if (empty($this->POST) === false) {
-            return true;
+        $return = false;
+        if (isset($_POST) === true && empty($_POST) === false) {
+            $this->POST = $_POST;
+            $return = true;
         }
+
+        return $return;
 
     }//end postExist()
 
@@ -93,15 +75,32 @@ class Superglobal
 
 
     /**
+     * Create a $_GET
+     *
+     * @return void
+     */
+    public function createGet($getValue)
+    {
+        $_GET = $getValue;
+        $this->GET = $_GET;
+      
+    }//end createSession()
+
+
+    /**
      * Check if $_GET exist
      *
      * @return boolean
      */
     public function getExist()
     {
-        if (empty($this->GET) === false) {
-            return true;
+        $return = false;
+        if (isset($_GET) === true && empty($_GET) === false) {
+            $this->GET = $_GET;
+            $return = true;
         }
+
+        return $return;
 
     }//end getExist()
 
@@ -134,5 +133,59 @@ class Superglobal
 
     }//end getGetData()
 
+    /**
+     * Create a $_SESSION
+     *
+     * @return mixed
+     */
+    public function createSession($sessionValue)
+    {
+        if(isset($_SESSION['auth']) === false) {
+            $_SESSION['auth'] = $sessionValue;
+            $this->SESSION = $_SESSION;
+        }
+        else
+        {
+            $this->SESSION = $_SESSION;
+        }
+      
+    }//end createSession()
+
+
+    /**
+     * Get Session
+     *
+     * @return array
+     */
+    public function getSession()
+    {
+        if (empty($this->SESSION) === false) {
+            return $this->SESSION;
+        }
+
+    }//end getSession()
+
+
+    /**
+     * Get Session
+     *
+     * @return array
+     */
+    public function authSessionExist()
+    {
+        $return = false;
+        if (isset($_SESSION['auth']) === true) {
+            $this->SESSION = $_SESSION;
+            $return = true;
+        }
+
+        return $return;
+
+    }//end getSession()
+
+    public function destroySession()
+    {
+        session_destroy();
+    }
 
 }//end class

@@ -1,9 +1,10 @@
 <?php
 
 namespace Controllers;
+use App\Superglobal;
 
 // Home Controller.
-class HomeController
+class HomeController extends Superglobal
 {
 
 
@@ -14,9 +15,18 @@ class HomeController
      */
     public function index()
     {
+        $varValue = '';
+        if($this->authSessionExist() === true) {
+            $session = $this->getSession();
+            $user = $session['auth'];
+            $varValue = ['user' => $user];
+        };
+
+ 
         $view = [];
         $view['folder'] = 'accueil';
         $view['file'] = 'accueil.twig';
+        $view['var'] = $varValue;
         return $view;
 
     }//end index()

@@ -112,7 +112,7 @@ class Router
             $routeAction = $routeValue['action'];
 
             if (empty($routeValue['var']) !== true) {
-                $_GET = array_merge($_GET, $routeValue['var']);
+                $this->superglobal->createGet($routeValue['var']);
             }
             
             // Use controller based on route.
