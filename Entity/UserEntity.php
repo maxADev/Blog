@@ -44,6 +44,12 @@ class UserEntity
 
     /**
      *
+     * @var userToken user token
+     */
+    public $userToken;
+
+    /**
+     *
      * @var FKIdTypeUser fk id type user
      */
     public $FKIdTypeUser;
@@ -154,6 +160,18 @@ class UserEntity
 
 
     /**
+     * Add value user token
+     *
+     * @return void
+     */
+    public function setUserToken($userToken)
+    {
+        $this->userToken = $userToken;
+
+    }
+
+
+    /**
      * Add value user fk id type user
      *
      * @return void
@@ -234,6 +252,18 @@ class UserEntity
     public function getUserPassword()
     {
         return $this->userPassword;
+
+    }
+
+
+    /**
+     * Get value user token
+     *
+     * @return userToken
+     */
+    public function getUserToken()
+    {
+        return $this->userToken;
 
     }
 
