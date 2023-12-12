@@ -51,7 +51,7 @@ class LoginController
      */
     public function registration()
     {
-        $error_log = '';
+        $errors = '';
 
         if ($this->superglobal->postExist() === true) {
             $user = [];
@@ -61,13 +61,14 @@ class LoginController
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
-                    $errors[] = $key;
+                    $errors[] = ['message' => 'Le champ est obligatoire : ', 'value' => $key];
                 } else {
                     $user[$key] = $this->superglobal->getPostData($key);
+                    
                 }
             }
 
-            $error_log = ['error' => $errors];
+            $errors;
 
             if (empty($errors) === true) {
                 $user['FKIdTypeUser'] = 3;
@@ -79,7 +80,7 @@ class LoginController
                     $this->sendEmailRegistration($createUser);
                     $this->redirect->getRedirect('connexion-redirect-true');
                 } else {
-                    $error_log = ['error_message' => "Cet utilisateur existe déjà"];
+                    $errors[] = ['message' => "Cet utilisateur existe déjà"];
                 }
             }
         }//end if
@@ -87,7 +88,7 @@ class LoginController
         $view = [];
         $view['folder'] = 'connexion';
         $view['file'] = 'inscription.twig';
-        $view['var'] = $error_log;
+        $view['errorLog'] = $errors;
         return $view;
 
     }//end registration()
@@ -100,6 +101,7 @@ class LoginController
      */
     public function loginPage()
     {
+        $success = [];
         $messageValue = '';
         $getValueRedirect = '';
         $getValueLogout = '';
@@ -147,10 +149,11 @@ class LoginController
             }
         }
 
+        $success[] = ['message' => $messageValue];
         $view = [];
         $view['folder'] = 'connexion';
         $view['file'] = 'connexion.twig';
-        $view['var'] = ['inscription_message' => $messageValue];
+        $view['successLog'] = $success;
         return $view;
 
     }//end loginPage()

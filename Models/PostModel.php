@@ -4,8 +4,8 @@ namespace Models;
 use App\Model;
 use \PDO;
 
-// User Model.
-class UserModel extends Model
+// Post Model.
+class PostModel extends Model
 {
 
 
@@ -22,34 +22,26 @@ class UserModel extends Model
 
 
     /**
-     * Create user
+     * Create post
      *
-     * @param  $userValues user
+     * @param  $postValues post
      * @return void
      */
-    public function createUser($userValues)
+    public function createPost($postValues)
     {
         $return = false;
-        if ($this->userExist($userValues) === true) {
-            $userToken = self::randomToken(15);
+
+        $sql = 'INSERT INTO post (title, chapo, content, creation_date, modification_date, FK_user_id) VALUES (:title, :chapo, :content, NOW(), :modification_date, :FK_user_id)';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":title", $postValues->getPostTitle(), PDO::PARAM_STR);
+        $request->bindValue(":chapo", $postValues->getPostChapo(), PDO::PARAM_STR);
+        $request->bindValue(":content", $postValues->getPostContent(), PDO::PARAM_STR);
+        $request->bindValue(":modification_date", NULL);
+        $request->bindValue(":FK_user_id", $postValues->getPostFKUserId(), PDO::PARAM_STR);
+
+        if ($request->execute() === true) {
             $return = true;
-            $sql = 'INSERT INTO user (last_name, first_name, login, email, password, token, FK_type_user_id) VALUES (:last_name, :first_name, :login, :email, :password, :token, :FKTypeUserId)';
-
-            $request = $this->connection->prepare($sql);
-            $request->bindValue(":last_name", $userValues->getUserLastName(), PDO::PARAM_STR);
-            $request->bindValue(":first_name", $userValues->getUserFirstName(), PDO::PARAM_STR);
-            $request->bindValue(":login", $userValues->getUserLogin(), PDO::PARAM_STR);
-            $request->bindValue(":email", $userValues->getUserEmail(), PDO::PARAM_STR);
-            $request->bindValue(":password", password_hash($userValues->getUserPassword(), PASSWORD_BCRYPT), PDO::PARAM_STR);
-            $request->bindValue(":token", $userToken, PDO::PARAM_STR);
-            $request->bindValue(":FKTypeUserId", $userValues->getUserFKIdTypeUser(), PDO::PARAM_INT);
-
-            if ($request->execute() === true) {
-                $usersId = $this->connection->lastInsertId();
-                $return = ['userId' => $usersId,
-                           'userEmail' => $userValues->getUserEmail(),
-                           'userToken' => $userToken];
-            }
         }
 
         return $return;

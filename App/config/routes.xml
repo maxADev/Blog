@@ -8,4 +8,5 @@
   <route url="/connexion-validation-([0-9]+)-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="userId,token"></route>
   <route url="/mon-compte" controller="Account" action="index"></route>
   <route url="/deconnexion" controller="Login" action="logout"></route>
+  <route url="/creer-un-post" controller="Post" action="create"></route>
 </routes>

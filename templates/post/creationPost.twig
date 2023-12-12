@@ -1,0 +1,44 @@
+{% extends "layout.twig" %}
+{% block head %}
+    <title>Inscription</title>
+{% endblock %}
+
+{% block content %}
+
+{% if errorLog is defined %}
+    <div class="container text-center text-danger mt-3">
+        <p>Erreur<p>
+        {% for errorValue in errorLog %}
+            <p>{{errorValue.message}}{{errorValue.value}}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+{% if successLog is defined %}
+    <div class="container text-center text-success mt-3">
+        {% for successValue in successLog %}
+            <p>{{successValue.message}}{{successValue.value}}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="container text-center">
+    <form action="" method="post">
+        <div class="form-group">
+            <label for="title">Titre</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Titre du post">
+        </div>
+        <div class="form-group">
+            <label for="chapo">Chapo</label>
+            <input type="text" class="form-control" id="chapo" name="chapo" placeholder="Chapo du post">
+        </div>
+        <div class="form-group">
+            <label for="content">Contenu</label>
+            <input type="text" class="form-control" id="content" name="content" placeholder="Contenu du post">
+        </div>
+        <button type="submit" class="btn btn-primary">Valider</button>
+    </form>
+</div>
+{% endblock %}
+
