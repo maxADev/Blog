@@ -121,11 +121,10 @@ class UserModel extends Model
     /**
      * Check user exist
      *
-     * @param $login    user login
-     * @param $password user password
+     * @param $login user login
      * @return void
      */
-    public function login($login, $password)
+    public function login($login)
     {
         $sql = 'SELECT * FROM user WHERE (login = :login OR email = :login ) AND token IS NULL AND FK_type_user_id != 3';
 
@@ -135,9 +134,7 @@ class UserModel extends Model
         $user = $request->fetch(PDO::FETCH_ASSOC);
 
         if (empty($user) === false) {
-            if (password_verify($password, $user['password']) === true) {
-                return $user;
-            }
+            return $user;
         }
 
     }//end login()

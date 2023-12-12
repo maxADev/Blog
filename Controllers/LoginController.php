@@ -138,10 +138,12 @@ class LoginController
             $postValue = $this->superglobal->getPost();
 
             if (empty($postValue['login']) === false && empty($postValue['password']) === false) {
-                $user = $this->userModel->login($postValue['login'], $postValue['password']);
+                $user = $this->userModel->login($postValue['login']);
                 if (empty($user) === false) {
-                    $this->superglobal->createSession($user);
-                    $this->redirect->getRedirect('mon-compte');
+                    if (password_verify($postValue['password'], $user['password']) === true) {
+                        $this->superglobal->createSession($user);
+                        $this->redirect->getRedirect('mon-compte');
+                    }
                 }
             }
         }

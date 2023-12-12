@@ -1,7 +1,7 @@
 <?php
 
 namespace Controllers;
-use App\Superglobal;
+use App\SuperGlobal;
 use App\Redirect;
 
 // Account Controller.
@@ -10,9 +10,9 @@ class AccountController
 
     /**
      *
-     * @var $superglobal for Superglobal class
+     * @var $superGlobal for SuperGlobal class
      */
-    private $superglobal;
+    private $superGlobal;
 
     /**
      *
@@ -28,7 +28,7 @@ class AccountController
      */
     public function __construct()
     {
-        $this->superglobal = new Superglobal;
+        $this->superGlobal = new SuperGlobal;
         $this->redirect = new Redirect;
 
     }//end __construct()
@@ -41,12 +41,11 @@ class AccountController
      */
     public function index()
     {
-        if ($this->superglobal->authSessionExist() === false) {
+        if (empty($this->superGlobal->getCurrentUser()) === true) {
             $this->redirect->getRedirect('connexion');
         };
 
-        $session = $this->superglobal->getSession();
-        $user = $session['auth'];
+        $user = $this->superGlobal->getCurrentUser();
 
         $view = [];
         $view['folder'] = 'compte';

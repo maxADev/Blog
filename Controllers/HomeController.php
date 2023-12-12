@@ -16,10 +16,8 @@ class HomeController extends Superglobal
     public function index()
     {
         $varValue = '';
-        if ($this->authSessionExist() === true) {
-            $session = $this->getSession();
-            $user = $session['auth'];
-            $varValue = ['user' => $user];
+        if (empty($this->getCurrentUser()) === false) {
+            $varValue = ['user' => $this->getCurrentUser()];
         };
 
         $view = [];

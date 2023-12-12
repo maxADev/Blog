@@ -4,8 +4,8 @@ namespace App;
 
 session_start();
 
-// Superglobal.
-class Superglobal
+// SuperGlobal.
+class SuperGlobal
 {
 
     /**
@@ -25,6 +25,18 @@ class Superglobal
      * @var $_SESSION $_SESSION value
      */
     private $SESSION;
+
+    /**
+     *
+     * @var $user $user value
+     */
+    public $user;
+
+    public function __construct() {
+        if ($this->authSessionExist() === true) {
+            $this->user = $this->SESSION['auth'];
+        };
+    }
 
 
     /**
@@ -152,14 +164,14 @@ class Superglobal
 
 
     /**
-     * Get Session
+     * Get User
      *
      * @return array
      */
-    public function getSession()
+    public function getCurrentUser()
     {
-        if (empty($this->SESSION) === false) {
-            return $this->SESSION;
+        if (empty($this->user) === false) {
+            return $this->user;
         }
 
     }//end getSession()
