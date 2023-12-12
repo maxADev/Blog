@@ -134,7 +134,6 @@ class LoginController
         }
 
         if ($this->superglobal->postExist() === true) {
-
             $postValue = $this->superglobal->getPost();
 
             if (empty($postValue['login']) === false && empty($postValue['password']) === false) {

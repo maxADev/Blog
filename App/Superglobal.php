@@ -32,11 +32,19 @@ class SuperGlobal
      */
     public $user;
 
-    public function __construct() {
+
+    /**
+     * Construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
         if ($this->authSessionExist() === true) {
             $this->user = $this->SESSION['auth'];
         };
-    }
+
+    }//end __construct()
 
 
     /**
