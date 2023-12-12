@@ -11,7 +11,7 @@ $twig = new Environment($loader);
 
 // Return controller based on url.
 $routerClass = 'App\\Router';
-$router = new $routerClass;
+$router = new $routerClass();
 $view = $router->run($twig);
 
 print_r($view);

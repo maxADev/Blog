@@ -37,9 +37,9 @@ class LoginController
      */
     public function __construct()
     {
-        $this->userModel = new UserModel;
-        $this->superglobal = new Superglobal;
-        $this->redirect = new Redirect;
+        $this->userModel = new UserModel();
+        $this->superglobal = new Superglobal();
+        $this->redirect = new Redirect();
 
     }//end __construct()
 

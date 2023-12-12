@@ -28,8 +28,8 @@ class AccountController
      */
     public function __construct()
     {
-        $this->superGlobal = new SuperGlobal;
-        $this->redirect = new Redirect;
+        $this->superGlobal = new SuperGlobal();
+        $this->redirect = new Redirect();
 
     }//end __construct()
 
