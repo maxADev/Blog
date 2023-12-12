@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-use App\Superglobal;
+use App\SuperGlobal;
 
 // Router.
 class Router
@@ -9,9 +9,9 @@ class Router
 
     /**
      *
-     * @var $superglobal for Superglobal class
+     * @var $superGlobal for SuperGlobal class
      */
-    private $superglobal;
+    private $superGlobal;
 
 
     /**
@@ -21,7 +21,7 @@ class Router
      */
     public function __construct()
     {
-        $this->superglobal = new Superglobal;
+        $this->superGlobal = new SuperGlobal;
 
     }//end __construct()
 
@@ -112,7 +112,7 @@ class Router
             $routeAction = $routeValue['action'];
 
             if (empty($routeValue['var']) !== true) {
-                $_GET = array_merge($_GET, $routeValue['var']);
+                $this->superGlobal->createGet($routeValue['var']);
             }
             
             // Use controller based on route.

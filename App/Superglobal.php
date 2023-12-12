@@ -2,8 +2,10 @@
 
 namespace App;
 
-// Superglobal.
-class Superglobal
+session_start();
+
+// SuperGlobal.
+class SuperGlobal
 {
 
     /**
@@ -18,35 +20,31 @@ class Superglobal
      */
     private $GET;
 
+    /**
+     *
+     * @var $_SESSION $_SESSION value
+     */
+    private $SESSION;
 
     /**
-     * Create a superglobal
+     *
+     * @var $user $user value
+     */
+    public $user;
+
+
+    /**
+     * Construct
      *
      * @return void
      */
     public function __construct()
     {
-        $this->createSuperglobal();
+        if ($this->authSessionExist() === true) {
+            $this->user = $this->SESSION['auth'];
+        };
 
     }//end __construct()
-
-
-    /**
-     * Create a superglobal
-     *
-     * @return mixed
-     */
-    private function createSuperglobal()
-    {
-        if (isset($_POST) === true) {
-            $this->POST = $_POST;
-        }
-
-        if (isset($_GET) === true) {
-            $this->GET = $_GET;
-        }
-
-    }//end createSuperglobal()
 
 
     /**
@@ -56,9 +54,13 @@ class Superglobal
      */
     public function postExist()
     {
-        if (empty($this->POST) === false) {
-            return true;
+        $return = false;
+        if (isset($_POST) === true && empty($_POST) === false) {
+            $this->POST = $_POST;
+            $return = true;
         }
+
+        return $return;
 
     }//end postExist()
 
@@ -93,15 +95,33 @@ class Superglobal
 
 
     /**
+     * Create a $_GET
+     *
+     * @param $getValue $_GET value
+     * @return void
+     */
+    public function createGet($getValue)
+    {
+        $_GET = $getValue;
+        $this->GET = $_GET;
+
+    }//end createGet()
+
+
+    /**
      * Check if $_GET exist
      *
      * @return boolean
      */
     public function getExist()
     {
-        if (empty($this->GET) === false) {
-            return true;
+        $return = false;
+        if (isset($_GET) === true && empty($_GET) === false) {
+            $this->GET = $_GET;
+            $return = true;
         }
+
+        return $return;
 
     }//end getExist()
 
@@ -133,6 +153,54 @@ class Superglobal
         }
 
     }//end getGetData()
+
+    /**
+     * Create a $_SESSION
+     *
+     * @return mixed
+     */
+    public function createSession($sessionValue)
+    {
+        if (isset($_SESSION['auth']) === false) {
+            $_SESSION['auth'] = $sessionValue;
+            $this->SESSION = $_SESSION;
+        } else {
+            $this->SESSION = $_SESSION;
+        }
+
+    }//end createSession()
+
+
+    /**
+     * Get User
+     *
+     * @return array
+     */
+    public function getCurrentUser()
+    {
+        if (empty($this->user) === false) {
+            return $this->user;
+        }
+
+    }//end getSession()
+
+
+    /**
+     * Get Session
+     *
+     * @return array
+     */
+    public function authSessionExist()
+    {
+        $return = false;
+        if (isset($_SESSION['auth']) === true) {
+            $this->SESSION = $_SESSION;
+            $return = true;
+        }
+
+        return $return;
+
+    }//end authSessionExist()
 
 
 }//end class

@@ -4,5 +4,8 @@
   <route url="/inscription" controller="Login" action="registration"></route>
   <route url="/connexion" controller="Login" action="loginPage"></route>
   <route url="/connexion-redirect-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="redirect"></route>
-   <route url="/connexion-validation-([0-9]+)-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="userId,token"></route>
+   <route url="/connexion-logout-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="logout"></route>
+  <route url="/connexion-validation-([0-9]+)-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="userId,token"></route>
+  <route url="/mon-compte" controller="Account" action="index"></route>
+  <route url="/deconnexion" controller="Login" action="logout"></route>
 </routes>

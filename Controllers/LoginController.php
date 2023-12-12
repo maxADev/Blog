@@ -5,6 +5,7 @@ namespace Controllers;
 use Entity\UserEntity;
 use Models\UserModel;
 use App\Superglobal;
+use App\Redirect;
 
 // Login Controller.
 class LoginController
@@ -22,6 +23,12 @@ class LoginController
      */
     private $superglobal;
 
+    /**
+     *
+     * @var $redirect for Redirect class
+     */
+    private $redirect;
+
 
     /**
      * Construct
@@ -30,8 +37,9 @@ class LoginController
      */
     public function __construct()
     {
-        $this->userModel = new UserModel;
-        $this->superglobal = new Superglobal;
+        $this->userModel = new UserModel();
+        $this->superglobal = new Superglobal();
+        $this->redirect = new Redirect();
 
     }//end __construct()
 
@@ -69,7 +77,7 @@ class LoginController
 
                 if ($createUser !== false) {
                     $this->sendEmailRegistration($createUser);
-                    header('Location: connexion-redirect-true');
+                    $this->redirect->getRedirect('connexion-redirect-true');
                 } else {
                     $error_log = ['error_message' => "Cet utilisateur existe déjà"];
                 }
@@ -94,6 +102,7 @@ class LoginController
     {
         $messageValue = '';
         $getValueRedirect = '';
+        $getValueLogout = '';
         $getValueToken = '';
         $getValueUserId = '';
 
@@ -106,6 +115,14 @@ class LoginController
         }
 
         if ($this->superglobal->getExist() === true) {
+            $getValueLogout = $this->superglobal->getGetData('logout');
+        }
+
+        if ($getValueLogout === 'true') {
+            $messageValue = "Vous êtes bien déconnecté";
+        }
+
+        if ($this->superglobal->getExist() === true) {
             $getValueToken = $this->superglobal->getGetData('token');
             $getValueUserId = $this->superglobal->getGetData('userId');
         }
@@ -113,6 +130,20 @@ class LoginController
         if (empty($getValueUserId) !== true && empty($getValueToken) !== true) {
             if ($this->userModel->validationUser($getValueUserId, $getValueToken) === true) {
                 $messageValue = 'Votre compte a bien été validé, vous pouvez vous connecter.';
+            }
+        }
+
+        if ($this->superglobal->postExist() === true) {
+            $postValue = $this->superglobal->getPost();
+
+            if (empty($postValue['login']) === false && empty($postValue['password']) === false) {
+                $user = $this->userModel->login($postValue['login']);
+                if (empty($user) === false) {
+                    if (password_verify($postValue['password'], $user['password']) === true) {
+                        $this->superglobal->createSession($user);
+                        $this->redirect->getRedirect('mon-compte');
+                    }
+                }
             }
         }
 
@@ -142,6 +173,19 @@ class LoginController
         mail($userEmail, 'Ma-Blog inscription', $message);
 
     }//end sendEmailRegistration()
+
+
+    /**
+     * Logout
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        session_destroy();
+        $this->redirect->getRedirect('connexion-logout-true');
+
+    }//end logout()
 
 
 }//end class

@@ -119,6 +119,28 @@ class UserModel extends Model
 
 
     /**
+     * Check user exist
+     *
+     * @param $login user login
+     * @return void
+     */
+    public function login($login)
+    {
+        $sql = 'SELECT * FROM user WHERE (login = :login OR email = :login ) AND token IS NULL AND FK_type_user_id != 3';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":login", $login, PDO::PARAM_STR);
+        $request->execute();
+        $user = $request->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($user) === false) {
+            return $user;
+        }
+
+    }//end login()
+
+
+    /**
      * Create a random token
      *
      * @param  $length length of token
