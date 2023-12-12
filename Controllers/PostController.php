@@ -11,20 +11,17 @@ use App\Redirect;
 class PostController
 {
 
-
-     /**
-     *
-     * @var $userModel for UserModel class
-     */
-    private $userModel;
-
+    /**
+      *
+      * @var $postModel for PostModel class
+      */
+    private $postModel;
 
     /**
      *
      * @var $superglobal for Superglobal class
      */
     private $superglobal;
-
 
     /**
      *
@@ -70,7 +67,8 @@ class PostController
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
-                    $errors[] = ['message' => 'Le champ est obligatoire : ', 'value' => $key];
+                    $errors[] = ['message' => 'Le champ est obligatoire : ',
+                                 'value' => $key];
                 } else {
                     $post[$key] = $this->superglobal->getPostData($key);
                 }
@@ -79,7 +77,7 @@ class PostController
             if (empty($errors) === true) {
                 $post['FkUserId'] = $varValue['user']['id'];
                 $postValues = new PostEntity($post);
-                if($this->postModel->createPost($postValues) === true) {
+                if ($this->postModel->createPost($postValues) === true) {
                     $success[] = ['message' => 'Le post a bien été créé'];
                 }
             }
