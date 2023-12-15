@@ -49,4 +49,23 @@ class PostModel extends Model
     }//end createPost()
 
 
+    /**
+     * Get post list
+     *
+     * @return post
+     */
+    public function getPostList()
+    {
+        $sql = 'SELECT * FROM post';
+
+        $request = $this->connection->prepare($sql);
+        $request->execute();
+
+        $postList = $request->fetchAll(PDO::FETCH_ASSOC);
+
+        return $postList;
+
+    }//end getPostList()
+
+
 }//end class

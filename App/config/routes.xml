@@ -9,4 +9,5 @@
   <route url="/mon-compte" controller="Account" action="index"></route>
   <route url="/deconnexion" controller="Login" action="logout"></route>
   <route url="/creer-un-post" controller="Post" action="create"></route>
+  <route url="/les-posts" controller="Post" action="postList"></route>
 </routes>
