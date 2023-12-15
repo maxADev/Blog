@@ -94,4 +94,34 @@ class PostController
     }//end create()
 
 
+    /**
+     * Get post list
+     *
+     * @return view
+     */
+    public function postList()
+    {
+        $errors[] = ['message' => 'Aucun post trouvé : '];
+
+        if (empty($this->superglobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superglobal->getCurrentUser();
+        };
+
+        $postList = $this->postModel->getPostList();
+
+        if (empty($postList) === false) {
+            $errors = [];
+            $varValue['postList'] = $postList;
+        }
+
+        $view = [];
+        $view['folder'] = 'post';
+        $view['file'] = 'postList.twig';
+        $view['var'] = $varValue;
+        $view['errorLog'] = $errors;
+        return $view;
+
+    }//end postList()
+
+
 }//end class
