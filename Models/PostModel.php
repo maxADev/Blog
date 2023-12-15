@@ -68,4 +68,27 @@ class PostModel extends Model
     }//end getPostList()
 
 
+    /**
+     * Get post list
+     *
+     * @param $postId post id
+     * @return post
+     */
+    public function getPost($postId)
+    {
+        $sql = 'SELECT post.id, post.title, post.chapo, post.content, post.creation_date, post.modification_date, post.FK_user_id, user.last_name, user.first_name FROM post
+                INNER JOIN user ON user.id = post.FK_user_id
+                WHERE post.id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":id", $postId, PDO::PARAM_INT);
+        $request->execute();
+
+        $post = $request->fetch(PDO::FETCH_ASSOC);
+
+        return $post;
+
+    }//end getPost()
+
+
 }//end class

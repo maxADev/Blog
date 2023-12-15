@@ -125,4 +125,40 @@ class PostController
     }//end postList()
 
 
+    /**
+     * Get post list
+     *
+     * @return view
+     */
+    public function readPost()
+    {
+        $varValue = [];
+        $errors[] = ['message' => 'Aucun post trouvé : '];
+
+        if (empty($this->superglobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superglobal->getCurrentUser();
+        };
+
+        if ($this->superglobal->getExist() === true) {
+            $getValuePostId = $this->superglobal->getGetData('postId');
+        }
+
+        if (empty($getValuePostId) === false) {
+            $post = $this->postModel->getPost($getValuePostId);
+            if (empty($post) === false) {
+                $errors = [];
+                $varValue['post'] = $post;
+            }
+        }
+
+        $view = [];
+        $view['folder'] = 'post';
+        $view['file'] = 'readPost.twig';
+        $view['var'] = $varValue;
+        $view['errorLog'] = $errors;
+        return $view;
+
+    }//end readPost()
+
+
 }//end class
