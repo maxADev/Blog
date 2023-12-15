@@ -101,6 +101,7 @@ class PostController
      */
     public function postList()
     {
+        $varValue = [];
         $errors[] = ['message' => 'Aucun post trouvé : '];
 
         if (empty($this->superglobal->getCurrentUser()) === false) {
