@@ -102,6 +102,9 @@ class Router
     public function run($twig)
     {
         $viewVar = [];
+        $viewVarValue = [];
+        $viewVarErrorLog = [];
+        $viewVarSuccessLog = [];
         
         $routeValue = $this->getRoute();
 
@@ -120,11 +123,20 @@ class Router
             $viewPath = $controller->$routeAction();
             if (empty($viewPath['var']) !== true) {
                 $viewVar = $viewPath['var'];
+                $viewVarValue['varList'] = $viewVar;
+            }
+            if (empty($viewPath['errorLog']) !== true) {
+                $viewVarErrorLog = $viewPath['errorLog'];
+                $viewVarValue['errorLog'] = $viewVarErrorLog;
+            }
+            if (empty($viewPath['successLog']) !== true) {
+                $viewVarSuccessLog = $viewPath['successLog'];
+                $viewVarValue['successLog'] = $viewVarSuccessLog;
             }
             $view = $viewPath['folder'].'\\'.$viewPath['file'];
         }
 
-        $viewValue = $twig->render($view, ['varList' => $viewVar]);
+        $viewValue = $twig->render($view, $viewVarValue);
         return $viewValue;
 
     }//end run()

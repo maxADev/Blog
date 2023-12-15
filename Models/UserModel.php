@@ -4,7 +4,7 @@ namespace Models;
 use App\Model;
 use \PDO;
 
-// Utilisateur Model.
+// User Model.
 class UserModel extends Model
 {
 
