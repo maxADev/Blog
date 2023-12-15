@@ -10,4 +10,5 @@
   <route url="/deconnexion" controller="Login" action="logout"></route>
   <route url="/creer-un-post" controller="Post" action="create"></route>
   <route url="/les-posts" controller="Post" action="postList"></route>
+  <route url="/post-([0-9]+)-([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postId"></route>
 </routes>
