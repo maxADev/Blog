@@ -36,7 +36,16 @@
                     {% else %}
                         <p class="card-text"><i class="bi bi-calendar"></i> {{ post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
                     {% endif %}
-                    <a class="btn btn-primary" href={{"post-#{post.id}-#{post.title}"|replace({' ': '-'})}}>Voir</a>
+                    <div class="col-12 row justify-content-around">
+                        <div class="col-5">
+                            <a class="btn btn-primary" href={{"post-#{post.id}-#{post.title}"|replace({' ': '-'})}}>Voir</a>
+                        </div>
+                    {% if post.FK_user_id == varList.user.id %}
+                        <div class="col-5">
+                            <a class="btn btn-primary" href={{"post-modification-#{post.id}-#{post.title}"|replace({' ': '-'})}}>Modifier</a>
+                        </div>
+                    {% endif %}
+                    </div>
                 </div>
             </div>
         {% endfor %}

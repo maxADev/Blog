@@ -49,13 +49,13 @@ class PostController
      *
      * @return view
      */
-    public function create()
+    public function postCreation()
     {
         $errors = [];
         $success = [];
 
         if (empty($this->superglobal->getCurrentUser()) === true) {
-            $this->redirect->getRedirect('connexion');
+            $this->redirect->getRedirect('login');
         };
 
         $varValue = ['user' => $this->superglobal->getCurrentUser()];
@@ -85,7 +85,7 @@ class PostController
 
         $view = [];
         $view['folder'] = 'post';
-        $view['file'] = 'creationPost.twig';
+        $view['file'] = 'postCreation.twig';
         $view['var'] = $varValue;
         $view['errorLog'] = $errors;
         $view['successLog'] = $success;
@@ -159,6 +159,69 @@ class PostController
         return $view;
 
     }//end readPost()
+
+
+    /**
+     * Get post list
+     *
+     * @return view
+     */
+    public function postModification()
+    {
+        $varValue = [];
+        $errors[] = ['message' => 'Aucun post trouvé : '];
+        $success = [];
+
+        if (empty($this->superglobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superglobal->getCurrentUser();
+        };
+
+        if ($this->superglobal->getExist() === true) {
+            $getValuePostId = $this->superglobal->getGetData('postId');
+        }
+
+        if (empty($getValuePostId) === false) {
+            $postValue = $this->postModel->getPost($getValuePostId);
+            if (empty($postValue) === false) {
+                if($varValue['user']['id'] !== $postValue['FK_user_id']) {
+                    $this->redirect->getRedirect('posts');
+                }
+                $errors = [];
+                $varValue['post'] = $postValue;
+            }
+        }
+
+        if ($this->superglobal->postExist() === true) {
+            $post = [];
+
+            $postValue = $this->superglobal->getPost();
+
+            foreach ($postValue as $key => $value) {
+                if (empty($value) === true) {
+                    $errors[] = ['message' => 'Le champ est obligatoire : ',
+                                 'value' => $key];
+                } else {
+                    $post[$key] = $this->superglobal->getPostData($key);
+                }
+            }
+
+            if (empty($errors) === true) {
+                $post['id'] = $getValuePostId;
+                if ($this->postModel->postModification($post) === true) {
+                    $success[] = ['message' => 'Le post a bien été modifié'];
+                }
+            }
+        }//end if
+
+        $view = [];
+        $view['folder'] = 'post';
+        $view['file'] = 'postModification.twig';
+        $view['var'] = $varValue;
+        $view['errorLog'] = $errors;
+        $view['successLog'] = $success;
+        return $view;
+
+    }//end postModification()
 
 
 }//end class

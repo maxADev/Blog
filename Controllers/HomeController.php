@@ -21,8 +21,8 @@ class HomeController extends Superglobal
         };
 
         $view = [];
-        $view['folder'] = 'accueil';
-        $view['file'] = 'accueil.twig';
+        $view['folder'] = 'home';
+        $view['file'] = 'home.twig';
         $view['var'] = $varValue;
         return $view;
 

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <routes>
   <route url="/" controller="Home" action="index"></route>
-  <route url="/inscription" controller="Login" action="registration"></route>
-  <route url="/connexion" controller="Login" action="loginPage"></route>
-  <route url="/connexion-redirect-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="redirect"></route>
-   <route url="/connexion-logout-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="logout"></route>
-  <route url="/connexion-validation-([0-9]+)-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="userId,token"></route>
-  <route url="/mon-compte" controller="Account" action="index"></route>
-  <route url="/deconnexion" controller="Login" action="logout"></route>
-  <route url="/creer-un-post" controller="Post" action="create"></route>
-  <route url="/les-posts" controller="Post" action="postList"></route>
-  <route url="/post-([0-9]+)-([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postId"></route>
+  <route url="/registration" controller="Login" action="registration"></route>
+  <route url="/login" controller="Login" action="loginPage"></route>
+  <route url="/login-redirect-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="redirect"></route>
+  <route url="/login-logout-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="logout"></route>
+  <route url="/login-validation-([0-9]+)-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="userId,token"></route>
+  <route url="/my-account" controller="Account" action="index"></route>
+  <route url="/logout" controller="Login" action="logout"></route>
+  <route url="/post-creation" controller="Post" action="postCreation"></route>
+  <route url="/posts" controller="Post" action="postList"></route>
+  <route url="/post-([0-9]+)-([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postId,postTitle"></route>
+  <route url="/post-modification-([0-9]+)-([a-z-A-Z-0-9]+)" controller="Post" action="postModification" vars="postId,postTitle"></route>
 </routes>

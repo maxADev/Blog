@@ -78,7 +78,7 @@ class LoginController
 
                 if ($createUser !== false) {
                     $this->sendEmailRegistration($createUser);
-                    $this->redirect->getRedirect('connexion-redirect-true');
+                    $this->redirect->getRedirect('login-redirect-true');
                 } else {
                     $errors[] = ['message' => "Cet utilisateur existe déjà"];
                 }
@@ -86,8 +86,8 @@ class LoginController
         }//end if
 
         $view = [];
-        $view['folder'] = 'connexion';
-        $view['file'] = 'inscription.twig';
+        $view['folder'] = 'login';
+        $view['file'] = 'registration.twig';
         $view['errorLog'] = $errors;
         return $view;
 
@@ -143,7 +143,7 @@ class LoginController
                 if (empty($user) === false) {
                     if (password_verify($postValue['password'], $user['password']) === true) {
                         $this->superglobal->createSession($user);
-                        $this->redirect->getRedirect('mon-compte');
+                        $this->redirect->getRedirect('my-account');
                     }
                 }
             }
@@ -151,8 +151,8 @@ class LoginController
 
         $success[] = ['message' => $messageValue];
         $view = [];
-        $view['folder'] = 'connexion';
-        $view['file'] = 'connexion.twig';
+        $view['folder'] = 'login';
+        $view['file'] = 'login.twig';
         $view['successLog'] = $success;
         return $view;
 
@@ -171,7 +171,7 @@ class LoginController
         $userToken = $createUser['userToken'];
         $userEmail = $createUser['userEmail'];
 
-        $message = 'Valider votre compte en cliquant sur le lien : http://mablog.projetformationma.com/connexion-validation-'.$userId.'-'.$userToken.'';
+        $message = 'Valider votre compte en cliquant sur le lien : http://mablog.projetformationma.com/login-validation-'.$userId.'-'.$userToken.'';
 
         mail($userEmail, 'Ma-Blog inscription', $message);
 
@@ -186,7 +186,7 @@ class LoginController
     public function logout()
     {
         session_destroy();
-        $this->redirect->getRedirect('connexion-logout-true');
+        $this->redirect->getRedirect('login-logout-true');
 
     }//end logout()
 

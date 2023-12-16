@@ -42,14 +42,14 @@ class AccountController
     public function index()
     {
         if (empty($this->superGlobal->getCurrentUser()) === true) {
-            $this->redirect->getRedirect('connexion');
+            $this->redirect->getRedirect('login');
         };
 
         $user = $this->superGlobal->getCurrentUser();
 
         $view = [];
-        $view['folder'] = 'compte';
-        $view['file'] = 'monCompte.twig';
+        $view['folder'] = 'account';
+        $view['file'] = 'myAccount.twig';
         $view['var'] = ['user' => $user];
         return $view;
 
