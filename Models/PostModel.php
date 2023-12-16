@@ -91,4 +91,25 @@ class PostModel extends Model
     }//end getPost()
 
 
+    /**
+     * Post modification
+     *
+     * @param $post post value
+     * @return boolean
+     */
+    public function postModification($post)
+    {
+        $sql = 'UPDATE post SET title = :tile, chapo = :chapo, content = :content, modification_date = NOW() WHERE id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":tile", $post['title'], PDO::PARAM_STR);
+        $request->bindValue(":chapo", $post['chapo'], PDO::PARAM_STR);
+        $request->bindValue(":content", $post['content'], PDO::PARAM_STR);
+        $request->bindValue(":id", $post['id'], PDO::PARAM_INT);
+
+        return $request->execute();
+
+    }//end postModification()
+
+
 }//end class
