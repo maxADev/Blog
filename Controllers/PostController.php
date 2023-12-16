@@ -178,14 +178,12 @@ class PostController
 
         if ($this->superglobal->getExist() === true) {
             $getValuePostId = $this->superglobal->getGetData('postId');
-        }
-
-        if (empty($getValuePostId) === false) {
             $postValue = $this->postModel->getPost($getValuePostId);
             if (empty($postValue) === false) {
-                if($varValue['user']['id'] !== $postValue['FK_user_id']) {
+                if ($varValue['user']['id'] !== $postValue['FK_user_id']) {
                     $this->redirect->getRedirect('posts');
                 }
+
                 $errors = [];
                 $varValue['post'] = $postValue;
             }
