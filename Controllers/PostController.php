@@ -222,4 +222,36 @@ class PostController
     }//end postModification()
 
 
+    /**
+     * Get post list
+     *
+     * @return view
+     */
+    public function postDeletion()
+    {
+        $varValue = [];
+
+        if (empty($this->superglobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superglobal->getCurrentUser();
+        };
+
+        if ($this->superglobal->getExist() === true) {
+            $getValuePostId = $this->superglobal->getGetData('postId');
+            $postValue = $this->postModel->getPost($getValuePostId);
+            if (empty($postValue) === false) {
+                if ($varValue['user']['id'] !== $postValue['FK_user_id']) {
+                    $this->redirect->getRedirect('posts');
+                }
+
+                if (empty($postValue) === false) {
+                    if ($this->postModel->postDeletion($getValuePostId) === true) {
+                        $this->redirect->getRedirect('posts');
+                    }
+                }
+            }
+        }//end if
+
+    }//end postDeletion()
+
+
 }//end class

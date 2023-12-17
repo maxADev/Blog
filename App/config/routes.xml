@@ -12,4 +12,5 @@
   <route url="/posts" controller="Post" action="postList"></route>
   <route url="/post-([0-9]+)-([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postId,postTitle"></route>
   <route url="/post-modification-([0-9]+)-([a-z-A-Z-0-9]+)" controller="Post" action="postModification" vars="postId,postTitle"></route>
+  <route url="/post-deletion-([0-9]+)" controller="Post" action="postDeletion" vars="postId"></route>
 </routes>
