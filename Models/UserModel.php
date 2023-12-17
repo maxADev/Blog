@@ -119,10 +119,10 @@ class UserModel extends Model
 
 
     /**
-     * Check user exist
+     * Login
      *
      * @param $login user login
-     * @return void
+     * @return user
      */
     public function login($login)
     {
@@ -138,6 +138,28 @@ class UserModel extends Model
         }
 
     }//end login()
+
+
+    /**
+     * Login Admin
+     *
+     * @param $login user login
+     * @return user
+     */
+    public function loginAdmin($login)
+    {
+        $sql = 'SELECT * FROM user WHERE (login = :login OR email = :login ) AND token IS NULL AND FK_type_user_id = 2';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":login", $login, PDO::PARAM_STR);
+        $request->execute();
+        $user = $request->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($user) === false) {
+            return $user;
+        }
+
+    }//end loginAdmin()
 
 
     /**

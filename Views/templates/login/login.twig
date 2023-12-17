@@ -1,0 +1,30 @@
+{% extends "layout.twig" %}
+{% block head %}
+    <title>Connexion</title>
+{% endblock %}
+
+{% block content %}
+
+{% if successLog is defined %}
+    <div class="container text-center text-success mt-3">
+        {% for successValue in successLog %}
+            <p>{{successValue.message}}{{successValue.value}}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="container text-center">
+    <p>Connexion</p>
+    <form action="" method="post">
+        <div class="form-group">
+            <label for="login">Email ou Identifiant</label>
+            <input type="text" class="form-control" id="login" name="login" placeholder="Votre email ou identifiant">
+        </div>
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Votre mot de passe">
+        </div>
+        <button type="submit" class="btn btn-primary">Valider</button>
+    </form>
+</div>
+{% endblock %}

@@ -86,7 +86,7 @@ class LoginController
         }//end if
 
         $view = [];
-        $view['folder'] = 'login';
+        $view['folder'] = 'templates\login';
         $view['file'] = 'registration.twig';
         $view['errorLog'] = $errors;
         return $view;
@@ -151,7 +151,7 @@ class LoginController
 
         $success[] = ['message' => $messageValue];
         $view = [];
-        $view['folder'] = 'login';
+        $view['folder'] = 'templates\login';
         $view['file'] = 'login.twig';
         $view['successLog'] = $success;
         return $view;

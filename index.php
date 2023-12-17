@@ -6,7 +6,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 // Load TWIG.
-$loader = new FilesystemLoader(__DIR__.'/templates');
+$loader = new FilesystemLoader(__DIR__.'/Views');
 $twig = new Environment($loader);
 
 // Return controller based on url.
