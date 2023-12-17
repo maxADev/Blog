@@ -156,8 +156,10 @@ class PostController
         if (empty($getValuePostId) === false) {
             $post = $this->postModel->getPost($getValuePostId);
             if (empty($post) === false) {
+                $commentList = $this->commentModel->getPostCommentList($getValuePostId);
                 $errors = [];
                 $varValue['post'] = $post;
+                $varValue['commentList'] = $commentList;
             }
         }
 
@@ -184,9 +186,12 @@ class PostController
                     if ($this->commentModel->createComment($commentValue) === true) {
                         $errors = [];
                         $success[] = ['message' => 'Le commentaire a bien été posté, il est en attente de validation'];
+                        $commentList = $this->commentModel->getPostCommentList($getValuePostId);
+                        $varValue['commentList'] = $commentList;
                     }
                 }
             }
+
         }//end if
 
         $view = [];

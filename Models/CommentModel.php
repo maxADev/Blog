@@ -42,4 +42,28 @@ class CommentModel extends Model
     }//end createComment()
 
 
+    /**
+     * Get post comment list
+     *
+     * @param $postId post id
+     * @return comment
+     */
+    public function getPostCommentList($postId)
+    {
+        $sql = 'SELECT comment.id, comment.content, comment.creation_date, comment.modification_date, comment.FK_statut_comment_id, comment.FK_user_id, comment.FK_post_id, user.last_name, user.first_name, comment_statut.comment_statut_name FROM comment 
+                INNER JOIN user ON user.id = comment.FK_user_id
+                INNER JOIN comment_statut ON comment_statut.id = comment.FK_statut_comment_id
+                WHERE FK_post_id = :FK_post_id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":FK_post_id", $postId, PDO::PARAM_INT);
+        $request->execute();
+
+        $postCommentList = $request->fetchAll(PDO::FETCH_ASSOC);
+
+        return $postCommentList;
+
+    }//end getPostCommentList()
+
+
 }//end class
