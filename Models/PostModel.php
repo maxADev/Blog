@@ -112,4 +112,22 @@ class PostModel extends Model
     }//end postModification()
 
 
+    /**
+     * Post deletion
+     *
+     * @param $postId post id
+     * @return boolean
+     */
+    public function postDeletion($postId)
+    {
+        $sql = 'DELETE FROM post WHERE id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":id", $postId, PDO::PARAM_INT);
+
+        return $request->execute();
+
+    }//end postDeletion()
+
+
 }//end class

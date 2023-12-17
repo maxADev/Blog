@@ -41,8 +41,13 @@
                             <a class="btn btn-primary" href={{"post-#{post.id}-#{post.title}"|replace({' ': '-'})}}>Voir</a>
                         </div>
                     {% if post.FK_user_id == varList.user.id %}
-                        <div class="col-5">
-                            <a class="btn btn-primary" href={{"post-modification-#{post.id}-#{post.title}"|replace({' ': '-'})}}>Modifier</a>
+                        <div class="col-6 row">
+                            <div class="col-6">
+                                <a class="btn btn-primary" href={{"post-modification-#{post.id}-#{post.title}"|replace({' ': '-'})}}>Modifier</a>
+                            </div>
+                            <div class="col-6">
+                                <a class="btn btn-danger" href={{"post-deletion-#{post.id}"}}>Supprimer</a>
+                            </div>
                         </div>
                     {% endif %}
                     </div>
