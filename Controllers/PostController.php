@@ -230,8 +230,6 @@ class PostController
     public function postDeletion()
     {
         $varValue = [];
-        $errors[] = ['message' => 'Aucun post trouvé : '];
-        $success = [];
 
         if (empty($this->superglobal->getCurrentUser()) === false) {
             $varValue['user'] = $this->superglobal->getCurrentUser();
@@ -246,7 +244,7 @@ class PostController
                 }
 
                 if (empty($postValue) === false) {
-                    if($this->postModel->postDeletion($getValuePostId) === true)
+                    if ($this->postModel->postDeletion($getValuePostId) === true)
                     {
                         $this->redirect->getRedirect('posts');
                     };
@@ -255,15 +253,7 @@ class PostController
 
         }//end if
 
-        $view = [];
-        $view['folder'] = 'post';
-        $view['file'] = 'postModification.twig';
-        $view['var'] = $varValue;
-        $view['errorLog'] = $errors;
-        $view['successLog'] = $success;
-        return $view;
-
-    }//end postModification()
+    }//end postDeletion()
 
 
 }//end class
