@@ -3,8 +3,10 @@
 namespace Controllers;
 
 use Entity\CommentEntity;
+use Models\PostModel;
 use Models\CommentModel;
 use App\Superglobal;
+use App\Redirect;
 
 // Comment Controller.
 class CommentController extends Superglobal
@@ -22,6 +24,12 @@ class CommentController extends Superglobal
      */
     private $superglobal;
 
+    /**
+     *
+     * @var $redirect for Redirect class
+     */
+    private $redirect;
+
 
     /**
      * Construct
@@ -32,6 +40,7 @@ class CommentController extends Superglobal
     {
         $this->commentModel = new CommentModel();
         $this->superglobal = new Superglobal();
+        $this->redirect = new Redirect();
 
     }//end __construct()
 
@@ -86,6 +95,40 @@ class CommentController extends Superglobal
         return $return;
 
     }//end commentPostModification()
+
+
+    /**
+     * Comment deletion
+     *
+     * @return void
+     */
+    public function commentDeletion()
+    {
+        $varValue = [];
+
+        if (empty($this->superglobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superglobal->getCurrentUser();
+        };
+
+        if ($this->superglobal->getExist() === true) {
+            $getValueCommentId = $this->superglobal->getGetData('commentId');
+            $commentValue = $this->commentModel->getComment($getValueCommentId);
+            if (empty($commentValue) === false) {
+                $postModel = new PostModel();
+                $post = $postModel->getPost($commentValue['FK_post_id']);
+                if ($varValue['user']['id'] !== $commentValue['FK_user_id']) {
+                    $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
+                }
+
+                if (empty($commentValue) === false) {
+                    if ($this->commentModel->deleteComment($getValueCommentId) === true) {
+                        $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
+                    }
+                }
+            }
+        }//end if
+
+    }//end commentDeletion()
 
 
 }//end class

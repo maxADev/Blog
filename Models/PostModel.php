@@ -69,7 +69,7 @@ class PostModel extends Model
 
 
     /**
-     * Get post list
+     * Get post
      *
      * @param $postId post id
      * @return post

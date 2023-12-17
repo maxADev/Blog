@@ -85,4 +85,45 @@ class CommentModel extends Model
     }//end commentModification()
 
 
+    /**
+     * Get comment
+     *
+     * @param $commentId comment id
+     * @return comment
+     */
+    public function getComment($commentId)
+    {
+        $sql = 'SELECT comment.id, comment.content, comment.creation_date, comment.modification_date, comment.FK_statut_comment_id, comment.FK_user_id, comment.FK_post_id, user.last_name, user.first_name FROM comment
+                INNER JOIN user ON user.id = comment.FK_user_id
+                WHERE comment.id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":id", $commentId, PDO::PARAM_INT);
+        $request->execute();
+
+        $comment = $request->fetch(PDO::FETCH_ASSOC);
+
+        return $comment;
+
+    }//end getComment()
+
+
+    /**
+     * Delete comment
+     *
+     * @param $commentId comment id
+     * @return boolean
+     */
+    public function deleteComment($commentId)
+    {
+        $sql = 'DELETE FROM comment WHERE id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":id", $commentId, PDO::PARAM_INT);
+
+        return $request->execute();
+
+    }//end deleteComment()
+
+
 }//end class
