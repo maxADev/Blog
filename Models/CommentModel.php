@@ -48,7 +48,7 @@ class CommentModel extends Model
      * @param $postId post id
      * @return comment
      */
-    public function getPostCommentList($postId)
+    public function getCommentList($postId)
     {
         $sql = 'SELECT comment.id, comment.content, comment.creation_date, comment.modification_date, comment.FK_statut_comment_id, comment.FK_user_id, comment.FK_post_id, user.last_name, user.first_name, comment_statut.comment_statut_name FROM comment 
                 INNER JOIN user ON user.id = comment.FK_user_id
@@ -63,7 +63,26 @@ class CommentModel extends Model
 
         return $postCommentList;
 
-    }//end getPostCommentList()
+    }//end getCommentList()
+
+
+    /**
+     * Comment modification
+     *
+     * @param $comment comment value
+     * @return boolean
+     */
+    public function commentModification($comment)
+    {
+        $sql = 'UPDATE comment SET content = :content, FK_statut_comment_id = 1, modification_date = NOW() WHERE id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":content", $comment['commentContent'], PDO::PARAM_STR);
+        $request->bindValue(":id", $comment['commentId'], PDO::PARAM_INT);
+
+        return $request->execute();
+
+    }//end commentModification()
 
 
 }//end class

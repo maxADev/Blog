@@ -3,11 +3,10 @@
 namespace Controllers;
 
 use Entity\PostEntity;
-use Entity\CommentEntity;
 use Models\PostModel;
-use Models\CommentModel;
 use App\Superglobal;
 use App\Redirect;
+use Controllers\CommentController;
 
 // Post Controller.
 class PostController
@@ -18,12 +17,6 @@ class PostController
       * @var $postModel for PostModel class
       */
     private $postModel;
-
-    /**
-      *
-      * @var $postModel for PostModel class
-      */
-    private $commentModel;
 
     /**
      *
@@ -37,6 +30,12 @@ class PostController
      */
     private $redirect;
 
+    /**
+     *
+     * @var $commentController for CommentController class
+     */
+    private $commentController;
+
 
     /**
      * Construct
@@ -46,9 +45,9 @@ class PostController
     public function __construct()
     {
         $this->postModel = new PostModel();
-        $this->commentModel = new CommentModel();
         $this->superglobal = new Superglobal();
         $this->redirect = new Redirect();
+        $this->commentController = new CommentController();
 
     }//end __construct()
 
@@ -144,6 +143,7 @@ class PostController
         $varValue = [];
         $errors[] = ['message' => 'Aucun post trouvé : '];
         $success = [];
+        $varValue['commentModificationId'] = 0;
 
         if (empty($this->superglobal->getCurrentUser()) === false) {
             $varValue['user'] = $this->superglobal->getCurrentUser();
@@ -151,15 +151,18 @@ class PostController
 
         if ($this->superglobal->getExist() === true) {
             $getValuePostId = $this->superglobal->getGetData('postId');
+            $getValueCommentId = $this->superglobal->getGetData('commentId');
+            if (empty($getValueCommentId) === false) {
+                $varValue['commentModificationId'] = $getValueCommentId;
+            }
         }
 
         if (empty($getValuePostId) === false) {
             $post = $this->postModel->getPost($getValuePostId);
             if (empty($post) === false) {
-                $commentList = $this->commentModel->getPostCommentList($getValuePostId);
                 $errors = [];
                 $varValue['post'] = $post;
-                $varValue['commentList'] = $commentList;
+                $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);;
             }
         }
 
@@ -180,18 +183,24 @@ class PostController
             if (empty($errors) === true) {
                 $postValue['FKPostId'] = $getValuePostId;
                 $postValue['FKUserId'] = $varValue['user']['id'];
-                $commentValue = new CommentEntity($postValue);
-                $errors[] = ['message' => 'Le commentaire ne peut-être ajouté'];
-                if (empty($varValue['user']['id']) === false) {
-                    if ($this->commentModel->createComment($commentValue) === true) {
-                        $errors = [];
-                        $success[] = ['message' => 'Le commentaire a bien été posté, il est en attente de validation'];
-                        $commentList = $this->commentModel->getPostCommentList($getValuePostId);
-                        $varValue['commentList'] = $commentList;
+                if (isset($postValue['comment_content_modification']) === false) {
+                    $errors[] = ['message' => 'Le commentaire ne peut-être ajouté'];
+                    if (empty($varValue['user']['id']) === false) {
+                        if ($this->commentController->createPostComment($postValue) === true) {
+                            $errors = [];
+                            $success[] = ['message' => 'Le commentaire a bien été posté, il est en attente de validation'];
+                            $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);;
+                        }
+                    }
+                } else {
+                    $postValue['commentContent'] = $postValue['comment_content_modification'];
+                    $postValue['commentId'] = $getValueCommentId;
+                    $commentValue = $postValue;
+                    if ($this->commentController->commentPostModification($commentValue) === true) {
+                        $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
                     }
                 }
             }
-
         }//end if
 
         $view = [];
