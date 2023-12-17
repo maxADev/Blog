@@ -189,7 +189,7 @@ class PostController
                         if ($this->commentController->createPostComment($postValue) === true) {
                             $errors = [];
                             $success[] = ['message' => 'Le commentaire a bien été posté, il est en attente de validation'];
-                            $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);;
+                            $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);
                         }
                     }
                 } else {

@@ -61,7 +61,7 @@ class CommentController extends Superglobal
     {
         $return = false;
         $comment = new CommentEntity($commentValue);
-        if($this->commentModel->createComment($comment)) {
+        if ($this->commentModel->createComment($comment) === true) {
             $return = true;
         };
 
@@ -79,7 +79,7 @@ class CommentController extends Superglobal
     public function commentPostModification($commentValue)
     {
         $return = false;
-        if($this->commentModel->commentModification($commentValue)) {
+        if ($this->commentModel->commentModification($commentValue) === true) {
             $return = true;
         };
 
