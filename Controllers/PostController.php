@@ -3,7 +3,9 @@
 namespace Controllers;
 
 use Entity\PostEntity;
+use Entity\CommentEntity;
 use Models\PostModel;
+use Models\CommentModel;
 use App\Superglobal;
 use App\Redirect;
 
@@ -16,6 +18,12 @@ class PostController
       * @var $postModel for PostModel class
       */
     private $postModel;
+
+    /**
+      *
+      * @var $postModel for PostModel class
+      */
+    private $commentModel;
 
     /**
      *
@@ -38,6 +46,7 @@ class PostController
     public function __construct()
     {
         $this->postModel = new PostModel();
+        $this->commentModel = new CommentModel();
         $this->superglobal = new Superglobal();
         $this->redirect = new Redirect();
 
@@ -134,6 +143,7 @@ class PostController
     {
         $varValue = [];
         $errors[] = ['message' => 'Aucun post trouvé : '];
+        $success = [];
 
         if (empty($this->superglobal->getCurrentUser()) === false) {
             $varValue['user'] = $this->superglobal->getCurrentUser();
@@ -151,11 +161,40 @@ class PostController
             }
         }
 
+        if ($this->superglobal->postExist() === true) {
+            $postValue = [];
+
+            $postValue = $this->superglobal->getPost();
+
+            foreach ($postValue as $key => $value) {
+                if (empty($value) === true) {
+                    $errors[] = ['message' => 'Le champ est obligatoire : ',
+                                 'value' => $key];
+                } else {
+                    $postValue[$key] = $this->superglobal->getPostData($key);
+                }
+            }
+
+            if (empty($errors) === true) {
+                $postValue['FKPostId'] = $getValuePostId;
+                $postValue['FKUserId'] = $varValue['user']['id'];
+                $commentValue = new CommentEntity($postValue);
+                $errors[] = ['message' => 'Le commentaire ne peut-être ajouté'];
+                if (empty($varValue['user']['id']) === false) {
+                    if ($this->commentModel->createComment($commentValue) === true) {
+                        $errors = [];
+                        $success[] = ['message' => 'Le commentaire a bien été posté, il est en attente de validation'];
+                    }
+                }
+            }
+        }//end if
+
         $view = [];
         $view['folder'] = 'post';
         $view['file'] = 'readPost.twig';
         $view['var'] = $varValue;
         $view['errorLog'] = $errors;
+        $view['successLog'] = $success;
         return $view;
 
     }//end readPost()

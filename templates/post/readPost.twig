@@ -45,5 +45,17 @@
         </div>
     </div>
     {% endif %}
+
+    {% if varList.user is defined %}
+    <div class="container col-8 text-center">
+        <form action="" method="post">
+            <div class="form-group">
+                <label for="content">Contenu</label>
+                <input type="text" class="form-control" id="content" name="content" placeholder="Contenu du commentaire">
+            </div>
+            <button type="submit" class="btn btn-primary">Commenter</button>
+        </form>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
