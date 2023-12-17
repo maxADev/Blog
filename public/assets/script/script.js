@@ -1,23 +1,47 @@
-$(document).ready(function() {
-    $(document).on('click', '.delete-post', function() {
-        let postId = $(this).data('post-id');
-        $('.post-deletion-container').css('display', 'block')
-        $('.confirm-post-deletion').attr('href', 'post-deletion-'+postId+'');
-    })
+document.addEventListener("DOMContentLoaded", (event) => {
+    let deletePost = document.getElementsByClassName('delete-post');
+    let deletePostClose = document.getElementById('delete-post-close');
+    if (deletePost && deletePostClose) {
+        for (var i = 0; i < deletePost.length; i++) {
+            deletePost[i].addEventListener('click', modalDeletePost, false);
+        }
+    
+        deletePostClose.addEventListener('click', modalDeletePostClose, false);
+    }
 
-    $(document).on('click', '.delete-post-close', function() {
-        $('.post-deletion-container').css('display', 'none')
-        $('.confirm-post-deletion').attr('href', '');
-    })
+    let commentPost = document.getElementsByClassName('delete-comment');
+    let deleteCommentClose = document.getElementById('delete-comment-close');
+    if (commentPost && deleteCommentClose) {
+        for (var i = 0; i < commentPost.length; i++) {
+            commentPost[i].addEventListener('click', modalDeleteComment, false);
+        }
 
-    $(document).on('click', '.delete-comment', function() {
-        let commentId = $(this).data('comment-id');
-        $('.comment-deletion-container').css('display', 'block')
-        $('.confirm-comment-deletion').attr('href', 'comment-deletion-'+commentId+'');
-    })
-
-    $(document).on('click', '.delete-comment-close', function() {
-        $('.comment-deletion-container').css('display', 'none')
-        $('.confirm-comment-deletion').attr('href', '');
-    })
+        deleteCommentClose.addEventListener('click', modalDeleteCommentClose, false);
+    }
 });
+
+function modalDeletePost()
+{
+    let postId = this.dataset.postId;
+    document.getElementById("post-deletion-container").style.display = "block";
+    document.getElementById("confirm-post-deletion").href = "post-deletion-"+postId;
+}
+
+function modalDeletePostClose()
+{
+    document.getElementById("post-deletion-container").style.display = "none";
+    document.getElementById("confirm-post-deletion").href = "";
+}
+
+function modalDeleteComment()
+{
+    let commentId = this.dataset.commentId;
+    document.getElementById("comment-deletion-container").style.display = "block";
+    document.getElementById("confirm-comment-deletion").href = "comment-deletion-"+commentId;
+}
+
+function modalDeleteCommentClose()
+{
+    document.getElementById("comment-deletion-container").style.display = "none";
+    document.getElementById("confirm-comment-deletion").href = "";
+}
