@@ -30,20 +30,17 @@ class CommentEntity
      */
     public $commentModificationDate;
 
-
     /**
      *
      * @var FKStatutCommentId comment fk statut comment id
      */
     public $FKStatutCommentId;
 
-
     /**
      *
      * @var FKUserId comment fk user id
      */
     public $FKUserId;
-
 
     /**
      *
