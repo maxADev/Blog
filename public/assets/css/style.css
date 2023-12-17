@@ -1,4 +1,5 @@
-.comment-modification-container {
+.modal-container {
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -8,7 +9,7 @@
     background-color: rgba(0,0,0,0.5);
 }
 
-.comment-modification-content {
+.modal-content {
     background-color: #fefefe;
     padding: 25px;
     border: 1px solid #888;

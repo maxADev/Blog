@@ -141,7 +141,7 @@ class PostController
     public function readPost()
     {
         $varValue = [];
-        $errors[] = ['message' => 'Aucun post trouvé : '];
+        $errors[] = ['message' => 'Aucun post trouvé'];
         $success = [];
         $varValue['commentModificationId'] = 0;
 
@@ -276,9 +276,9 @@ class PostController
 
 
     /**
-     * Get post list
+     * Post deletion
      *
-     * @return view
+     * @return void
      */
     public function postDeletion()
     {

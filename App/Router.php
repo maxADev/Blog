@@ -134,6 +134,10 @@ class Router
                 $viewVarValue['successLog'] = $viewVarSuccessLog;
             }
             $view = $viewPath['folder'].'\\'.$viewPath['file'];
+        } else {
+            if (empty($this->superGlobal->getCurrentUser()) === false) {
+                $viewVarValue['varList']['user'] = $this->superGlobal->getCurrentUser();
+            };
         }
 
         $viewValue = $twig->render($view, $viewVarValue);

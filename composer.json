@@ -1,7 +1,8 @@
 {
     "require": {
         "twig/twig": "3.0",
-        "twbs/bootstrap": "5.0.2"
+        "twbs/bootstrap": "5.0.2",
+        "components/jquery": "^3.7"
     },
     "autoload": {
         "psr-4": {
@@ -10,5 +11,10 @@
             "Models\\": "Models/",
             "Entity\\": "Entity/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"copy('vendor/components/jquery/jquery.min.js', 'public/assets/script/jquery.min.js');\""
+        ]
     }
 }
