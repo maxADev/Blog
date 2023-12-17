@@ -47,6 +47,12 @@ class Router
 
         $routeExist = false;
 
+        if (strpos($httpRequest, '/admin/') !== false) {
+            $controllerFolder = "AdminControllers";
+        } else {
+            $controllerFolder = "Controllers";
+        }
+
         // For each routes from xml file.
         foreach ($routes as $route) {
             $routeUrl = $route->getAttribute('url');
@@ -63,7 +69,7 @@ class Router
                 $routeExist = true;
                 // Get route controller.
                 $controller = ucfirst($routeController).'Controller';
-                $requireController = 'Controllers\\'.$controller;
+                $requireController = $controllerFolder.'\\'.$controller;
 
                 $controllerValue['controller'] = $requireController;
                 $controllerValue['action'] = $routeAction;

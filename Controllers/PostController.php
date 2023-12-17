@@ -92,7 +92,7 @@ class PostController
         }//end if
 
         $view = [];
-        $view['folder'] = 'post';
+        $view['folder'] = 'templates\post';
         $view['file'] = 'postCreation.twig';
         $view['var'] = $varValue;
         $view['errorLog'] = $errors;
@@ -124,7 +124,7 @@ class PostController
         }
 
         $view = [];
-        $view['folder'] = 'post';
+        $view['folder'] = 'templates\post';
         $view['file'] = 'postList.twig';
         $view['var'] = $varValue;
         $view['errorLog'] = $errors;
@@ -204,7 +204,7 @@ class PostController
         }//end if
 
         $view = [];
-        $view['folder'] = 'post';
+        $view['folder'] = 'templates\post';
         $view['file'] = 'readPost.twig';
         $view['var'] = $varValue;
         $view['errorLog'] = $errors;
@@ -265,7 +265,7 @@ class PostController
         }//end if
 
         $view = [];
-        $view['folder'] = 'post';
+        $view['folder'] = 'templates\post';
         $view['file'] = 'postModification.twig';
         $view['var'] = $varValue;
         $view['errorLog'] = $errors;

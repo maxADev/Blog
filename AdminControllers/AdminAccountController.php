@@ -1,11 +1,11 @@
 <?php
 
-namespace Controllers;
+namespace AdminControllers;
 use App\SuperGlobal;
 use App\Redirect;
 
-// Account Controller.
-class AccountController
+// Admin Account Controller.
+class AdminAccountController
 {
 
     /**
@@ -42,14 +42,14 @@ class AccountController
     public function index()
     {
         if (empty($this->superGlobal->getCurrentUser()) === true) {
-            $this->redirect->getRedirect('login');
+            $this->redirect->getRedirect('admin/login');
         };
 
         $user = $this->superGlobal->getCurrentUser();
 
         $view = [];
-        $view['folder'] = 'templates\account';
-        $view['file'] = 'myAccount.twig';
+        $view['folder'] = 'adminTemplates\account';
+        $view['file'] = 'adminAccount.twig';
         $view['var'] = ['user' => $user];
         return $view;
 
