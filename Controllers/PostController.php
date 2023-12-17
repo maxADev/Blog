@@ -244,13 +244,11 @@ class PostController
                 }
 
                 if (empty($postValue) === false) {
-                    if ($this->postModel->postDeletion($getValuePostId) === true)
-                    {
+                    if ($this->postModel->postDeletion($getValuePostId) === true) {
                         $this->redirect->getRedirect('posts');
-                    };
-                };
+                    }
+                }
             }
-
         }//end if
 
     }//end postDeletion()
