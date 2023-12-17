@@ -45,6 +45,7 @@ class CommentModel extends Model
     /**
      * Get post comment list
      *
+     * @param $postId post id
      * @return comment
      */
     public function getPostCommentList($postId)

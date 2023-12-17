@@ -192,7 +192,6 @@ class PostController
                 }
             }
 
-            
         }//end if
 
         $view = [];
