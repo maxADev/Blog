@@ -75,8 +75,10 @@ class PostController
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
-                    $errors[] = ['message' => 'Le champ est obligatoire : ',
-                                 'value' => $key];
+                    $errors[] = [
+                                'message' => 'Le champ est obligatoire : ',
+                                  'value' => $key
+                                ];
                 } else {
                     $post[$key] = $this->superglobal->getPostData($key);
                 }
@@ -162,7 +164,7 @@ class PostController
             if (empty($post) === false) {
                 $errors = [];
                 $varValue['post'] = $post;
-                $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);;
+                $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);
             }
         }
 

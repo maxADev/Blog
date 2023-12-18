@@ -46,9 +46,11 @@ class UserModel extends Model
 
             if ($request->execute() === true) {
                 $usersId = $this->connection->lastInsertId();
-                $return = ['userId' => $usersId,
+                $return = [
+                              'userId' => $usersId,
                            'userEmail' => $userValues->getUserEmail(),
-                           'userToken' => $userToken];
+                           'userToken' => $userToken
+                          ];
             }
         }//end if
 
@@ -166,7 +168,7 @@ class UserModel extends Model
      * Create a random token
      *
      * @param  $length length of token
-     * 
+     *
      * @return string
      */
     public function randomToken($length)

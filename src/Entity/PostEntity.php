@@ -81,6 +81,8 @@ class PostEntity
 
 
     // Setters.
+
+
     /**
      * Add value post id
      *
@@ -90,7 +92,7 @@ class PostEntity
     {
         $this->postId = $postId;
 
-    }
+    }//end setPostId()
 
 
     /**
@@ -166,6 +168,8 @@ class PostEntity
 
 
     // Getters.
+
+
     /**
      * Get value post id
      *

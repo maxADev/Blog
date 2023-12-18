@@ -81,6 +81,8 @@ class CommentEntity
 
 
     // Setters.
+
+
     /**
      * Add value comment id
      *
@@ -102,7 +104,7 @@ class CommentEntity
     {
         $this->commentContent = $commentContent;
 
-    }
+    }//end setCommentContent()
 
 
     /**
@@ -166,6 +168,8 @@ class CommentEntity
 
 
     // Getters.
+
+
     /**
      * Get value comment id
      *

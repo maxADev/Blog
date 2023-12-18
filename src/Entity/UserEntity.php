@@ -87,6 +87,8 @@ class UserEntity
 
 
     // Setters.
+
+
     /**
      * Add value user id
      *
@@ -96,7 +98,7 @@ class UserEntity
     {
         $this->userId = $userId;
 
-    }
+    }//end setUserId()
 
 
     /**
@@ -184,6 +186,8 @@ class UserEntity
 
 
     // Getters.
+
+
     /**
      * Get value user id
      *
