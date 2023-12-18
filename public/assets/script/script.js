@@ -7,11 +7,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         deletePostClose.addEventListener("click", modalDeletePostClose, false);
     }
-
+    
     let commentPost = document.getElementsByClassName("delete-comment");
     let deleteCommentClose = document.getElementById("delete-comment-close");
     if (commentPost && deleteCommentClose) {
-        for (var a = 0; a < commentPost.length; i++) {
+        for (var a = 0; a < commentPost.length; a++) {
             commentPost[a].addEventListener("click", modalDeleteComment, false);
         }
         deleteCommentClose.addEventListener("click", modalDeleteCommentClose, false);
