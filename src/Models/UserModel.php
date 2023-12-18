@@ -47,9 +47,9 @@ class UserModel extends Model
             if ($request->execute() === true) {
                 $usersId = $this->connection->lastInsertId();
                 $return = [
-                              'userId' => $usersId,
-                           'userEmail' => $userValues->getUserEmail(),
-                           'userToken' => $userToken
+                          'userId'    => $usersId,
+                          'userEmail' => $userValues->getUserEmail(),
+                          'userToken' => $userToken
                           ];
             }
         }//end if

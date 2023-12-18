@@ -92,6 +92,7 @@ class UserEntity
     /**
      * Add value user id
      *
+     * @param $userId user id
      * @return void
      */
     public function setUserId($userId)

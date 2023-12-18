@@ -86,13 +86,14 @@ class CommentEntity
     /**
      * Add value comment id
      *
+     * @param $commentId comment id
      * @return void
      */
     public function setCommentId($commentId)
     {
         $this->commentId = $commentId;
 
-    }
+    }//end setCommentId()
 
 
     /**

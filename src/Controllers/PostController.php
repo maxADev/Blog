@@ -77,7 +77,7 @@ class PostController
                 if (empty($value) === true) {
                     $errors[] = [
                                 'message' => 'Le champ est obligatoire : ',
-                                  'value' => $key
+                                'value'   => $key
                                 ];
                 } else {
                     $post[$key] = $this->superglobal->getPostData($key);
@@ -175,8 +175,10 @@ class PostController
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
-                    $errors[] = ['message' => 'Le champ est obligatoire : ',
-                                 'value' => $key];
+                    $errors[] = [
+                                'message' => 'Le champ est obligatoire : ',
+                                'value'   => $key
+                                ];
                 } else {
                     $postValue[$key] = $this->superglobal->getPostData($key);
                 }

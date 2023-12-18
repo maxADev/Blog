@@ -86,6 +86,7 @@ class PostEntity
     /**
      * Add value post id
      *
+     * @param $postId post id
      * @return void
      */
     public function setPostId($postId)

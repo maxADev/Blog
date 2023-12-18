@@ -63,7 +63,7 @@ class LoginController
                 if (empty($value) === true) {
                     $errors[] = [
                                 'message' => 'Le champ est obligatoire : ',
-                                  'value' => $key
+                                'value'   => $key
                                 ];
                 } else {
                     $user[$key] = $this->superglobal->getPostData($key);
