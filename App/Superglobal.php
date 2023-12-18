@@ -203,4 +203,21 @@ class SuperGlobal
     }//end authSessionExist()
 
 
+    /**
+     * Test admin
+     *
+     * @return boolean
+     */
+    public function userIsAdmin()
+    {
+        $return = false;
+        if (isset($_SESSION['auth']) === true && intval($_SESSION['auth']['FK_type_user_id']) === 2) {
+            $return = true;
+        }
+
+        return $return;
+
+    }//end userIsAdmin()
+
+
 }//end class

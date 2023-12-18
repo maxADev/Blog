@@ -6,10 +6,11 @@
     "autoload": {
         "psr-4": {
             "App\\": "App/",
-            "Controllers\\": "Controllers/",
-            "AdminControllers\\": "AdminControllers/",
-            "Models\\": "Models/",
-            "Entity\\": "Entity/"
+            "src\\Controllers\\": "src/Controllers/",
+            "src\\AdminControllers\\": "src/AdminControllers/",
+            "src\\Models\\": "src/Models/",
+            "src\\AdminModels\\": "src/AdminModels/",
+            "src\\Entity\\": "src/Entity/"
         }
     }
 }

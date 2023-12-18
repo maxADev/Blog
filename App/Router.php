@@ -69,7 +69,7 @@ class Router
                 $routeExist = true;
                 // Get route controller.
                 $controller = ucfirst($routeController).'Controller';
-                $requireController = $controllerFolder.'\\'.$controller;
+                $requireController = 'src\\'.$controllerFolder.'\\'.$controller;
 
                 $controllerValue['controller'] = $requireController;
                 $controllerValue['action'] = $routeAction;
@@ -114,7 +114,11 @@ class Router
         
         $routeValue = $this->getRoute();
 
-        $view = 'error\error.twig';
+        $cssLink = "http://mablog.projetformationma.com/public/assets/css/style.css";
+        $bootstrapLink = "http://mablog.projetformationma.com/public/assets/css/bootstrap.min.css";
+        $scriptLink = "http://mablog.projetformationma.com/public/assets/script/script.js";
+
+        $view = 'templates\error\error.twig';
 
         if (empty($routeValue['controller']) === false) {
             $routeController = $routeValue['controller'];
@@ -146,6 +150,9 @@ class Router
             };
         }
 
+        $viewVarValue['cssLink'] = $cssLink;
+        $viewVarValue['bootstrapLink'] = $bootstrapLink;
+        $viewVarValue['scriptLink'] = $scriptLink;
         $viewValue = $twig->render($view, $viewVarValue);
         return $viewValue;
 

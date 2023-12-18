@@ -17,4 +17,7 @@
   <route url="/comment-deletion-([0-9]+)" controller="Comment" action="commentDeletion" vars="commentId"></route>
   <route url="/admin/login" controller="AdminLogin" action="loginPage"></route>
   <route url="/admin/account" controller="AdminAccount" action="index"></route>
+  <route url="/admin/posts" controller="AdminPost" action="adminPostList"></route>
+  <route url="/admin/post/modification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostModification" vars="postId,postTitle"></route>
+  <route url="/admin/post/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminReadPost" vars="postId,postTitle"></route>
 </routes>
