@@ -13,9 +13,9 @@ class PostController
 {
 
     /**
-      *
-      * @var $postModel for PostModel class
-      */
+     *
+     * @var $postModel for PostModel class
+     */
     private $postModel;
 
     /**
@@ -99,7 +99,7 @@ class PostController
         $view['successLog'] = $success;
         return $view;
 
-    }//end create()
+    }//end postCreation()
 
 
     /**
@@ -200,7 +200,7 @@ class PostController
                         $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
                     }
                 }
-            }
+            }//end if
         }//end if
 
         $view = [];

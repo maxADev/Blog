@@ -45,30 +45,12 @@ class AdminLoginController
 
 
     /**
-     * Login
+     * Admin Login
      *
      * @return void
      */
-    public function loginPage()
+    public function adminLoginPage()
     {
-        $success = [];
-        $messageValue = '';
-        $getValueLogout = '';
-        $getValueToken = '';
-        $getValueUserId = '';
-
-        if ($this->superglobal->getExist() === true) {
-            $getValueRedirect = $this->superglobal->getGetData('redirect');
-        }
-
-        if ($this->superglobal->getExist() === true) {
-            $getValueLogout = $this->superglobal->getGetData('logout');
-        }
-
-        if ($getValueLogout === 'true') {
-            $messageValue = "Vous êtes bien déconnecté";
-        }
-
         if ($this->superglobal->postExist() === true) {
             $postValue = $this->superglobal->getPost();
 
@@ -83,14 +65,12 @@ class AdminLoginController
             }
         }
 
-        $success[] = ['message' => $messageValue];
         $view = [];
         $view['folder'] = 'adminTemplates\login';
         $view['file'] = 'adminLogin.twig';
-        $view['successLog'] = $success;
         return $view;
 
-    }//end loginPage()
+    }//end adminLoginPage()
 
 
 }//end class

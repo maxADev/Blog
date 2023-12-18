@@ -46,7 +46,7 @@ class AdminCommentController extends Superglobal
 
 
     /**
-     * Get post comment list
+     * Admin get post comment list
      *
      * @param $postId post id
      * @return comment
@@ -57,7 +57,7 @@ class AdminCommentController extends Superglobal
 
         return $commentList;
 
-    }//end getPostCommentList()
+    }//end adminGetPostCommentList()
 
 
 }//end class

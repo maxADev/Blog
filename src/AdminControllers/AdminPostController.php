@@ -13,10 +13,10 @@ class AdminPostController
 {
 
     /**
-      *
-      * @var $postModel for PostModel class
-      */
-    private $postModel;
+     *
+     * @var $adminPostModel for AdminPostModel class
+     */
+    private $adminPostModel;
 
     /**
      *
@@ -53,7 +53,7 @@ class AdminPostController
 
 
     /**
-     * Get post list
+     * Admin post list
      *
      * @return view
      */
@@ -62,7 +62,7 @@ class AdminPostController
         $varValue = [];
         $errors[] = ['message' => 'Aucun post trouvé : '];
 
-        if (empty($this->superGlobal->userIsAdmin()) === true) {
+        if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
         };
 
@@ -81,7 +81,7 @@ class AdminPostController
         $view['errorLog'] = $errors;
         return $view;
 
-    }//end postListAdmin()
+    }//end adminPostList()
 
 
     /**
@@ -96,7 +96,7 @@ class AdminPostController
         $success = [];
         $varValue['commentModificationId'] = 0;
 
-        if (empty($this->superGlobal->userIsAdmin()) === true) {
+        if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
         };
 
@@ -177,7 +177,7 @@ class AdminPostController
         $errors[] = ['message' => 'Aucun post trouvé : '];
         $success = [];
 
-        if (empty($this->superGlobal->userIsAdmin()) === true) {
+        if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
         };
 
@@ -187,10 +187,6 @@ class AdminPostController
             $getValuePostId = $this->superGlobal->getGetData('postId');
             $postValue = $this->adminPostModel->adminGetPost($getValuePostId);
             if (empty($postValue) === false) {
-                if ($varValue['userAdmin']['FK_type_user_id'] != 2) {
-                    $this->redirect->getRedirect('posts');
-                }
-
                 $errors = [];
                 $varValue['post'] = $postValue;
             }

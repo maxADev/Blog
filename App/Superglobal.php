@@ -211,7 +211,7 @@ class SuperGlobal
     public function userIsAdmin()
     {
         $return = false;
-        if (isset($_SESSION['auth']) === true && intval($_SESSION['auth']['FK_type_user_id']) === 2) {
+        if (isset($this->SESSION['auth']) === true && (int) $this->SESSION['auth']['FK_type_user_id'] === 2) {
             $return = true;
         }
 

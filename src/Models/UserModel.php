@@ -50,7 +50,7 @@ class UserModel extends Model
                            'userEmail' => $userValues->getUserEmail(),
                            'userToken' => $userToken];
             }
-        }
+        }//end if
 
         return $return;
 
@@ -88,7 +88,7 @@ class UserModel extends Model
      *
      * @param  $userId    user id
      * @param  $userToken user token
-     * 
+     *
      * @return void
      */
     public function validationUser($userId, $userToken)
