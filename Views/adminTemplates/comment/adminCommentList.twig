@@ -5,8 +5,8 @@
 
 {% block content %}
 
-<a class="btn btn-primary" href="/admin/comments/invalid">Commentaire en attente</a>
-<a class="btn btn-primary" href="/admin/comments/valid">Commentaire en validé</a>
+<a class="btn btn-primary" href="/admin/comment/invalid">Commentaire en attente</a>
+<a class="btn btn-primary" href="/admin/comment/valid">Commentaire en validé</a>
 <a class="btn btn-primary" href="/admin/comments">Tous les commentaires</a>
 {% if varList.commentList is defined %}
     <div class="container text-center mt-3">
@@ -28,11 +28,11 @@
                 <div class="col-6 row">
                     {% if comment.FK_statut_comment_id == 1 %}
                     <div class="col-6">
-                        <a class="btn btn-primary" href={{"/admin/comments/validation/#{comment.id}"}}>Valider</a>
+                        <a class="btn btn-primary" href={{"/admin/comment/validation/#{comment.id}"}}>Valider</a>
                     </div>
                     {% else %}
                     <div class="col-6">
-                        <a class="btn btn-danger" href={{"/admin/comments/invalidation/#{comment.id}"}}>Invalider</a>
+                        <a class="btn btn-danger" href={{"/admin/comment/invalidation/#{comment.id}"}}>Invalider</a>
                     </div>
                     {% endif %}
                     <div class="col-6">

@@ -107,6 +107,7 @@ class AdminCommentModel extends Model
 
     }//end adminGetCommentByStatut()
 
+
     /**
      * Admin comment validate
      *

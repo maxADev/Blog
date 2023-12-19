@@ -82,7 +82,7 @@ class AdminCommentController extends SuperGlobal
 
         if ($getValueCommentSetting === 'invalid') {
             $commentList = $this->adminCommentModel->adminGetCommentByStatut(1);
-        } elseif ($getValueCommentSetting === 'valid') {
+        } else if ($getValueCommentSetting === 'valid') {
             $commentList = $this->adminCommentModel->adminGetCommentByStatut(2);
         } else {
             $commentList = $this->adminCommentModel->adminGetAllComment();
@@ -115,8 +115,8 @@ class AdminCommentController extends SuperGlobal
         }
 
         if (empty($commentId) === false) {
-            if ($this->adminCommentModel->adminCommentValidate($commentId)) {
-                $this->redirect->getRedirect('/admin/comments/invalid');
+            if ($this->adminCommentModel->adminCommentValidate($commentId) === true) {
+                $this->redirect->getRedirect('/admin/comment/invalid');
             }
         }//end if
 
@@ -140,7 +140,7 @@ class AdminCommentController extends SuperGlobal
 
         if (empty($commentId) === false) {
             if ($this->adminCommentModel->adminCommentInvalidate($commentId)) {
-                $this->redirect->getRedirect('/admin/comments/valid');
+                $this->redirect->getRedirect('/admin/comment/valid');
             }
         }//end if
 
