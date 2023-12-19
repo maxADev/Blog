@@ -109,8 +109,6 @@ class Router
     {
         $viewVar = [];
         $viewVarValue = [];
-        $viewVarErrorLog = [];
-        $viewVarSuccessLog = [];
         
         $routeValue = $this->getRoute();
 
@@ -130,20 +128,16 @@ class Router
             
             // Use controller based on route.
             $controller = new $routeController;
-            $viewPath = $controller->$routeAction();
-            if (empty($viewPath['var']) !== true) {
-                $viewVar = $viewPath['var'];
+            $viewValue = $controller->$routeAction();
+            if (empty($viewValue['var']) !== true) {
+                $viewVar = $viewValue['var'];
                 $viewVarValue['varList'] = $viewVar;
             }
-            if (empty($viewPath['errorLog']) !== true) {
-                $viewVarErrorLog = $viewPath['errorLog'];
-                $viewVarValue['errorLog'] = $viewVarErrorLog;
+            if (empty($viewValue['flashMessageList']) !== true) {
+                $viewVarFlashMessageList = $viewValue['flashMessageList'];
+                $viewVarValue['flashMessageList'] = $viewVarFlashMessageList;
             }
-            if (empty($viewPath['successLog']) !== true) {
-                $viewVarSuccessLog = $viewPath['successLog'];
-                $viewVarValue['successLog'] = $viewVarSuccessLog;
-            }
-            $view = $viewPath['folder'].'\\'.$viewPath['file'];
+            $view = $viewValue['folder'].'\\'.$viewValue['file'];
         } else {
             if (empty($this->superGlobal->getCurrentUser()) === false) {
                 $viewVarValue['varList']['user'] = $this->superGlobal->getCurrentUser();

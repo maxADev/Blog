@@ -41,8 +41,10 @@ class AdminAccountController
      */
     public function index()
     {
+        $flashMessageList = $this->superGlobal->getFlashMessage();
+
         if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
+            $this->redirect->getRedirect('/admin/login');
         };
 
         $user = $this->superGlobal->getCurrentUser();
@@ -51,6 +53,7 @@ class AdminAccountController
         $view['folder'] = 'adminTemplates\account';
         $view['file'] = 'adminAccount.twig';
         $view['var'] = ['userAdmin' => $user];
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end index()

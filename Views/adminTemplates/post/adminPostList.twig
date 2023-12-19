@@ -5,19 +5,19 @@
 
 {% block content %}
 
-{% if errorLog is defined %}
+{% if flashMessageList is defined %}
     <div class="container text-center text-danger mt-3">
-        <p>Erreur<p>
-        {% for errorValue in errorLog %}
-            <p>{{errorValue.message}}{{errorValue.value}}</p>
-        {% endfor %}
-    </div>
-{% endif %}
-
-{% if successLog is defined %}
-    <div class="container text-center text-success mt-3">
-        {% for successValue in successLog %}
-            <p>{{successValue.message}}{{successValue.value}}</p>
+        {% for flashMessage in flashMessageList %}
+            {% if flashMessage.type == "danger" %}
+                <div class="container text-center text-danger mt-3">
+                    <p>Erreur :<p>
+                    <p>{{flashMessage.message}}<p>
+                </div>
+            {% else %}
+                <div class="container text-center text-success mt-3">
+                    <p>{{flashMessage.message}}<p>
+                </div>
+            {% endif %}
         {% endfor %}
     </div>
 {% endif %}
@@ -55,6 +55,10 @@
             </div>
         {% endfor %}
     </div>
+    {% else %}
+        <div class="container text-center mt-3">
+            <p>Aucun post trouvé</p>
+        </div>
     {% endif %}
 </div>
 

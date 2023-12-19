@@ -44,6 +44,10 @@ class SuperGlobal
             $this->user = $this->SESSION['auth'];
         };
 
+        if ($this->flashMessageSessionExist() === true) {
+            $this->SESSION['flashMessage'] = $this->SESSION['flashMessage'];
+        };
+
     }//end __construct()
 
 
@@ -163,9 +167,9 @@ class SuperGlobal
     {
         if (isset($_SESSION['auth']) === false) {
             $_SESSION['auth'] = $sessionValue;
-            $this->SESSION = $_SESSION;
+            $this->SESSION['auth'] = $_SESSION['auth'];
         } else {
-            $this->SESSION = $_SESSION;
+            $this->SESSION['auth'] = $_SESSION['auth'];
         }
 
     }//end createSession()
@@ -186,7 +190,7 @@ class SuperGlobal
 
 
     /**
-     * Get Session
+     * Check auth session exist
      *
      * @return array
      */
@@ -194,13 +198,31 @@ class SuperGlobal
     {
         $return = false;
         if (isset($_SESSION['auth']) === true) {
-            $this->SESSION = $_SESSION;
+            $this->SESSION['auth'] = $_SESSION['auth'];
             $return = true;
         }
 
         return $return;
 
     }//end authSessionExist()
+
+
+    /**
+     * Check flash message session exist
+     *
+     * @return array
+     */
+    public function flashMessageSessionExist()
+    {
+        $return = false;
+        if (isset($_SESSION['flashMessage']) === true) {
+            $this->SESSION['flashMessage'] = $_SESSION['flashMessage'];
+            $return = true;
+        }
+
+        return $return;
+
+    }//end flashMessageSessionExist()
 
 
     /**
@@ -218,6 +240,72 @@ class SuperGlobal
         return $return;
 
     }//end userIsAdmin()
+
+
+    /**
+     * Create flash message
+     *
+     * @return mixed
+     */
+    public function createFlashMessage($flashMessageValue)
+    {
+        if (empty($flashMessageValue) === false) {
+            if (isset($flashMessageValue[0]) === false) {
+                $_SESSION['flashMessage'][] = $flashMessageValue;
+            } else {
+                $_SESSION['flashMessage'] = $flashMessageValue;
+            }
+
+            $this->SESSION['flashMessage'] = $_SESSION['flashMessage'];
+        }
+
+    }//end createFlashMessage()
+
+
+    /**
+     * Clear flash message
+     *
+     * @return mixed
+     */
+    public function clearFlashMessage()
+    {
+        if (isset($_SESSION['flashMessage']) === true) {
+            unset($_SESSION['flashMessage']);
+            unset($this->SESSION['flashMessage']);
+        }
+
+    }//end clearFlashMessage()
+
+
+    /**
+     * Get flash message
+     *
+     * @return mixed
+     */
+    public function getFlashMessage()
+    {
+        $flashMessage = null;
+
+        if (isset($this->SESSION['flashMessage']) === true) {
+            $flashMessage = $this->SESSION['flashMessage'];
+            $this->clearFlashMessage();
+        }
+
+        return $flashMessage;
+
+    }//end getFlashMessage()
+
+
+    /**
+     * Delete session
+     *
+     * @return void
+     */
+    public function deleteSession($value)
+    {
+        unset($_SESSION[$value]);
+
+    }//end deleteSession()
 
 
 }//end class

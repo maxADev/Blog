@@ -67,6 +67,7 @@ class AdminCommentController extends SuperGlobal
      */
     public function adminCommentList()
     {
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
         $getValueCommentSetting;
 
@@ -89,11 +90,11 @@ class AdminCommentController extends SuperGlobal
         }
 
         $varValue['commentList'] = $commentList;
-
         $view = [];
         $view['folder'] = 'adminTemplates\comment';
         $view['file'] = 'adminCommentList.twig';
         $view['var'] = $varValue;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end adminCommentList()
@@ -106,8 +107,9 @@ class AdminCommentController extends SuperGlobal
      */
     public function adminCommentModification()
     {
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
-        $errors;
+        $errors = [];
         $getValueCommentId;
 
         if ($this->superGlobal->userIsAdmin() === false) {
@@ -125,7 +127,9 @@ class AdminCommentController extends SuperGlobal
         }
 
         $commentValue = $this->adminCommentModel->adminGetComment($getValueCommentId);
-        $varValue['commentValue'] = $commentValue;
+        if (empty($commentValue) === false) {
+            $varValue['commentValue'] = $commentValue;
+        }
 
         if ($this->superGlobal->postExist() === true) {
             $postValue = [];
@@ -135,8 +139,8 @@ class AdminCommentController extends SuperGlobal
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = [
-                                'message' => 'Le champ est obligatoire : ',
-                                'value'   => $key
+                                'type'    => 'danger',
+                                'message' => 'Le champ est obligatoire : '.$key.''
                                 ];
                 } else {
                     $postValue[$key] = $this->superGlobal->getPostData($key);
@@ -146,8 +150,12 @@ class AdminCommentController extends SuperGlobal
             if (empty($errors) === true) {
                 $postValue['id'] = $getValueCommentId;
                 if ($this->adminCommentModel->adminCommentUpdate($postValue) === true) {
+                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été modifié']);
                     $this->redirect->getRedirect('/admin/comments');
                 }
+            } else {
+                $this->superGlobal->createFlashMessage($errors);
+                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
@@ -155,6 +163,7 @@ class AdminCommentController extends SuperGlobal
         $view['folder'] = 'adminTemplates\comment';
         $view['file'] = 'adminCommentModification.twig';
         $view['var'] = $varValue;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end adminCommentModification()
@@ -177,6 +186,7 @@ class AdminCommentController extends SuperGlobal
 
         if (empty($commentId) === false) {
             if ($this->adminCommentModel->adminCommentValidate($commentId) === true) {
+                $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été validé']);
                 $this->redirect->getRedirect('/admin/comment/invalid');
             }
         }//end if
@@ -201,6 +211,7 @@ class AdminCommentController extends SuperGlobal
 
         if (empty($commentId) === false) {
             if ($this->adminCommentModel->adminCommentInvalidate($commentId) === true) {
+                $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été invalidé']);
                 $this->redirect->getRedirect('/admin/comment/valid');
             }
         }//end if
@@ -244,6 +255,10 @@ class AdminCommentController extends SuperGlobal
 
         if (empty($commentId) === false) {
             if ($this->adminCommentModel->adminDeleteComment($commentId) === true) {
+                $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
+                $this->redirect->getRedirect('/admin/comments');
+            } else {
+                $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le commentaire ne peut pas être supprimé']);
                 $this->redirect->getRedirect('/admin/comments');
             }
         }//end if

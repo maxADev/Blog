@@ -4,37 +4,59 @@
 {% endblock %}
 
 {% block content %}
-    {% if varList.commentValue is defined %}
-        <div class="container text-center mt-3">
-            <div class="container col-5 mt-3 border border-dark rounded text-start">
-                <div class="container">
-                    <p>{{varList.commentValue.last_name}} {{varList.commentValue.first_name}} -
-                    {% if varList.commentValue.modification_date is not null %}
-                        {{varList.commentValue.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
-                    {% else %}
-                        {{varList.commentValue.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
-                    {% endif %}
+
+{% if flashMessageList is defined %}
+    <div class="container text-center text-danger mt-3">
+        {% for flashMessage in flashMessageList %}
+            {% if flashMessage.type == "danger" %}
+                <div class="container text-center text-danger mt-3">
+                    <p>Erreur :<p>
+                    <p>{{flashMessage.message}}<p>
                 </div>
-                <div class="container">
-                    <div class="container">
-                        <form action="" method="post">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="comment_content_modification" name="comment_content_modification" value="{{"#{varList.commentValue.content}"}}">
-                                <p>{{varList.commentValue.comment_statut_name}}</p>
-                            </div>
-                            <div class="container row">
-                                <div class="container col-5">
-                                    <button type="submit" class="btn btn-primary">Valider</button>
-                                </div>
-                                <div class="container col-5">
-                                    <a class="btn btn-danger" href="/admin/comments">Annuler</a>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <p>{{varList.commentValue.commentValue_statut_name}}</p>
+            {% else %}
+                <div class="container text-center text-success mt-3">
+                    <p>{{flashMessage.message}}<p>
                 </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if varList.commentValue is defined %}
+    <div class="container text-center mt-3">
+        <div class="container col-5 mt-3 border border-dark rounded text-start">
+            <div class="container">
+                <p>{{varList.commentValue.last_name}} {{varList.commentValue.first_name}} -
+                {% if varList.commentValue.modification_date is not null %}
+                    {{varList.commentValue.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
+                {% else %}
+                    {{varList.commentValue.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
+                {% endif %}
+            </div>
+            <div class="container">
+                <div class="container">
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="comment_content_modification" name="comment_content_modification" value="{{"#{varList.commentValue.content}"}}">
+                            <p>{{varList.commentValue.comment_statut_name}}</p>
+                        </div>
+                        <div class="container row">
+                            <div class="container col-5">
+                                <button type="submit" class="btn btn-primary">Valider</button>
+                            </div>
+                            <div class="container col-5">
+                                <a class="btn btn-danger" href="/admin/comments">Annuler</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <p>{{varList.commentValue.commentValue_statut_name}}</p>
             </div>
         </div>
-    {% endif %}
+    </div>
+{% else %}
+    <div class="container text-center mt-3">
+        <p>Aucun commentaire trouvé</p>
+    </div>
+{% endif %}
 {% endblock %}

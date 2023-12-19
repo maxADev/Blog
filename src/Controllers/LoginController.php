@@ -4,7 +4,7 @@ namespace src\Controllers;
 
 use src\Entity\UserEntity;
 use src\Models\UserModel;
-use App\Superglobal;
+use App\SuperGlobal;
 use App\Redirect;
 
 // Login Controller.
@@ -19,9 +19,9 @@ class LoginController
 
     /**
      *
-     * @var $superglobal for Superglobal class
+     * @var $superGlobal for SuperGlobal class
      */
-    private $superglobal;
+    private $superGlobal;
 
     /**
      *
@@ -38,7 +38,7 @@ class LoginController
     public function __construct()
     {
         $this->userModel = new UserModel();
-        $this->superglobal = new Superglobal();
+        $this->superGlobal = new SuperGlobal();
         $this->redirect = new Redirect();
 
     }//end __construct()
@@ -51,26 +51,25 @@ class LoginController
      */
     public function registration()
     {
-        $errors = '';
+        $flashMessageList = $this->superGlobal->getFlashMessage();
+        $errors;
 
-        if ($this->superglobal->postExist() === true) {
+        if ($this->superGlobal->postExist() === true) {
             $user = [];
             $errors = [];
 
-            $postValue = $this->superglobal->getPost();
+            $postValue = $this->superGlobal->getPost();
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = [
-                                'message' => 'Le champ est obligatoire : ',
-                                'value'   => $key
+                                'type' => 'danger',
+                                'message'   => 'Le champ est obligatoire : '.$key.''
                                 ];
                 } else {
-                    $user[$key] = $this->superglobal->getPostData($key);
+                    $user[$key] = $this->superGlobal->getPostData($key);
                 }
             }
-
-            $errors;
 
             if (empty($errors) === true) {
                 $user['FKIdTypeUser'] = 3;
@@ -80,17 +79,22 @@ class LoginController
 
                 if ($createUser !== false) {
                     $this->sendEmailRegistration($createUser);
-                    $this->redirect->getRedirect('login-redirect-true');
+                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Votre a bien été créé, vous allez recevoir un mail pour le valider']);
+                    $this->redirect->getRedirect('login');
                 } else {
-                    $errors[] = ['message' => "Cet utilisateur existe déjà"];
+                    $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Cet utilisateur existe déjà']);
+                    $flashMessageList = $this->superGlobal->getFlashMessage();
                 }
+            } else {
+                $this->superGlobal->createFlashMessage($errors);
+                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
         $view = [];
         $view['folder'] = 'templates\login';
         $view['file'] = 'registration.twig';
-        $view['errorLog'] = $errors;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end registration()
@@ -103,59 +107,40 @@ class LoginController
      */
     public function loginPage()
     {
-        $success = [];
-        $messageValue = '';
-        $getValueRedirect = '';
-        $getValueLogout = '';
-        $getValueToken = '';
-        $getValueUserId = '';
+        $flashMessageList = $this->superGlobal->getFlashMessage();
+        $getValueToken;
+        $getValueUserId;
 
-        if ($this->superglobal->getExist() === true) {
-            $getValueRedirect = $this->superglobal->getGetData('redirect');
-        }
-
-        if ($getValueRedirect === 'true') {
-            $messageValue = "Un email vous a été envoyé pour valider votre compte.";
-        }
-
-        if ($this->superglobal->getExist() === true) {
-            $getValueLogout = $this->superglobal->getGetData('logout');
-        }
-
-        if ($getValueLogout === 'true') {
-            $messageValue = "Vous êtes bien déconnecté";
-        }
-
-        if ($this->superglobal->getExist() === true) {
-            $getValueToken = $this->superglobal->getGetData('token');
-            $getValueUserId = $this->superglobal->getGetData('userId');
+        if ($this->superGlobal->getExist() === true) {
+            $getValueToken = $this->superGlobal->getGetData('token');
+            $getValueUserId = $this->superGlobal->getGetData('userId');
         }
 
         if (empty($getValueUserId) !== true && empty($getValueToken) !== true) {
             if ($this->userModel->validationUser($getValueUserId, $getValueToken) === true) {
-                $messageValue = 'Votre compte a bien été validé, vous pouvez vous connecter.';
+                $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Votre compte a bien été validé, vous pouvez vous connecter']);
             }
         }
 
-        if ($this->superglobal->postExist() === true) {
-            $postValue = $this->superglobal->getPost();
+        if ($this->superGlobal->postExist() === true) {
+            $postValue = $this->superGlobal->getPost();
 
             if (empty($postValue['login']) === false && empty($postValue['password']) === false) {
                 $user = $this->userModel->login($postValue['login']);
                 if (empty($user) === false) {
                     if (password_verify($postValue['password'], $user['password']) === true) {
-                        $this->superglobal->createSession($user);
-                        $this->redirect->getRedirect('my-account');
+                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Vous êtes bien connecté']);
+                        $this->superGlobal->createSession($user);
+                        $this->redirect->getRedirect('account');
                     }
                 }
             }
         }
 
-        $success[] = ['message' => $messageValue];
         $view = [];
         $view['folder'] = 'templates\login';
         $view['file'] = 'login.twig';
-        $view['successLog'] = $success;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end loginPage()
@@ -187,8 +172,9 @@ class LoginController
      */
     public function logout()
     {
-        session_destroy();
-        $this->redirect->getRedirect('login-logout-true');
+        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Vous êtes bien déconnecté']);
+        $this->superGlobal->deleteSession('auth');
+        $this->redirect->getRedirect('login');
 
     }//end logout()
 
