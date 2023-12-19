@@ -32,9 +32,9 @@ class AdminPostController
 
     /**
      *
-     * @var $commentController for CommentController class
+     * @var $adminCommentController for AdminCommentController class
      */
-    private $commentController;
+    private $adminCommentController;
 
 
     /**
@@ -223,6 +223,32 @@ class AdminPostController
         return $view;
 
     }//end adminPostModification()
+
+
+    /**
+     * Admin post deletion
+     *
+     * @return void
+     */
+    public function adminPostDeletion()
+    {
+        if ($this->superGlobal->userIsAdmin() === false) {
+            $this->redirect->getRedirect('login');
+        };
+
+        if ($this->superGlobal->getExist() === true) {
+            $getValuePostId = $this->superGlobal->getGetData('postId');
+            $postValue = $this->adminPostModel->adminGetPost($getValuePostId);
+            if (empty($postValue) === false) {
+                if ($this->adminCommentController->adminCommentListDeletion($getValuePostId)) {
+                    if ($this->adminPostModel->adminPostDeletion($getValuePostId) === true) {
+                        $this->redirect->getRedirect('/admin/posts');
+                    }
+                }
+            }
+        }//end if
+
+    }//end adminPostDeletion()
 
 
 }//end class
