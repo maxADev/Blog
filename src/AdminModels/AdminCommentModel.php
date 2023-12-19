@@ -45,4 +45,22 @@ class AdminCommentModel extends Model
     }//end adminGetCommentList()
 
 
+    /**
+     * Admin delete comment list
+     *
+     * @param $postId post id
+     * @return boolean
+     */
+    public function adminDeleteCommentList($postId)
+    {
+        $sql = 'DELETE FROM comment WHERE FK_post_id = :FK_post_id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":FK_post_id", $postId, PDO::PARAM_INT);
+
+        return $request->execute();
+
+    }//end adminDeleteCommentList()
+
+
 }//end class

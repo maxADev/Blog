@@ -5,11 +5,11 @@ namespace src\AdminControllers;
 use src\Entity\CommentEntity;
 use src\AdminModels\AdminPostModel;
 use src\AdminModels\AdminCommentModel;
-use App\Superglobal;
+use App\SuperGlobal;
 use App\Redirect;
 
 // Admin Comment Controller.
-class AdminCommentController extends Superglobal
+class AdminCommentController extends SuperGlobal
 {
 
     /**
@@ -20,9 +20,9 @@ class AdminCommentController extends Superglobal
 
     /**
      *
-     * @var $superglobal for Superglobal class
+     * @var $superGlobal for SuperGlobal class
      */
-    private $superglobal;
+    private $superGlobal;
 
     /**
      *
@@ -39,7 +39,7 @@ class AdminCommentController extends Superglobal
     public function __construct()
     {
         $this->adminCommentModel = new AdminCommentModel();
-        $this->superglobal = new Superglobal();
+        $this->superGlobal = new SuperGlobal();
         $this->redirect = new Redirect();
 
     }//end __construct()
@@ -58,6 +58,25 @@ class AdminCommentController extends Superglobal
         return $commentList;
 
     }//end adminGetPostCommentList()
+
+
+    /**
+     * Admin comment list deletion
+     *
+     * @param $postId post id
+     * @return void
+     */
+    public function adminCommentListDeletion($postId)
+    {
+        if ($this->superGlobal->userIsAdmin() === false) {
+            $this->redirect->getRedirect('login');
+        };
+
+        if (empty($postId) === false) {
+            return $this->adminCommentModel->adminDeleteCommentList($postId);
+        }//end if
+
+    }//end adminCommentListDeletion()
 
 
 }//end class

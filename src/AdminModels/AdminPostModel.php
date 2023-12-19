@@ -84,4 +84,22 @@ class AdminPostModel extends Model
     }//end adminPostModification()
 
 
+    /**
+     * Admin post deletion
+     *
+     * @param $postId post id
+     * @return boolean
+     */
+    public function adminPostDeletion($postId)
+    {
+        $sql = 'DELETE FROM post WHERE id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":id", $postId, PDO::PARAM_INT);
+
+        return $request->execute();
+
+    }//end adminPostDeletion()
+
+
 }//end class

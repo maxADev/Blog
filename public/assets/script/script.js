@@ -16,6 +16,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         deleteCommentClose.addEventListener("click", modalDeleteCommentClose, false);
     }
+
+    let adminDeletePost = document.getElementsByClassName("admin-delete-post");
+    let adminDeletePostClose = document.getElementById("admin-delete-post-close");
+    if (adminDeletePost && adminDeletePostClose) {
+        for (var b = 0; b < adminDeletePost.length; b++) {
+            adminDeletePost[b].addEventListener("click", adminModalDeletePost, false);
+        }
+        adminDeletePostClose.addEventListener("click", adminModalDeletePostClose, false);
+    }
+    
+    let adminCommentPost = document.getElementsByClassName("admin-delete-comment");
+    let adminDeleteCommentClose = document.getElementById("admin-delete-comment-close");
+    if (adminCommentPost && adminDeleteCommentClose) {
+        for (var c = 0; c < adminCommentPost.length; c++) {
+            adminCommentPost[c].addEventListener("click", modalDeleteComment, false);
+        }
+        adminDeleteCommentClose.addEventListener("click", modalDeleteCommentClose, false);
+    }
 });
 
 /**
@@ -50,4 +68,38 @@ function modalDeleteComment() {
 function modalDeleteCommentClose() {
     document.getElementById("comment-deletion-container").style.display = "none";
     document.getElementById("confirm-comment-deletion").href = "";
+}
+
+/**
+ * @func adminModalDeletePost
+ */
+function adminModalDeletePost() {
+    let postId = this.dataset.postId;
+    document.getElementById("admin-post-deletion-container").style.display = "block";
+    document.getElementById("admin-confirm-post-deletion").href = "/admin/post/deletion/"+postId;
+}
+
+/**
+ * @func adminModalDeletePostClose
+ */
+function adminModalDeletePostClose() {
+    document.getElementById("admin-post-deletion-container").style.display = "none";
+    document.getElementById("admin-confirm-post-deletion").href = "";
+}
+
+/**
+ * @func adminModalDeleteComment
+ */
+function adminModalDeleteComment() {
+    let commentId = this.dataset.commentId;
+    document.getElementById("admin-comment-deletion-container").style.display = "block";
+    document.getElementById("admin-confirm-comment-deletion").href = "admin/comment/deletion/"+commentId;
+}
+
+/**
+ * @func adminModalDeleteCommentClose
+ */
+function adminModalDeleteCommentClose() {
+    document.getElementById("admin-comment-deletion-container").style.display = "none";
+    document.getElementById("admin-confirm-comment-deletion").href = "";
 }
