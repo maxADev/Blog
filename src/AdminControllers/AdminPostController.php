@@ -240,7 +240,7 @@ class AdminPostController
             $getValuePostId = $this->superGlobal->getGetData('postId');
             $postValue = $this->adminPostModel->adminGetPost($getValuePostId);
             if (empty($postValue) === false) {
-                if ($this->adminCommentController->adminCommentListDeletion($getValuePostId)) {
+                if ($this->adminCommentController->adminCommentListDeletion($getValuePostId) === true) {
                     if ($this->adminPostModel->adminPostDeletion($getValuePostId) === true) {
                         $this->redirect->getRedirect('/admin/posts');
                     }
