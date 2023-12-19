@@ -241,9 +241,9 @@ class AdminCommentController extends SuperGlobal
         if ($this->superGlobal->getExist() === true) {
             $commentId = $this->superGlobal->getGetData('commentId');
         }
-        
+
         if (empty($commentId) === false) {
-            if ($this->adminCommentModel->adminDeleteComment($commentId)) {
+            if ($this->adminCommentModel->adminDeleteComment($commentId) === true) {
                 $this->redirect->getRedirect('/admin/comments');
             }
         }//end if
