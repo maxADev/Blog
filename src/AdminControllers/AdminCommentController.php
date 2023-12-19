@@ -139,8 +139,8 @@ class AdminCommentController extends SuperGlobal
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = [
-                                 'type' => 'danger',
-                                 'message'   => 'Le champ est obligatoire : '.$key.''
+                                'type'    => 'danger',
+                                'message' => 'Le champ est obligatoire : '.$key.''
                                 ];
                 } else {
                     $postValue[$key] = $this->superGlobal->getPostData($key);

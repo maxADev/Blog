@@ -155,8 +155,8 @@ class AdminPostController
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = [
-                                 'type' => 'danger',
-                                 'message'   => 'Le champ est obligatoire : '.$key.''
+                                'type'    => 'danger',
+                                'message' => 'Le champ est obligatoire : '.$key.''
                                 ];
                 } else {
                     $post[$key] = $this->superGlobal->getPostData($key);
