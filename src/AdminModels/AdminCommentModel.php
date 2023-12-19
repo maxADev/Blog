@@ -63,4 +63,84 @@ class AdminCommentModel extends Model
     }//end adminDeleteCommentList()
 
 
+    /**
+     * Admin get all comment
+     *
+     * @return comment
+     */
+    public function adminGetAllComment()
+    {
+        $sql = 'SELECT comment.id, comment.content, comment.creation_date, comment.modification_date, comment.FK_statut_comment_id, comment.FK_user_id, comment.FK_post_id, user.last_name, user.first_name, comment_statut.comment_statut_name FROM comment 
+                INNER JOIN user ON user.id = comment.FK_user_id
+                INNER JOIN comment_statut ON comment_statut.id = comment.FK_statut_comment_id';
+
+        $request = $this->connection->prepare($sql);
+        $request->execute();
+
+        $commentList = $request->fetchAll(PDO::FETCH_ASSOC);
+
+        return $commentList;
+
+    }//end adminGetAllComment()
+
+
+    /**
+     * Admin get comment by statut
+     *
+     * @param $commentStatut comment statut
+     * @return comment
+     */
+    public function adminGetCommentByStatut($commentStatut)
+    {
+        $sql = 'SELECT comment.id, comment.content, comment.creation_date, comment.modification_date, comment.FK_statut_comment_id, comment.FK_user_id, comment.FK_post_id, user.last_name, user.first_name, comment_statut.comment_statut_name FROM comment 
+                INNER JOIN user ON user.id = comment.FK_user_id
+                INNER JOIN comment_statut ON comment_statut.id = comment.FK_statut_comment_id
+                WHERE comment.FK_statut_comment_id = :FK_statut_comment_id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":FK_statut_comment_id", $commentStatut, PDO::PARAM_INT);
+        $request->execute();
+
+        $commentList = $request->fetchAll(PDO::FETCH_ASSOC);
+
+        return $commentList;
+
+    }//end adminGetCommentByStatut()
+
+    /**
+     * Admin comment validate
+     *
+     * @param $commentId comment id
+     * @return boolean
+     */
+    public function adminCommentValidate($commentId)
+    {
+        $sql = 'UPDATE comment SET FK_statut_comment_id = :FK_statut_comment_id WHERE id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":id", $commentId, PDO::PARAM_INT);
+        $request->bindValue(":FK_statut_comment_id", 2, PDO::PARAM_INT);
+        return $request->execute();
+
+    }//end adminCommentValidate()
+
+
+    /**
+     * Admin comment invalidate
+     *
+     * @param $commentId comment id
+     * @return boolean
+     */
+    public function adminCommentInvalidate($commentId)
+    {
+        $sql = 'UPDATE comment SET FK_statut_comment_id = :FK_statut_comment_id WHERE id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":id", $commentId, PDO::PARAM_INT);
+        $request->bindValue(":FK_statut_comment_id", 1, PDO::PARAM_INT);
+        return $request->execute();
+
+    }//end adminCommentInvalidate()
+
+
 }//end class
