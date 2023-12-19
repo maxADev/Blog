@@ -227,4 +227,28 @@ class AdminCommentController extends SuperGlobal
     }//end adminCommentListDeletion()
 
 
+    /**
+     * Admin comment deletion
+     *
+     * @return void
+     */
+    public function adminCommentDeletion()
+    {
+        if ($this->superGlobal->userIsAdmin() === false) {
+            $this->redirect->getRedirect('login');
+        };
+
+        if ($this->superGlobal->getExist() === true) {
+            $commentId = $this->superGlobal->getGetData('commentId');
+        }
+        
+        if (empty($commentId) === false) {
+            if ($this->adminCommentModel->adminDeleteComment($commentId)) {
+                $this->redirect->getRedirect('/admin/comments');
+            }
+        }//end if
+
+    }//end adminCommentDeletion()
+
+
 }//end class

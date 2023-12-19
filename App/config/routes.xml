@@ -26,4 +26,5 @@
   <route url="/admin/comment/validation/([0-9]+)" controller="AdminComment" action="adminCommentValidation" vars="commentId"></route>
   <route url="/admin/comment/invalidation/([0-9]+)" controller="AdminComment" action="adminCommentInvalidation" vars="commentId"></route>
   <route url="/admin/comment/modification/([0-9]+)" controller="AdminComment" action="adminCommentModification" vars="commentId"></route>
+   <route url="/admin/comment/deletion/([0-9]+)" controller="AdminComment" action="adminCommentDeletion" vars="commentId"></route>
 </routes>

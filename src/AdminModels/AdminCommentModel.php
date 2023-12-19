@@ -186,4 +186,21 @@ class AdminCommentModel extends Model
     }//end adminCommentUpdate()
 
 
+    /**
+     * Admin delete comment
+     *
+     * @param $commentId comment id
+     * @return boolean
+     */
+    public function adminDeleteComment($commentId)
+    {
+        $sql = 'DELETE FROM comment WHERE id = :id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":id", $commentId, PDO::PARAM_INT);
+
+        return $request->execute();
+
+    }//end adminDeleteComment()
+
 }//end class
