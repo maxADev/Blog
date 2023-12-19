@@ -63,7 +63,7 @@ class AdminCommentController extends SuperGlobal
     /**
      * Admin comment list
      *
-     * @return comment
+     * @return view
      */
     public function adminCommentList()
     {
@@ -97,6 +97,67 @@ class AdminCommentController extends SuperGlobal
         return $view;
 
     }//end adminCommentList()
+
+
+    /**
+     * Admin comment modification
+     *
+     * @return view
+     */
+    public function adminCommentModification()
+    {
+        $varValue = [];
+        $errors;
+        $getValueCommentId;
+
+        if ($this->superGlobal->userIsAdmin() === false) {
+            $this->redirect->getRedirect('login');
+        };
+
+        $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
+
+        if ($this->superGlobal->getExist() === true) {
+            $getValueCommentId = $this->superGlobal->getGetData('commentId');
+        }
+
+        if (empty($getValueCommentId) === true) {
+            $this->redirect->getRedirect('/admin/comments');
+        }
+
+        $commentValue = $this->adminCommentModel->adminGetComment($getValueCommentId);
+        $varValue['commentValue'] = $commentValue;
+
+        if ($this->superGlobal->postExist() === true) {
+            $postValue = [];
+
+            $postValue = $this->superGlobal->getPost();
+
+            foreach ($postValue as $key => $value) {
+                if (empty($value) === true) {
+                    $errors[] = [
+                                'message' => 'Le champ est obligatoire : ',
+                                'value'   => $key
+                                ];
+                } else {
+                    $postValue[$key] = $this->superGlobal->getPostData($key);
+                }
+            }
+
+            if (empty($errors) === true) {
+                $postValue['id'] = $getValueCommentId;
+                if ($this->adminCommentModel->adminCommentUpdate($postValue) === true) {
+                    $this->redirect->getRedirect('/admin/comments');
+                }
+            }
+        }//end if
+
+        $view = [];
+        $view['folder'] = 'adminTemplates\comment';
+        $view['file'] = 'adminCommentModification.twig';
+        $view['var'] = $varValue;
+        return $view;
+
+    }//end adminCommentModification()
 
 
     /**
