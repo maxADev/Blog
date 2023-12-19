@@ -61,6 +61,93 @@ class AdminCommentController extends SuperGlobal
 
 
     /**
+     * Admin comment list
+     *
+     * @return comment
+     */
+    public function adminCommentList()
+    {
+        $varValue = [];
+        $getValueCommentSetting;
+
+        if ($this->superGlobal->userIsAdmin() === false) {
+            $this->redirect->getRedirect('login');
+        };
+
+        $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
+
+        if ($this->superGlobal->getExist() === true) {
+            $getValueCommentSetting = $this->superGlobal->getGetData('commentSetting');
+        }
+
+        if ($getValueCommentSetting === 'invalid') {
+            $commentList = $this->adminCommentModel->adminGetCommentByStatut(1);
+        } else if ($getValueCommentSetting === 'valid') {
+            $commentList = $this->adminCommentModel->adminGetCommentByStatut(2);
+        } else {
+            $commentList = $this->adminCommentModel->adminGetAllComment();
+        }
+
+        $varValue['commentList'] = $commentList;
+
+        $view = [];
+        $view['folder'] = 'adminTemplates\comment';
+        $view['file'] = 'adminCommentList.twig';
+        $view['var'] = $varValue;
+        return $view;
+
+    }//end adminCommentList()
+
+
+    /**
+     * Admin comment validation
+     *
+     * @return void
+     */
+    public function adminCommentValidation()
+    {
+        if ($this->superGlobal->userIsAdmin() === false) {
+            $this->redirect->getRedirect('login');
+        };
+
+        if ($this->superGlobal->getExist() === true) {
+            $commentId = $this->superGlobal->getGetData('commentId');
+        }
+
+        if (empty($commentId) === false) {
+            if ($this->adminCommentModel->adminCommentValidate($commentId) === true) {
+                $this->redirect->getRedirect('/admin/comment/invalid');
+            }
+        }//end if
+
+    }//end adminCommentValidation()
+
+
+    /**
+     * Admin comment invalidation
+     *
+     * @return void
+     */
+    public function adminCommentInvalidation()
+    {
+        if ($this->superGlobal->userIsAdmin() === false) {
+            $this->redirect->getRedirect('login');
+        };
+
+        if ($this->superGlobal->getExist() === true) {
+            $commentId = $this->superGlobal->getGetData('commentId');
+        }
+
+        if (empty($commentId) === false) {
+            if ($this->adminCommentModel->adminCommentInvalidate($commentId) === true) {
+                $this->redirect->getRedirect('/admin/comment/valid');
+            }
+        }//end if
+
+    }//end adminCommentInvalidation()
+
+
+    /**
      * Admin comment list deletion
      *
      * @param $postId post id

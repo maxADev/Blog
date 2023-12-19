@@ -1,0 +1,95 @@
+{% extends "adminLayout.twig" %}
+{% block head %}
+    <title>Les posts</title>
+{% endblock %}
+
+{% block content %}
+
+<a class="btn btn-primary" href="/admin/comment/invalid">Commentaire en attente</a>
+<a class="btn btn-primary" href="/admin/comment/valid">Commentaire en validé</a>
+<a class="btn btn-primary" href="/admin/comments">Tous les commentaires</a>
+{% if varList.commentList is defined %}
+    <div class="container text-center mt-3">
+        {% for comment in varList.commentList %}
+            {% if varList.commentModificationId != comment.id %}
+            <div class="container col-5 mt-3 border border-dark rounded text-start">
+                <div class="container">
+                    <p>{{comment.last_name}} {{comment.first_name}} -
+                    {% if comment.modification_date is not null %}
+                        {{comment.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
+                    {% else %}
+                        {{comment.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
+                    {% endif %}
+                </div>
+                <div class="container">
+                    <p>{{comment.content}}</p>
+                    <p>{{comment.comment_statut_name}}</p>
+                </div>
+                <div class="col-6 row">
+                    {% if comment.FK_statut_comment_id == 1 %}
+                    <div class="col-6">
+                        <a class="btn btn-primary" href={{"/admin/comment/validation/#{comment.id}"}}>Valider</a>
+                    </div>
+                    {% else %}
+                    <div class="col-6">
+                        <a class="btn btn-danger" href={{"/admin/comment/invalidation/#{comment.id}"}}>Invalider</a>
+                    </div>
+                    {% endif %}
+                    <div class="col-6">
+                        <a class="btn btn-primary" href={{"post-#{varList.post.id}-#{varList.post.title}-comment-modification-#{comment.id}"|replace({' ': '-'})}}>Modifier</a>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-danger admin-delete-comment" data-comment-id={{"#{comment.id}"}}>Supprimer</button>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="modal-container comment-modification-container">
+                <div class="modal-content comment-modification-content container col-5 mt-5 border border-dark rounded text-start">
+                    <div class="container">
+                        <p>{{comment.last_name}} {{comment.first_name}} -
+                        {% if comment.modification_date is not null %}
+                            {{ comment.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
+                        {% else %}
+                            {{ comment.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
+                        {% endif %}
+                    </div>
+                    <div class="container">
+                        <form action="" method="post">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="comment_content_modification" name="comment_content_modification" value="{{"#{comment.content}"}}">
+                                <p>{{comment.comment_statut_name}}</p>
+                            </div>
+                            <div class="container row">
+                                <div class="container col-5">
+                                    <button type="submit" class="btn btn-primary">Valider</button>
+                                </div>
+                                <div class="container col-5">
+                                    <a class="btn btn-danger" href={{"post-#{varList.post.id}-#{varList.post.title}"|replace({' ': '-'})}}>Annuler</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div id="admin-comment-deletion-container" class="modal-container">
+    <div class="modal-content comment-deletion-content container col-5 mt-5 border border-dark rounded text-start">
+        <div class="container col-5">
+            <p>Confimer la suppression ?</p>
+        </div>
+        <div class="container row">
+            <div class="container col-5">
+                <a id="admin-confirm-comment-deletion" class="btn btn-danger">Supprimer</a>
+            </div>
+            <div class="container col-5">
+                <button id="admin-delete-comment-close" class="btn btn-primary">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

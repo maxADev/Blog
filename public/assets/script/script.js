@@ -30,9 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let adminDeleteCommentClose = document.getElementById("admin-delete-comment-close");
     if (adminCommentPost && adminDeleteCommentClose) {
         for (var c = 0; c < adminCommentPost.length; c++) {
-            adminCommentPost[c].addEventListener("click", modalDeleteComment, false);
+            adminCommentPost[c].addEventListener("click", adminModalDeleteComment, false);
         }
-        adminDeleteCommentClose.addEventListener("click", modalDeleteCommentClose, false);
+        adminDeleteCommentClose.addEventListener("click", adminModalDeleteCommentClose, false);
     }
 });
 

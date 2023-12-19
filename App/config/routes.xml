@@ -21,4 +21,8 @@
   <route url="/admin/post/modification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostModification" vars="postId,postTitle"></route>
   <route url="/admin/post/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminReadPost" vars="postId,postTitle"></route>
   <route url="/admin/post/deletion/([0-9]+)" controller="AdminPost" action="adminPostDeletion" vars="postId"></route>
+  <route url="/admin/comments" controller="AdminComment" action="adminCommentList"></route>
+  <route url="/admin/comment/([a-z-A-Z-0-9]+)" controller="AdminComment" action="adminCommentList" vars="commentSetting"></route>
+  <route url="/admin/comment/validation/([0-9]+)" controller="AdminComment" action="adminCommentValidation" vars="commentId"></route>
+  <route url="/admin/comment/invalidation/([0-9]+)" controller="AdminComment" action="adminCommentInvalidation" vars="commentId"></route>
 </routes>
