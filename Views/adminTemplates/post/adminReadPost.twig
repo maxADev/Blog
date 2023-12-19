@@ -72,7 +72,7 @@
                             </div>
                             {% endif %}
                             <div class="col-6">
-                                <a class="btn btn-primary" href={{"post-#{varList.post.id}-#{varList.post.title}-comment-modification-#{comment.id}"|replace({' ': '-'})}}>Modifier</a>
+                                <a class="btn btn-primary" href={{"/admin/comment/modification/#{comment.id}"}}>Modifier</a>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-danger admin-delete-comment" data-comment-id={{"#{comment.id}"}}>Supprimer</button>
