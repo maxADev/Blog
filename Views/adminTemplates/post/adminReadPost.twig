@@ -61,12 +61,21 @@
                             <p>{{comment.content}}</p>
                             <p>{{comment.comment_statut_name}}</p>
                         </div>
-                        <div class="col-6 row">
+                         <div class="col-6 row">
+                            {% if comment.FK_statut_comment_id == 1 %}
+                            <div class="col-6">
+                                <a class="btn btn-primary" href={{"/admin/comment/validation/#{comment.id}"}}>Valider</a>
+                            </div>
+                            {% else %}
+                            <div class="col-6">
+                                <a class="btn btn-danger" href={{"/admin/comment/invalidation/#{comment.id}"}}>Invalider</a>
+                            </div>
+                            {% endif %}
                             <div class="col-6">
                                 <a class="btn btn-primary" href={{"post-#{varList.post.id}-#{varList.post.title}-comment-modification-#{comment.id}"|replace({' ': '-'})}}>Modifier</a>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-danger delete-comment" data-comment-id={{"#{comment.id}"}}>Supprimer</button>
+                                <button class="btn btn-danger admin-delete-comment" data-comment-id={{"#{comment.id}"}}>Supprimer</button>
                             </div>
                         </div>
                     </div>

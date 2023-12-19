@@ -38,7 +38,7 @@
                     {% endif %}
                     <div class="col-12 row justify-content-around">
                         <div class="col-5">
-                            <a class="btn btn-primary" href={{"/admin/post-#{post.id}-#{post.title}"|replace({' ': '-'})}}>Voir</a>
+                            <a class="btn btn-primary" href={{"/admin/post/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Voir</a>
                         </div>
                     {% if varList.userAdmin.FK_type_user_id == 2 %}
                         <div class="col-6 row">

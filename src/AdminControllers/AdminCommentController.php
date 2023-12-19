@@ -139,7 +139,7 @@ class AdminCommentController extends SuperGlobal
         }
 
         if (empty($commentId) === false) {
-            if ($this->adminCommentModel->adminCommentInvalidate($commentId)) {
+            if ($this->adminCommentModel->adminCommentInvalidate($commentId) === true) {
                 $this->redirect->getRedirect('/admin/comment/valid');
             }
         }//end if
