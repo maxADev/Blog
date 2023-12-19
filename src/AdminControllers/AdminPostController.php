@@ -93,7 +93,7 @@ class AdminPostController
     {
         $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
-        $errors;
+        $errors = [];
 
         if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
@@ -129,11 +129,10 @@ class AdminPostController
      * @return view
      */
     public function adminPostModification()
-    {   
+    {
         $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
-        $errors;
-        $success = [];
+        $errors = [];
 
         if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
@@ -156,8 +155,8 @@ class AdminPostController
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
+                                 'type' => 'danger',
+                                 'message'   => 'Le champ est obligatoire : '.$key.''
                                 ];
                 } else {
                     $post[$key] = $this->superGlobal->getPostData($key);

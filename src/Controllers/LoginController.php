@@ -173,7 +173,7 @@ class LoginController
     public function logout()
     {
         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Vous êtes bien déconnecté']);
-        unset($_SESSION['auth']);
+        $this->superGlobal->deleteSession('auth');
         $this->redirect->getRedirect('login');
 
     }//end logout()

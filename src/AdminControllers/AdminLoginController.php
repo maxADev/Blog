@@ -54,6 +54,7 @@ class AdminLoginController
         if (empty($this->superGlobal->getCurrentUser()) === false && $this->superGlobal->userIsAdmin() === true) {
             $this->redirect->getRedirect('/admin/account');
         }
+
         $flashMessageList = $this->superGlobal->getFlashMessage();
 
         if ($this->superGlobal->postExist() === true) {
@@ -88,7 +89,7 @@ class AdminLoginController
     public function adminLogout()
     {
         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Vous êtes bien déconnecté']);
-        unset($_SESSION['auth']);
+        $this->superGlobal->deleteSession('auth');
         $this->redirect->getRedirect('/admin/login');
 
     }//end adminLogout()

@@ -250,11 +250,12 @@ class SuperGlobal
     public function createFlashMessage($flashMessageValue)
     {
         if (empty($flashMessageValue) === false) {
-            if(isset($flashMessageValue[0]) === false) {
+            if (isset($flashMessageValue[0]) === false) {
                 $_SESSION['flashMessage'][] = $flashMessageValue;
             } else {
                 $_SESSION['flashMessage'] = $flashMessageValue;
             }
+
             $this->SESSION['flashMessage'] = $_SESSION['flashMessage'];
         }
 
@@ -293,6 +294,18 @@ class SuperGlobal
         return $flashMessage;
 
     }//end getFlashMessage()
+
+
+    /**
+     * Delete session
+     *
+     * @return void
+     */
+    public function deleteSession($value)
+    {
+        unset($_SESSION[$value]);
+
+    }//end deleteSession()
 
 
 }//end class

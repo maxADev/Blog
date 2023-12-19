@@ -109,7 +109,6 @@ class Router
     {
         $viewVar = [];
         $viewVarValue = [];
-        $viewVarFlashMessage = [];
         
         $routeValue = $this->getRoute();
 
