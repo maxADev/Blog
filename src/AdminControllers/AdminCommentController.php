@@ -107,6 +107,7 @@ class AdminCommentController extends SuperGlobal
     public function adminCommentModification()
     {
         $varValue = [];
+        $errors;
         $getValueCommentId;
 
         if ($this->superGlobal->userIsAdmin() === false) {
@@ -122,6 +123,7 @@ class AdminCommentController extends SuperGlobal
         if (empty($getValueCommentId) === true) {
             $this->redirect->getRedirect('/admin/comments');
         }
+
         $commentValue = $this->adminCommentModel->adminGetComment($getValueCommentId);
         $varValue['commentValue'] = $commentValue;
 
@@ -132,8 +134,10 @@ class AdminCommentController extends SuperGlobal
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
-                    $errors[] = ['message' => 'Le champ est obligatoire : ',
-                                 'value' => $key];
+                    $errors[] = [
+                                'message' => 'Le champ est obligatoire : ',
+                                'value'   => $key
+                                ];
                 } else {
                     $postValue[$key] = $this->superGlobal->getPostData($key);
                 }
@@ -141,7 +145,6 @@ class AdminCommentController extends SuperGlobal
 
             if (empty($errors) === true) {
                 $postValue['id'] = $getValueCommentId;
-                var_dump($postValue);
                 if ($this->adminCommentModel->adminCommentUpdate($postValue) === true) {
                     $this->redirect->getRedirect('/admin/comments');
                 }
