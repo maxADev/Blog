@@ -59,8 +59,8 @@ class AdminPostController
      */
     public function adminPostList()
     {
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
-        $errors[] = ['message' => 'Aucun post trouvé : '];
 
         if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
@@ -78,7 +78,7 @@ class AdminPostController
         $view['folder'] = 'adminTemplates\post';
         $view['file'] = 'adminPostList.twig';
         $view['var'] = $varValue;
-        $view['errorLog'] = $errors;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end adminPostList()
@@ -91,10 +91,9 @@ class AdminPostController
      */
     public function adminReadPost()
     {
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
-        $errors[] = ['message' => 'Aucun post trouvé'];
-        $success = [];
-        $varValue['commentModificationId'] = 0;
+        $errors;
 
         if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
@@ -104,63 +103,21 @@ class AdminPostController
 
         if ($this->superGlobal->getExist() === true) {
             $getValuePostId = $this->superGlobal->getGetData('postId');
-            $getValueCommentId = $this->superGlobal->getGetData('commentId');
-            if (empty($getValueCommentId) === false) {
-                $varValue['commentModificationId'] = $getValueCommentId;
-            }
         }
 
         if (empty($getValuePostId) === false) {
             $post = $this->adminPostModel->adminGetPost($getValuePostId);
             if (empty($post) === false) {
-                $errors = [];
                 $varValue['post'] = $post;
                 $varValue['commentList'] = $this->adminCommentController->adminGetPostCommentList($getValuePostId);
             }
         }
 
-        if ($this->superGlobal->postExist() === true) {
-            $postValue = [];
-
-            $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = ['message' => 'Le champ est obligatoire : ',
-                                 'value' => $key];
-                } else {
-                    $postValue[$key] = $this->superGlobal->getPostData($key);
-                }
-            }
-
-            if (empty($errors) === true) {
-                $postValue['FKPostId'] = $getValuePostId;
-                if (isset($postValue['comment_content_modification']) === false) {
-                    $errors[] = ['message' => 'Le commentaire ne peut-être ajouté'];
-                    if (empty($varValue['userAdmin']['id']) === false) {
-                        if ($this->commentController->createPostComment($postValue) === true) {
-                            $errors = [];
-                            $success[] = ['message' => 'Le commentaire a bien été posté, il est en attente de validation'];
-                            $varValue['commentList'] = $this->adminCommentController->adminGetPostCommentList($getValuePostId);
-                        }
-                    }
-                } else {
-                    $postValue['commentContent'] = $postValue['comment_content_modification'];
-                    $postValue['commentId'] = $getValueCommentId;
-                    $commentValue = $postValue;
-                    if ($this->commentController->commentPostModification($commentValue) === true) {
-                        $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
-                    }
-                }
-            }
-        }//end if
-
         $view = [];
         $view['folder'] = 'adminTemplates\post';
         $view['file'] = 'adminReadPost.twig';
         $view['var'] = $varValue;
-        $view['errorLog'] = $errors;
-        $view['successLog'] = $success;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end adminReadPost()
@@ -172,9 +129,10 @@ class AdminPostController
      * @return view
      */
     public function adminPostModification()
-    {
+    {   
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
-        $errors[] = ['message' => 'Aucun post trouvé : '];
+        $errors;
         $success = [];
 
         if ($this->superGlobal->userIsAdmin() === false) {
@@ -187,20 +145,20 @@ class AdminPostController
             $getValuePostId = $this->superGlobal->getGetData('postId');
             $postValue = $this->adminPostModel->adminGetPost($getValuePostId);
             if (empty($postValue) === false) {
-                $errors = [];
                 $varValue['post'] = $postValue;
             }
         }
 
         if ($this->superGlobal->postExist() === true) {
             $post = [];
-
             $postValue = $this->superGlobal->getPost();
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
-                    $errors[] = ['message' => 'Le champ est obligatoire : ',
-                                 'value' => $key];
+                    $errors[] = [
+                                'type' => 'danger',
+                                'message'   => 'Le champ est obligatoire : '.$key.''
+                                ];
                 } else {
                     $post[$key] = $this->superGlobal->getPostData($key);
                 }
@@ -209,8 +167,12 @@ class AdminPostController
             if (empty($errors) === true) {
                 $post['id'] = $getValuePostId;
                 if ($this->adminPostModel->adminPostModification($post) === true) {
-                    $success[] = ['message' => 'Le post a bien été modifié'];
+                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
+                    $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $post['title']).'');
                 }
+            } else {
+                $this->superGlobal->createFlashMessage($errors);
+                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
@@ -218,8 +180,7 @@ class AdminPostController
         $view['folder'] = 'adminTemplates\post';
         $view['file'] = 'adminPostModification.twig';
         $view['var'] = $varValue;
-        $view['errorLog'] = $errors;
-        $view['successLog'] = $success;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end adminPostModification()
@@ -242,6 +203,7 @@ class AdminPostController
             if (empty($postValue) === false) {
                 if ($this->adminCommentController->adminCommentListDeletion($getValuePostId) === true) {
                     if ($this->adminPostModel->adminPostDeletion($getValuePostId) === true) {
+                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été supprimé']);
                         $this->redirect->getRedirect('/admin/posts');
                     }
                 }

@@ -3,10 +3,8 @@
   <route url="/" controller="Home" action="index"></route>
   <route url="/registration" controller="Login" action="registration"></route>
   <route url="/login" controller="Login" action="loginPage"></route>
-  <route url="/login-redirect-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="redirect"></route>
-  <route url="/login-logout-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="logout"></route>
   <route url="/login-validation-([0-9]+)-([a-zA-Z0-9]+)" controller="Login" action="loginPage" vars="userId,token"></route>
-  <route url="/my-account" controller="Account" action="index"></route>
+  <route url="/account" controller="Account" action="index"></route>
   <route url="/logout" controller="Login" action="logout"></route>
   <route url="/post-creation" controller="Post" action="postCreation"></route>
   <route url="/posts" controller="Post" action="postList"></route>
@@ -17,6 +15,7 @@
   <route url="/comment-deletion-([0-9]+)" controller="Comment" action="commentDeletion" vars="commentId"></route>
   <route url="/admin/login" controller="AdminLogin" action="adminLoginPage"></route>
   <route url="/admin/account" controller="AdminAccount" action="index"></route>
+  <route url="/admin/logout" controller="AdminLogin" action="AdminLogout"></route>
   <route url="/admin/posts" controller="AdminPost" action="adminPostList"></route>
   <route url="/admin/post/modification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostModification" vars="postId,postTitle"></route>
   <route url="/admin/post/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminReadPost" vars="postId,postTitle"></route>

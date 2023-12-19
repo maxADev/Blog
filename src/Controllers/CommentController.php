@@ -5,11 +5,11 @@ namespace src\Controllers;
 use src\Entity\CommentEntity;
 use src\Models\PostModel;
 use src\Models\CommentModel;
-use App\Superglobal;
+use App\SuperGlobal;
 use App\Redirect;
 
 // Comment Controller.
-class CommentController extends Superglobal
+class CommentController extends SuperGlobal
 {
 
     /**
@@ -20,9 +20,9 @@ class CommentController extends Superglobal
 
     /**
      *
-     * @var $superglobal for Superglobal class
+     * @var $superGlobal for SuperGlobal class
      */
-    private $superglobal;
+    private $superGlobal;
 
     /**
      *
@@ -39,7 +39,7 @@ class CommentController extends Superglobal
     public function __construct()
     {
         $this->commentModel = new CommentModel();
-        $this->superglobal = new Superglobal();
+        $this->superGlobal = new SuperGlobal();
         $this->redirect = new Redirect();
 
     }//end __construct()
@@ -106,12 +106,12 @@ class CommentController extends Superglobal
     {
         $varValue = [];
 
-        if (empty($this->superglobal->getCurrentUser()) === false) {
-            $varValue['user'] = $this->superglobal->getCurrentUser();
+        if (empty($this->superGlobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superGlobal->getCurrentUser();
         };
 
-        if ($this->superglobal->getExist() === true) {
-            $getValueCommentId = $this->superglobal->getGetData('commentId');
+        if ($this->superGlobal->getExist() === true) {
+            $getValueCommentId = $this->superGlobal->getGetData('commentId');
             $commentValue = $this->commentModel->getComment($getValueCommentId);
             if (empty($commentValue) === false) {
                 $postModel = new PostModel();
@@ -122,6 +122,7 @@ class CommentController extends Superglobal
 
                 if (empty($commentValue) === false) {
                     if ($this->commentModel->deleteComment($getValueCommentId) === true) {
+                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
                         $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
                     }
                 }

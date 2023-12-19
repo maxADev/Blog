@@ -25,7 +25,7 @@
             <a class="nav-link" href="/post-creation">Creer un post</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/my-account">Mon Compte</a>
+            <a class="nav-link" href="/account">Mon Compte</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/logout">Déconnexion</a>
@@ -41,6 +41,21 @@
       </ul>
     </div>
   </nav>
+  {% if flashMessageList is defined %}
+    <div class="container text-center text-danger mt-3">
+        {% for flashMessage in flashMessageList %}
+            {% if flashMessage.type == "danger" %}
+                <div class="container text-center text-danger mt-3">
+                    <p>Erreur : {{flashMessage.message}}<p>
+                </div>
+            {% else %}
+                <div class="container text-center text-success mt-3">
+                    <p>{{flashMessage.message}}<p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+  {% endif %}
   <div>{% block content %}{% endblock %}</div>
   <footer>
     <a href="admin/login">Admin</a>

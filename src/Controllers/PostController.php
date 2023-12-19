@@ -4,7 +4,7 @@ namespace src\Controllers;
 
 use src\Entity\PostEntity;
 use src\Models\PostModel;
-use App\Superglobal;
+use App\SuperGlobal;
 use App\Redirect;
 use src\Controllers\CommentController;
 
@@ -20,9 +20,9 @@ class PostController
 
     /**
      *
-     * @var $superglobal for Superglobal class
+     * @var $superGlobal for SuperGlobal class
      */
-    private $superglobal;
+    private $superGlobal;
 
     /**
      *
@@ -45,7 +45,7 @@ class PostController
     public function __construct()
     {
         $this->postModel = new PostModel();
-        $this->superglobal = new Superglobal();
+        $this->superGlobal = new SuperGlobal();
         $this->redirect = new Redirect();
         $this->commentController = new CommentController();
 
@@ -59,28 +59,27 @@ class PostController
      */
     public function postCreation()
     {
-        $errors = [];
-        $success = [];
+        $flashMessageList = $this->superGlobal->getFlashMessage();
+        $errors;
 
-        if (empty($this->superglobal->getCurrentUser()) === true) {
+        if (empty($this->superGlobal->getCurrentUser()) === true) {
             $this->redirect->getRedirect('login');
         };
 
-        $varValue = ['user' => $this->superglobal->getCurrentUser()];
+        $varValue = ['user' => $this->superGlobal->getCurrentUser()];
 
-        if ($this->superglobal->postExist() === true) {
+        if ($this->superGlobal->postExist() === true) {
             $post = [];
-
-            $postValue = $this->superglobal->getPost();
+            $postValue = $this->superGlobal->getPost();
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = [
-                                'message' => 'Le champ est obligatoire : ',
-                                'value'   => $key
+                                'type' => 'danger',
+                                'message'   => 'Le champ est obligatoire : '.$key.''
                                 ];
                 } else {
-                    $post[$key] = $this->superglobal->getPostData($key);
+                    $post[$key] = $this->superGlobal->getPostData($key);
                 }
             }
 
@@ -88,8 +87,12 @@ class PostController
                 $post['FkUserId'] = $varValue['user']['id'];
                 $postValues = new PostEntity($post);
                 if ($this->postModel->createPost($postValues) === true) {
-                    $success[] = ['message' => 'Le post a bien été créé'];
+                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été créé']);
+                    $this->redirect->getRedirect('posts');
                 }
+            } else {
+                $this->superGlobal->createFlashMessage($errors);
+                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
@@ -97,8 +100,7 @@ class PostController
         $view['folder'] = 'templates\post';
         $view['file'] = 'postCreation.twig';
         $view['var'] = $varValue;
-        $view['errorLog'] = $errors;
-        $view['successLog'] = $success;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end postCreation()
@@ -111,17 +113,16 @@ class PostController
      */
     public function postList()
     {
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
-        $errors[] = ['message' => 'Aucun post trouvé : '];
 
-        if (empty($this->superglobal->getCurrentUser()) === false) {
-            $varValue['user'] = $this->superglobal->getCurrentUser();
+        if (empty($this->superGlobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superGlobal->getCurrentUser();
         };
 
         $postList = $this->postModel->getPostList();
 
         if (empty($postList) === false) {
-            $errors = [];
             $varValue['postList'] = $postList;
         }
 
@@ -129,7 +130,8 @@ class PostController
         $view['folder'] = 'templates\post';
         $view['file'] = 'postList.twig';
         $view['var'] = $varValue;
-        $view['errorLog'] = $errors;
+        $view['flashMessageList'] = $flashMessageList;
+   
         return $view;
 
     }//end postList()
@@ -142,18 +144,18 @@ class PostController
      */
     public function readPost()
     {
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
-        $errors[] = ['message' => 'Aucun post trouvé'];
-        $success = [];
+        $errors;
         $varValue['commentModificationId'] = 0;
 
-        if (empty($this->superglobal->getCurrentUser()) === false) {
-            $varValue['user'] = $this->superglobal->getCurrentUser();
+        if (empty($this->superGlobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superGlobal->getCurrentUser();
         };
 
-        if ($this->superglobal->getExist() === true) {
-            $getValuePostId = $this->superglobal->getGetData('postId');
-            $getValueCommentId = $this->superglobal->getGetData('commentId');
+        if ($this->superGlobal->getExist() === true) {
+            $getValuePostId = $this->superGlobal->getGetData('postId');
+            $getValueCommentId = $this->superGlobal->getGetData('commentId');
             if (empty($getValueCommentId) === false) {
                 $varValue['commentModificationId'] = $getValueCommentId;
             }
@@ -168,19 +170,18 @@ class PostController
             }
         }
 
-        if ($this->superglobal->postExist() === true) {
+        if ($this->superGlobal->postExist() === true) {
             $postValue = [];
-
-            $postValue = $this->superglobal->getPost();
+            $postValue = $this->superGlobal->getPost();
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = [
-                                'message' => 'Le champ est obligatoire : ',
-                                'value'   => $key
+                                'type' => 'danger',
+                                'message'   => 'Le champ est obligatoire : '.$key.''
                                 ];
                 } else {
-                    $postValue[$key] = $this->superglobal->getPostData($key);
+                    $postValue[$key] = $this->superGlobal->getPostData($key);
                 }
             }
 
@@ -192,7 +193,8 @@ class PostController
                     if (empty($varValue['user']['id']) === false) {
                         if ($this->commentController->createPostComment($postValue) === true) {
                             $errors = [];
-                            $success[] = ['message' => 'Le commentaire a bien été posté, il est en attente de validation'];
+                            $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été posté, il est en attente de validation']);
+                            $flashMessageList = $this->superGlobal->getFlashMessage();
                             $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);
                         }
                     }
@@ -201,18 +203,21 @@ class PostController
                     $postValue['commentId'] = $getValueCommentId;
                     $commentValue = $postValue;
                     if ($this->commentController->commentPostModification($commentValue) === true) {
+                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été modifié, il est en attente de validation']);
                         $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
                     }
                 }
-            }//end if
+            } else {
+                $this->superGlobal->createFlashMessage($errors);
+                $flashMessageList = $this->superGlobal->getFlashMessage();
+            }
         }//end if
 
         $view = [];
         $view['folder'] = 'templates\post';
         $view['file'] = 'readPost.twig';
         $view['var'] = $varValue;
-        $view['errorLog'] = $errors;
-        $view['successLog'] = $success;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end readPost()
@@ -225,46 +230,51 @@ class PostController
      */
     public function postModification()
     {
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
-        $errors[] = ['message' => 'Aucun post trouvé : '];
-        $success = [];
+        $errors;
 
-        if (empty($this->superglobal->getCurrentUser()) === false) {
-            $varValue['user'] = $this->superglobal->getCurrentUser();
+        if (empty($this->superGlobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superGlobal->getCurrentUser();
         };
 
-        if ($this->superglobal->getExist() === true) {
-            $getValuePostId = $this->superglobal->getGetData('postId');
+        if ($this->superGlobal->getExist() === true) {
+            $getValuePostId = $this->superGlobal->getGetData('postId');
+            $getValuePostTtile = $this->superGlobal->getGetData('postTitle');
             $postValue = $this->postModel->getPost($getValuePostId);
             if (empty($postValue) === false) {
                 if ($varValue['user']['id'] !== $postValue['FK_user_id']) {
                     $this->redirect->getRedirect('posts');
                 }
-
-                $errors = [];
                 $varValue['post'] = $postValue;
             }
         }
 
-        if ($this->superglobal->postExist() === true) {
+        if ($this->superGlobal->postExist() === true) {
             $post = [];
 
-            $postValue = $this->superglobal->getPost();
+            $postValue = $this->superGlobal->getPost();
 
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
-                    $errors[] = ['message' => 'Le champ est obligatoire : ',
-                                 'value' => $key];
+                    $errors[] = [
+                                'type' => 'danger',
+                                'message'   => 'Le champ est obligatoire : '.$key.''
+                                ];
                 } else {
-                    $post[$key] = $this->superglobal->getPostData($key);
+                    $post[$key] = $this->superGlobal->getPostData($key);
                 }
             }
 
             if (empty($errors) === true) {
                 $post['id'] = $getValuePostId;
                 if ($this->postModel->postModification($post) === true) {
-                    $success[] = ['message' => 'Le post a bien été modifié'];
+                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
+                    $this->redirect->getRedirect('post-'.$getValuePostId.'-'.$getValuePostTtile.'');
                 }
+            } else {
+                $this->superGlobal->createFlashMessage($errors);
+                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
@@ -272,8 +282,7 @@ class PostController
         $view['folder'] = 'templates\post';
         $view['file'] = 'postModification.twig';
         $view['var'] = $varValue;
-        $view['errorLog'] = $errors;
-        $view['successLog'] = $success;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end postModification()
@@ -288,12 +297,12 @@ class PostController
     {
         $varValue = [];
 
-        if (empty($this->superglobal->getCurrentUser()) === false) {
-            $varValue['user'] = $this->superglobal->getCurrentUser();
+        if (empty($this->superGlobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superGlobal->getCurrentUser();
         };
 
-        if ($this->superglobal->getExist() === true) {
-            $getValuePostId = $this->superglobal->getGetData('postId');
+        if ($this->superGlobal->getExist() === true) {
+            $getValuePostId = $this->superGlobal->getGetData('postId');
             $postValue = $this->postModel->getPost($getValuePostId);
             if (empty($postValue) === false) {
                 if ($varValue['user']['id'] !== $postValue['FK_user_id']) {
@@ -302,6 +311,7 @@ class PostController
 
                 if (empty($postValue) === false) {
                     if ($this->postModel->postDeletion($getValuePostId) === true) {
+                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été supprimé']);
                         $this->redirect->getRedirect('posts');
                     }
                 }
