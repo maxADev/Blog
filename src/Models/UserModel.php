@@ -106,7 +106,7 @@ class UserModel extends Model
         $request->execute();
         $userVerification = $request->fetch(PDO::FETCH_ASSOC);
 
-        if(empty($userVerification) === false) {
+        if (empty($userVerification) === false) {
             $sqlUpdate = 'UPDATE user SET token = :token WHERE id = :id';
 
             $requestUpdate = $this->connection->prepare($sqlUpdate);

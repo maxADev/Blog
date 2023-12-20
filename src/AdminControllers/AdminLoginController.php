@@ -51,6 +51,7 @@ class AdminLoginController
      */
     public function adminLoginPage()
     {
+        $errors = [];
         if (empty($this->superGlobal->getCurrentUser()) === false && $this->superGlobal->userIsAdmin() === true) {
             $this->redirect->getRedirect('/admin/account');
         }
@@ -61,8 +62,8 @@ class AdminLoginController
             foreach ($postValue as $key => $value) {
                 if (empty($value) === true) {
                     $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
+                                'type'    => 'danger',
+                                'message' => 'Le champ est obligatoire : '.$key.''
                                 ];
                 }
             }

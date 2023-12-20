@@ -186,7 +186,7 @@ class SuperGlobal
             return $this->user;
         }
 
-    }//end getSession()
+    }//end getCurrentUser()
 
 
     /**

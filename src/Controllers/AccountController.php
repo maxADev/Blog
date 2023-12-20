@@ -41,6 +41,8 @@ class AccountController
      */
     public function index()
     {
+        $varValue = [];
+
         if (empty($this->superGlobal->getCurrentUser()) === true) {
             $this->redirect->getRedirect('/login');
         };
