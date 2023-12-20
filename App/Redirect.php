@@ -16,6 +16,7 @@ class Redirect
     public function getRedirect($redirectValue)
     {
         header('Location: '.$redirectValue.'');
+        exit();
 
     }//end getRedirect()
 

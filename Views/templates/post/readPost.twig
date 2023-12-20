@@ -20,7 +20,7 @@
                     <p class="card-text">Ecrit par : {{varList.post.last_name}} {{varList.post.first_name}}</p>
                     {% if varList.post.FK_user_id == varList.user.id %}
                         <div class="col-5">
-                            <a class="btn btn-primary" href={{"post-modification-#{varList.post.id}-#{varList.post.title}"|replace({' ': '-'})}}>Modifier</a>
+                            <a class="btn btn-primary" href={{"/post/modification/#{varList.post.id}/#{varList.post.title}"|replace({' ': '-'})}}>Modifier</a>
                         </div>
                     {% endif %}
                 </div>
@@ -47,7 +47,7 @@
                                 {% if comment.FK_user_id == varList.user.id %}
                                     <div class="col-6 row">
                                         <div class="col-6">
-                                            <a class="btn btn-primary" href={{"post-#{varList.post.id}-#{varList.post.title}-comment-modification-#{comment.id}"|replace({' ': '-'})}}>Modifier</a>
+                                            <a class="btn btn-primary" href={{"/post/#{varList.post.id}/#{varList.post.title}/comment/modification/#{comment.id}"|replace({' ': '-'})}}>Modifier</a>
                                         </div>
                                         <div class="col-6">
                                             <button class="btn btn-danger delete-comment" data-comment-id={{"#{comment.id}"}}>Supprimer</button>
@@ -77,7 +77,7 @@
                                                     <button type="submit" class="btn btn-primary">Valider</button>
                                                 </div>
                                                 <div class="container col-5">
-                                                    <a class="btn btn-danger" href={{"post-#{varList.post.id}-#{varList.post.title}"|replace({' ': '-'})}}>Annuler</a>
+                                                    <a class="btn btn-danger" href={{"/post/#{varList.post.id}/#{varList.post.title}"|replace({' ': '-'})}}>Annuler</a>
                                                 </div>
                                             </div>
                                         </form>

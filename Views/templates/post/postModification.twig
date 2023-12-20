@@ -19,7 +19,7 @@
                 <textarea class="form-control" id="content" name="content">{{varList.post.content}}</textarea>
             </div>
             <button type="submit" class="btn btn-primary">Modifier</button>
-            <a class="btn btn-danger" href={{"post-#{varList.post.id}-#{varList.post.title}"|replace({' ': '-'})}}>Annuler</a>
+            <a class="btn btn-danger" href={{"/post/#{varList.post.id}/#{varList.post.title}"|replace({' ': '-'})}}>Annuler</a>
         </form>
     </div>
 {% endblock %}

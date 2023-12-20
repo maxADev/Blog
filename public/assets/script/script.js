@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function modalDeletePost() {
     let postId = this.dataset.postId;
     document.getElementById("post-deletion-container").style.display = "block";
-    document.getElementById("confirm-post-deletion").href = "post-deletion-"+postId;
+    document.getElementById("confirm-post-deletion").href = "/post/deletion/"+postId;
 }
 
 /**
@@ -59,7 +59,7 @@ function modalDeletePostClose() {
 function modalDeleteComment() {
     let commentId = this.dataset.commentId;
     document.getElementById("comment-deletion-container").style.display = "block";
-    document.getElementById("confirm-comment-deletion").href = "comment-deletion-"+commentId;
+    document.getElementById("confirm-comment-deletion").href = "/comment/deletion/"+commentId;
 }
 
 /**

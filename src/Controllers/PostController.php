@@ -59,11 +59,10 @@ class PostController
      */
     public function postCreation()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
         $errors;
 
         if (empty($this->superGlobal->getCurrentUser()) === true) {
-            $this->redirect->getRedirect('login');
+            $this->redirect->getRedirect('/login');
         };
 
         $varValue = ['user' => $this->superGlobal->getCurrentUser()];
@@ -88,14 +87,14 @@ class PostController
                 $postValues = new PostEntity($post);
                 if ($this->postModel->createPost($postValues) === true) {
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été créé']);
-                    $this->redirect->getRedirect('posts');
+                    $this->redirect->getRedirect('/posts');
                 }
             } else {
                 $this->superGlobal->createFlashMessage($errors);
-                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
         $view['folder'] = 'templates\post';
         $view['file'] = 'postCreation.twig';
@@ -113,7 +112,6 @@ class PostController
      */
     public function postList()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
 
         if (empty($this->superGlobal->getCurrentUser()) === false) {
@@ -126,12 +124,12 @@ class PostController
             $varValue['postList'] = $postList;
         }
 
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
         $view['folder'] = 'templates\post';
         $view['file'] = 'postList.twig';
         $view['var'] = $varValue;
         $view['flashMessageList'] = $flashMessageList;
-   
         return $view;
 
     }//end postList()
@@ -144,7 +142,6 @@ class PostController
      */
     public function readPost()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
         $errors;
         $varValue['commentModificationId'] = 0;
@@ -189,12 +186,9 @@ class PostController
                 $postValue['FKPostId'] = $getValuePostId;
                 $postValue['FKUserId'] = $varValue['user']['id'];
                 if (isset($postValue['comment_content_modification']) === false) {
-                    $errors[] = ['message' => 'Le commentaire ne peut-être ajouté'];
                     if (empty($varValue['user']['id']) === false) {
                         if ($this->commentController->createPostComment($postValue) === true) {
-                            $errors = [];
                             $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été posté, il est en attente de validation']);
-                            $flashMessageList = $this->superGlobal->getFlashMessage();
                             $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);
                         }
                     }
@@ -204,15 +198,15 @@ class PostController
                     $commentValue = $postValue;
                     if ($this->commentController->commentPostModification($commentValue) === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été modifié, il est en attente de validation']);
-                        $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
+                        $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
                     }
                 }
             } else {
                 $this->superGlobal->createFlashMessage($errors);
-                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
         $view['folder'] = 'templates\post';
         $view['file'] = 'readPost.twig';
@@ -230,7 +224,6 @@ class PostController
      */
     public function postModification()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
         $errors;
 
@@ -244,7 +237,7 @@ class PostController
             $postValue = $this->postModel->getPost($getValuePostId);
             if (empty($postValue) === false) {
                 if ($varValue['user']['id'] !== $postValue['FK_user_id']) {
-                    $this->redirect->getRedirect('posts');
+                    $this->redirect->getRedirect('/posts');
                 }
                 $varValue['post'] = $postValue;
             }
@@ -270,14 +263,14 @@ class PostController
                 $post['id'] = $getValuePostId;
                 if ($this->postModel->postModification($post) === true) {
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
-                    $this->redirect->getRedirect('post-'.$getValuePostId.'-'.$getValuePostTtile.'');
+                    $this->redirect->getRedirect('/post/'.$getValuePostId.'/'.$getValuePostTtile.'');
                 }
             } else {
                 $this->superGlobal->createFlashMessage($errors);
-                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
         $view['folder'] = 'templates\post';
         $view['file'] = 'postModification.twig';
@@ -306,13 +299,13 @@ class PostController
             $postValue = $this->postModel->getPost($getValuePostId);
             if (empty($postValue) === false) {
                 if ($varValue['user']['id'] !== $postValue['FK_user_id']) {
-                    $this->redirect->getRedirect('posts');
+                    $this->redirect->getRedirect('/posts');
                 }
 
                 if (empty($postValue) === false) {
                     if ($this->postModel->postDeletion($getValuePostId) === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été supprimé']);
-                        $this->redirect->getRedirect('posts');
+                        $this->redirect->getRedirect('/posts');
                     }
                 }
             }

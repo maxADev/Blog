@@ -41,18 +41,17 @@ class AccountController
      */
     public function index()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
-
         if (empty($this->superGlobal->getCurrentUser()) === true) {
-            $this->redirect->getRedirect('login');
+            $this->redirect->getRedirect('/login');
         };
 
-        $user = $this->superGlobal->getCurrentUser();
+        $varValue['user'] = $this->superGlobal->getCurrentUser();
 
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
         $view['folder'] = 'templates\account';
-        $view['file'] = 'myAccount.twig';
-        $view['var'] = ['user' => $user];
+        $view['file'] = 'account.twig';
+        $view['var'] = $varValue;
         $view['flashMessageList'] = $flashMessageList;
         return $view;
 

@@ -67,7 +67,6 @@ class AdminCommentController extends SuperGlobal
      */
     public function adminCommentList()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
         $getValueCommentSetting;
 
@@ -89,6 +88,7 @@ class AdminCommentController extends SuperGlobal
             $commentList = $this->adminCommentModel->adminGetAllComment();
         }
 
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue['commentList'] = $commentList;
         $view = [];
         $view['folder'] = 'adminTemplates\comment';
@@ -107,7 +107,6 @@ class AdminCommentController extends SuperGlobal
      */
     public function adminCommentModification()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
         $errors = [];
         $getValueCommentId;
@@ -155,10 +154,10 @@ class AdminCommentController extends SuperGlobal
                 }
             } else {
                 $this->superGlobal->createFlashMessage($errors);
-                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
         $view['folder'] = 'adminTemplates\comment';
         $view['file'] = 'adminCommentModification.twig';
