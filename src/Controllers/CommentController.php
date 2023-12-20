@@ -117,13 +117,13 @@ class CommentController extends SuperGlobal
                 $postModel = new PostModel();
                 $post = $postModel->getPost($commentValue['FK_post_id']);
                 if ($varValue['user']['id'] !== $commentValue['FK_user_id']) {
-                    $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
+                    $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
                 }
 
                 if (empty($commentValue) === false) {
                     if ($this->commentModel->deleteComment($getValueCommentId) === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
-                        $this->redirect->getRedirect('post-'.$post['id'].'-'.str_replace(' ', '-', $post['title']).'');
+                        $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
                     }
                 }
             }

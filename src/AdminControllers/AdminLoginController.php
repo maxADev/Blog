@@ -51,27 +51,38 @@ class AdminLoginController
      */
     public function adminLoginPage()
     {
+        $errors = [];
         if (empty($this->superGlobal->getCurrentUser()) === false && $this->superGlobal->userIsAdmin() === true) {
             $this->redirect->getRedirect('/admin/account');
         }
 
-        $flashMessageList = $this->superGlobal->getFlashMessage();
-
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
 
-            if (empty($postValue['login']) === false && empty($postValue['password']) === false) {
-                $user = $this->userModel->loginAdmin($postValue['login']);
-                if (empty($user) === false) {
-                    if (password_verify($postValue['password'], $user['password']) === true) {
-                        $this->superGlobal->createSession($user);
-                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Vous êtes bien connecté']);
-                        $this->redirect->getRedirect('/admin/account');
-                    }
+            foreach ($postValue as $key => $value) {
+                if (empty($value) === true) {
+                    $errors[] = [
+                                'type'    => 'danger',
+                                'message' => 'Le champ est obligatoire : '.$key.''
+                                ];
                 }
+            }
+
+            if (empty($errors) === true) {
+                $user = $this->userModel->loginAdmin($postValue['login']);
+                if (empty($user) === false && password_verify($postValue['password'], $user['password']) === true) {
+                    $this->superGlobal->createSession($user);
+                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Vous êtes bien connecté']);
+                    $this->redirect->getRedirect('/admin/account');
+                } else {
+                    $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Identifiant ou mot de passe incorrect']);
+                }
+            } else {
+                $this->superGlobal->createFlashMessage($errors);
             }
         }
 
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
         $view['folder'] = 'adminTemplates\login';
         $view['file'] = 'adminLogin.twig';

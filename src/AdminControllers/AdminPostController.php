@@ -59,7 +59,6 @@ class AdminPostController
      */
     public function adminPostList()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
 
         if ($this->superGlobal->userIsAdmin() === false) {
@@ -78,7 +77,6 @@ class AdminPostController
         $view['folder'] = 'adminTemplates\post';
         $view['file'] = 'adminPostList.twig';
         $view['var'] = $varValue;
-        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end adminPostList()
@@ -91,7 +89,6 @@ class AdminPostController
      */
     public function adminReadPost()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
         $errors = [];
 
@@ -117,7 +114,6 @@ class AdminPostController
         $view['folder'] = 'adminTemplates\post';
         $view['file'] = 'adminReadPost.twig';
         $view['var'] = $varValue;
-        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end adminReadPost()
@@ -130,7 +126,6 @@ class AdminPostController
      */
     public function adminPostModification()
     {
-        $flashMessageList = $this->superGlobal->getFlashMessage();
         $varValue = [];
         $errors = [];
 
@@ -171,7 +166,6 @@ class AdminPostController
                 }
             } else {
                 $this->superGlobal->createFlashMessage($errors);
-                $flashMessageList = $this->superGlobal->getFlashMessage();
             }
         }//end if
 
@@ -179,7 +173,6 @@ class AdminPostController
         $view['folder'] = 'adminTemplates\post';
         $view['file'] = 'adminPostModification.twig';
         $view['var'] = $varValue;
-        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end adminPostModification()

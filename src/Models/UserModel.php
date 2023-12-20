@@ -68,11 +68,14 @@ class UserModel extends Model
     public function userExist($userValues)
     {
         $return = false;
-        $sql = 'SELECT * FROM user WHERE last_name = :last_name AND first_name = :first_name';
+        $sql = 'SELECT * FROM user
+                WHERE (last_name = :last_name AND first_name = :first_name)
+                OR email = :email';
 
         $request = $this->connection->prepare($sql);
         $request->bindValue(":last_name", $userValues->getUserLastName(), PDO::PARAM_STR);
         $request->bindValue(":first_name", $userValues->getUserFirstName(), PDO::PARAM_STR);
+        $request->bindValue(":email", $userValues->getUserEmail(), PDO::PARAM_STR);
         $request->execute();
         $userVerification = $request->fetch(PDO::FETCH_ASSOC);
 
@@ -83,6 +86,60 @@ class UserModel extends Model
         return $return;
 
     }//end userExist()
+
+
+    /**
+     * Check user exist
+     *
+     * @param  $userLogin user login
+     * @return void
+     */
+    public function checkUserExist($userLogin)
+    {
+        $return = false;
+        $userToken = self::randomToken(15);
+        $sql = 'SELECT user.id, user.email FROM user
+                WHERE email = :email';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":email", $userLogin, PDO::PARAM_STR);
+        $request->execute();
+        $userVerification = $request->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($userVerification) === false) {
+            $sqlUpdate = 'UPDATE user SET token = :token WHERE id = :id';
+
+            $requestUpdate = $this->connection->prepare($sqlUpdate);
+            $requestUpdate->bindValue(":token", $userToken, PDO::PARAM_STR);
+            $requestUpdate->bindValue(":id", $userVerification['id'], PDO::PARAM_INT);
+            if ($requestUpdate->execute() === true) {
+                $userVerification['token'] = $userToken;
+                $return = $userVerification;
+            }
+        }
+
+        return $return;
+
+    }//end checkUserExist()
+
+
+    /**
+     * Check user token
+     *
+     * @param  $userToken user token
+     * @return void
+     */
+    public function checkUserToken($userToken)
+    {
+        $sql = 'SELECT user.id FROM user
+                WHERE token = :token';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":token", $userToken, PDO::PARAM_STR);
+        $request->execute();
+        return $request->fetch(PDO::FETCH_ASSOC);
+
+    }//end checkUserToken()
 
 
     /**
@@ -121,6 +178,29 @@ class UserModel extends Model
 
 
     /**
+     * Change password
+     *
+     * @param  $userValues array with user id and user password
+     * @return void
+     */
+    public function changePassword($userValues)
+    {
+        $user = self::checkUserToken($userValues['token']);
+        if (empty($user) === false && $user['id'] === $userValues['id']) {
+            $sql = 'UPDATE user SET password = :password, token = :token WHERE id = :id';
+            $request = $this->connection->prepare($sql);
+            $request->bindValue(":password", password_hash($userValues['password'], PASSWORD_BCRYPT), PDO::PARAM_STR);
+            $request->bindValue(":token", null, PDO::PARAM_STR);
+            $request->bindValue(":id", $userValues['id'], PDO::PARAM_INT);
+            return $request->execute();
+        } else {
+            return false;
+        }
+
+    }//end changePassword()
+
+
+    /**
      * Login
      *
      * @param $login user login
@@ -128,7 +208,7 @@ class UserModel extends Model
      */
     public function login($login)
     {
-        $sql = 'SELECT * FROM user WHERE (login = :login OR email = :login ) AND token IS NULL AND FK_type_user_id != 3';
+        $sql = 'SELECT * FROM user WHERE (login = :login OR email = :login ) AND (token IS NULL OR FK_type_user_id != 3)';
 
         $request = $this->connection->prepare($sql);
         $request->bindValue(":login", $login, PDO::PARAM_STR);

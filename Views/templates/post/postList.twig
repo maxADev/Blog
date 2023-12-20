@@ -20,12 +20,12 @@
                         {% endif %}
                         <div class="col-12 row justify-content-around">
                             <div class="col-5">
-                                <a class="btn btn-primary" href={{"post-#{post.id}-#{post.title}"|replace({' ': '-'})}}>Voir</a>
+                                <a class="btn btn-primary" href={{"/post/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Voir</a>
                             </div>
                         {% if post.FK_user_id == varList.user.id %}
                             <div class="col-6 row">
                                 <div class="col-6">
-                                    <a class="btn btn-primary" href={{"post-modification-#{post.id}-#{post.title}"|replace({' ': '-'})}}>Modifier</a>
+                                    <a class="btn btn-primary" href={{"/post/modification/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Modifier</a>
                                 </div>
                                 <div class="col-6">
                                     <a class="btn btn-danger delete-post" data-post-id={{"#{post.id}"}}>Supprimer</a>
