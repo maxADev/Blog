@@ -56,6 +56,13 @@ class UserEntity
 
 
     /**
+     *
+     * @var error error
+     */
+    public $error;
+
+
+    /**
      * Create a user
      *
      * @param $arrayValue value
@@ -86,6 +93,24 @@ class UserEntity
     }//end hydrate()
 
 
+    /**
+     * Check no error value
+     *
+     * @return boolean
+     */
+    public function isValid()
+    {
+        $return = false;
+        if(empty($this->error) === true)
+        {
+            $return = true;
+        }
+
+        return $return;
+
+    }//end isValid()
+
+
     // Setters.
 
 
@@ -109,7 +134,11 @@ class UserEntity
      */
     public function setUserLastName($userLastName)
     {
-        $this->userLastName = $userLastName;
+        if (strlen($userLastName) <= 50) {
+            $this->userLastName = $userLastName;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Le nom ne doit pas dépasser 50 caractères'];
+        }
 
     }
 
@@ -121,7 +150,11 @@ class UserEntity
      */
     public function setUserFirstName($userFirstName)
     {
-        $this->userFirstName = $userFirstName;
+        if(strlen($userFirstName) <= 50) {
+            $this->userFirstName = $userFirstName;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Le prénom ne doit pas dépasser 50 caractères'];
+        }
 
     }
 
@@ -133,7 +166,11 @@ class UserEntity
      */
     public function setUserLogin($userLogin)
     {
-        $this->userLogin = $userLogin;
+        if(strlen($userLogin) <= 50) {
+            $this->userLogin = $userLogin;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Le prénom ne doit pas dépasser 50 caractères'];
+        }
 
     }
 
@@ -145,7 +182,11 @@ class UserEntity
      */
     public function setUserEmail($userEmail)
     {
-        $this->userEmail = $userEmail;
+        if (filter_var($userEmail, FILTER_VALIDATE_EMAIL) !== false) {
+            $this->userEmail = $userEmail;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Email invalide'];
+        }
 
     }
 
@@ -157,7 +198,11 @@ class UserEntity
      */
     public function setUserPassword($userPassword)
     {
-        $this->userPassword = $userPassword;
+        if(strlen($userPassword) <= 60 && strlen($userPassword) >= 8) {
+            $this->userPassword = $userPassword;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Le mot de passe doit faire entre 8 et 60 caractères'];
+        }
 
     }
 
@@ -281,6 +326,17 @@ class UserEntity
     public function getUserFKIdTypeUser()
     {
         return $this->FKIdTypeUser;
+
+    }
+
+    /**
+     * Get error
+     *
+     * @return error
+     */
+    public function getError()
+    {
+        return $this->error;
 
     }
 

@@ -51,6 +51,7 @@ class LoginController
      */
     public function registration()
     {
+        $varValue = [];
         if ($this->superGlobal->postExist() === true) {
             $user = [];
             $errors = [];
@@ -68,13 +69,6 @@ class LoginController
                 }
             }
 
-            if (!filter_var($postValue['email'], FILTER_VALIDATE_EMAIL)) {
-                $errors[] = [
-                            'type' => 'danger',
-                            'message'   => 'Email invalide'
-                            ];
-              }
-
             if ($postValue['password'] !== $postValue['confirmPassword']) {
                 $errors[] = [
                             'type' => 'danger',
@@ -86,24 +80,50 @@ class LoginController
                 $user['FKIdTypeUser'] = 3;
 
                 $userValues = new UserEntity($user);
-                $createUser = $this->userModel->createUser($userValues);
-
-                if ($createUser !== false) {
-                    $this->sendEmailRegistration($createUser);
-                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Votre a bien été créé, vous allez recevoir un mail pour le valider']);
-                    $this->redirect->getRedirect('/login');
-                } else {
-                    $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Cet utilisateur existe déjà']);
-                }
+                if ($userValues->isValid() === true) {
+                    $createUser = $this->userModel->createUser($userValues);
+                    if ($createUser !== false) {
+                        $this->sendEmailRegistration($createUser);
+                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Votre a bien été créé, vous allez recevoir un mail pour le valider']);
+                        $this->redirect->getRedirect('/login');
+                    } else {
+                        $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Cet utilisateur existe déjà']);
+                    }
             } else {
+                $newUserValues = [];
+                if (empty($userValues) === false) {
+                    foreach($userValues as $key => $newValue) {
+                        if ($key != 'FKIdTypeUser' && $key != 'error') {
+                            $newKey = lcfirst(str_replace('user', '', $key));
+                            $newUserValues[$newKey] = $newValue;
+                        }
+                    }
+                    $varValue['registrationValue'] = $newUserValues;
+                }
+                $this->superGlobal->createFlashMessage($userValues->getError());
+            }
+            } else {
+                if (empty($postValue) === false) {
+                    $varValue['registrationValue'] = $postValue;
+                }
                 $this->superGlobal->createFlashMessage($errors);
             }
         }//end if
+
+        $varValue['formSetting'] = [
+                                   "lastName"        => ['value' => "Nom", "type" => "text", "placeholder" => "Votre nom"],
+                                   "firstName"       => ['value' => "Prénom", "type" => "text", "placeholder" => "Votre prénom"],
+                                   "email"           => ['value' => "Email", "type" => "email", "placeholder" => "Votre email"],
+                                   "login"           => ['value' => "Identifiant", "type" => "text", "placeholder" => "Votre identifiant"],
+                                   "password"        => ['value' => "Mot de passe", "type" => "password", "placeholder" => "Votre mot de passe"],
+                                   "confirmPassword" => ['value' => "Confirmation du mot de passe", "type" => "password", "placeholder" => "Confirmer votre mot de passe"]
+                                   ];
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
         $view['folder'] = 'templates\login';
         $view['file'] = 'registration.twig';
+        $view['var'] = $varValue;
         $view['flashMessageList'] = $flashMessageList;
         return $view;
 
