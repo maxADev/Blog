@@ -184,7 +184,6 @@ class PostController
 
             if (empty($errors) === true) {
                 $postValue['FKPostId'] = $getValuePostId;
-                $postValue['FKUserId'] = $varValue['user']['id'];
                 if (isset($postValue['comment_content_modification']) === false) {
                     if (empty($varValue['user']['id']) === false) {
                         if ($this->commentController->createPostComment($postValue) === true) {
@@ -198,6 +197,9 @@ class PostController
                     $commentValue = $postValue;
                     if ($this->commentController->commentPostModification($commentValue) === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été modifié, il est en attente de validation']);
+                        $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
+                    } else {
+                        $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Vous ne pouvez pas modifier ce commentaire']);
                         $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
                     }
                 }

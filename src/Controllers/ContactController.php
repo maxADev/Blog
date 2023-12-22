@@ -43,6 +43,10 @@ class ContactController
     {
         $varValue = [];
 
+        if (empty($this->superGlobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superGlobal->getCurrentUser();
+        };
+
         if ($this->superGlobal->postExist() === true) {
             $user = [];
             $errors = [];

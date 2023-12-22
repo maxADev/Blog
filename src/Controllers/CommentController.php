@@ -88,9 +88,20 @@ class CommentController extends SuperGlobal
     public function commentPostModification($commentValue)
     {
         $return = false;
-        if ($this->commentModel->commentModification($commentValue) === true) {
-            $return = true;
-        };
+
+        if (empty($this->superGlobal->getCurrentUser()) === false) {
+            $varValue['user'] = $this->superGlobal->getCurrentUser();
+        } else {
+            $this->redirect->getRedirect('/login');
+        }
+
+        $comment = $this->commentModel->getComment($commentValue['commentId']);
+
+        if ($varValue['user']['id'] === $comment['FK_user_id']) {
+            if ($this->commentModel->commentModification($commentValue) === true) {
+                $return = true;
+            };
+        }
 
         return $return;
 

@@ -37,7 +37,11 @@
                 </div>
             {% endfor %}
         </div>
-        {% endif %}
+    {% else %}
+        <div class="container text-center mt-3">
+            <p>Aucun post trouvé</p>
+        </div>
+    {% endif %}
     </div>
 
     <div id="post-deletion-container" class="modal-container">

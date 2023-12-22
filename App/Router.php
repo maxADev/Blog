@@ -112,9 +112,9 @@ class Router
         
         $routeValue = $this->getRoute();
 
-        $cssLink = "http://mablog.projetformationma.com/public/assets/css/style.css";
-        $bootstrapLink = "http://mablog.projetformationma.com/public/assets/css/bootstrap.min.css";
-        $scriptLink = "http://mablog.projetformationma.com/public/assets/script/script.js";
+        $cssLink = "https://mablog.projetformationma.com/public/assets/css/style.css";
+        $bootstrapLink = "https://mablog.projetformationma.com/public/assets/css/bootstrap.min.css";
+        $scriptLink = "https://mablog.projetformationma.com/public/assets/script/script.js";
 
         $view = 'templates\error\error.twig';
 
