@@ -87,6 +87,7 @@ class CommentController extends SuperGlobal
      */
     public function commentPostModification($commentValue)
     {
+        $varValue = [];
         $return = false;
 
         if (empty($this->superGlobal->getCurrentUser()) === false) {
