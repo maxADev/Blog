@@ -120,6 +120,10 @@ class LoginController
         $getValueToken;
         $getValueUserId;
 
+        if (empty($this->superGlobal->getCurrentUser()) === false) {
+            $this->redirect->getRedirect('/account');
+        };
+        
         if ($this->superGlobal->getExist() === true) {
             $getValueToken = $this->superGlobal->getGetData('token');
             $getValueUserId = $this->superGlobal->getGetData('userId');

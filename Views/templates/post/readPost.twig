@@ -89,7 +89,11 @@
                     {% endfor %}
                 </div>
             {% endif %}
-        {% endif %}
+    {% else %}
+        <div class="container text-center mt-3">
+            <p>Aucun post trouvé</p>
+        </div>
+    {% endif %}
 
         {% if varList.commentModificationId == 0 %}
             {% if varList.user is defined %}
