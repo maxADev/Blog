@@ -68,6 +68,20 @@ class LoginController
                 }
             }
 
+            if (!filter_var($postValue['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors[] = [
+                            'type' => 'danger',
+                            'message'   => 'Email invalide'
+                            ];
+              }
+
+            if ($postValue['password'] !== $postValue['confirmPassword']) {
+                $errors[] = [
+                            'type' => 'danger',
+                            'message'   => 'Les mots de passe sont différents'
+                            ];
+            }
+
             if (empty($errors) === true) {
                 $user['FKIdTypeUser'] = 3;
 
@@ -263,7 +277,7 @@ class LoginController
             if (empty($errors) === true) {
                 $postValue['id'] = $getValueUserId;
                 $postValue['token'] = $getValueToken;
-                if ($postValue['password'] === $postValue['confirm_password']) {
+                if ($postValue['password'] === $postValue['confirmPassword']) {
                     if ($this->userModel->changePassword($postValue) === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Votre mot de passe a bien été changé']);
                         $this->redirect->getRedirect('/login');

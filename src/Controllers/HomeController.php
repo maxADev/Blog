@@ -1,10 +1,10 @@
 <?php
 
 namespace src\Controllers;
-use App\Superglobal;
+use App\SuperGlobal;
 
 // Home Controller.
-class HomeController extends Superglobal
+class HomeController extends SuperGlobal
 {
 
 
