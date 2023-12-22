@@ -10,12 +10,12 @@
                 {% set formValue = varList.formSetting[keyFormSetting] %}
                 {% if varList.registrationValue[keyFormSetting] is not empty %}
                     <div class="form-group">
-                        <label for="{{"#{keyFormSetting}"}}">{{formValue.value}}</label>
+                        <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
                         <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" value="{{"#{varList.registrationValue[keyFormSetting]}"}}">
                     </div>
                 {% else %}
                     <div class="form-group">
-                        <label for="{{"#{keyFormSetting}"}}">{{formValue.value}}</label>
+                        <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
                         <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" placeholder="{{"#{formValue.placeholder}"}}">
                     </div>
                 {% endif %}
