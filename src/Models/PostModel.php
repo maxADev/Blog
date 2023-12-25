@@ -92,6 +92,28 @@ class PostModel extends Model
 
 
     /**
+     * Get user posts
+     *
+     * @param $userId user id
+     * @return post
+     */
+    public function getUserPosts($userId)
+    {
+        $sql = 'SELECT * FROM post
+                WHERE FK_user_id = :FK_user_id';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":FK_user_id", $userId, PDO::PARAM_INT);
+        $request->execute();
+
+        $postList = $request->fetchAll(PDO::FETCH_ASSOC);
+
+        return $postList;
+
+    }//end getUserPosts()
+
+
+    /**
      * Post modification
      *
      * @param $post post value

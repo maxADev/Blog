@@ -52,22 +52,10 @@ class LoginController
     public function registration()
     {
         $varValue = [];
+        $errors = [];
         if ($this->superGlobal->postExist() === true) {
-            $user = [];
-            $errors = [];
-
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
-                                ];
-                } else {
-                    $user[$key] = $this->superGlobal->getPostData($key);
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if ($postValue['password'] !== $postValue['confirmPassword']) {
                 $errors[] = [
@@ -76,11 +64,10 @@ class LoginController
                             ];
             }
 
-            if (empty($errors) === true) {
-                $user['FKIdTypeUser'] = 3;
+            $postValue['FKIdTypeUser'] = 3;
+            $userValues = new UserEntity($postValue);
 
-                $userValues = new UserEntity($user);
-                if ($userValues->isValid() === true) {
+            if (empty($errors) === true && $userValues->isValid() === true) {
                     $createUser = $this->userModel->createUser($userValues);
                     if ($createUser !== false) {
                         $this->sendEmailRegistration($createUser);
@@ -90,22 +77,8 @@ class LoginController
                         $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Cet utilisateur existe déjà']);
                     }
             } else {
-                $newUserValues = [];
-                if (empty($userValues) === false) {
-                    foreach($userValues as $key => $newValue) {
-                        if ($key != 'FKIdTypeUser' && $key != 'error') {
-                            $newKey = lcfirst(str_replace('user', '', $key));
-                            $newUserValues[$newKey] = $newValue;
-                        }
-                    }
-                    $varValue['registrationValue'] = $newUserValues;
-                }
+                $varValue['registrationValue'] = $postValue;
                 $this->superGlobal->createFlashMessage($userValues->getError());
-            }
-            } else {
-                if (empty($postValue) === false) {
-                    $varValue['registrationValue'] = $postValue;
-                }
                 $this->superGlobal->createFlashMessage($errors);
             }
         }//end if
@@ -143,13 +116,11 @@ class LoginController
         if (empty($this->superGlobal->getCurrentUser()) === false) {
             $this->redirect->getRedirect('/account');
         };
-        
-        if ($this->superGlobal->getExist() === true) {
+
+        if ($this->superGlobal->getDataExist('token') === true && $this->superGlobal->getDataExist('userId')) {
             $getValueToken = $this->superGlobal->getGetData('token');
             $getValueUserId = $this->superGlobal->getGetData('userId');
-        }
 
-        if (empty($getValueUserId) !== true && empty($getValueToken) !== true) {
             if ($this->userModel->validationUser($getValueUserId, $getValueToken) === true) {
                 $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Votre compte a bien été validé, vous pouvez vous connecter']);
             }
@@ -157,15 +128,7 @@ class LoginController
 
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
-                                ];
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (empty($errors) === true) {
                 $user = $this->userModel->login($postValue['login']);
@@ -238,15 +201,7 @@ class LoginController
     {
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
-                                ];
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (empty($errors) === true) {
                 $user = $this->userModel->checkUserExist($postValue['login']);
@@ -278,40 +233,31 @@ class LoginController
      */
     public function resetPassword()
     {
-        if ($this->superGlobal->getExist() === true) {
-            $getValueUserId = $this->superGlobal->getGetData('userId');
-            $getValueToken = $this->superGlobal->getGetData('token');
-            if (empty($getValueUserId) === true || empty($getValueToken) === true) {
-                $this->redirect->getRedirect('/login');
-            }
-        }//end if
+        if ($this->superGlobal->getDataExist('userId') === false || $this->superGlobal->getDataExist('token') === false) {
+            $this->redirect->getRedirect('/login');
+        }
+
+        $getValueUserId = $this->superGlobal->getGetData('userId');
+        $getValueToken = $this->superGlobal->getGetData('token');
 
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
-                                ];
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (empty($errors) === true) {
                 $postValue['id'] = $getValueUserId;
                 $postValue['token'] = $getValueToken;
                 if(strlen($postValue['password']) <= 60 && strlen($postValue['password']) >= 8) {
-                if ($postValue['password'] === $postValue['confirmPassword']) {
-                    if ($this->userModel->changePassword($postValue) === true) {
-                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Votre mot de passe a bien été changé']);
-                        $this->redirect->getRedirect('/login');
+                    if ($postValue['password'] === $postValue['confirmPassword']) {
+                        if ($this->userModel->changePassword($postValue) === true) {
+                            $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Votre mot de passe a bien été changé']);
+                            $this->redirect->getRedirect('/login');
+                        } else {
+                            $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Erreur vous ne pouvez pas changer le mot de passe']);
+                        }
                     } else {
-                        $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Erreur vous ne pouvez pas changer le mot de passe']);
+                        $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Les mots de passe sont différents']);
                     }
-                } else {
-                    $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Les mots de passe sont différents']);
-                }
             } else {
                 $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le mot de passe doit faire entre 8 et 60 caractères']);
             }
