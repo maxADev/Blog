@@ -151,22 +151,23 @@ class AdminPostController
                 $postValue['id'] = $getValuePostId;
                 $postValues = new PostEntity($postValue);
                 if ($postValues->isValid() === true) {
-                if ($this->adminPostModel->adminPostModification($postValue) === true) {
-                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
-                    $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
-                }
-            } else {
-                $newPostValues = [];
-                if (empty($postValues) === false) {
-                    foreach($postValues as $key => $newValue) {
-                        if ($key != 'FKUserId' && $key != 'error') {
-                            $newKey = lcfirst(str_replace('post', '', $key));
-                            $newPostValues[$newKey] = $newValue;
-                        }
+                    if ($this->adminPostModel->adminPostModification($postValue) === true) {
+                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
+                        $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
                     }
-                    $varValue['postValue'] = $newPostValues;
-                }
-                $this->superGlobal->createFlashMessage($postValues->getError());
+            } else {
+                    $newPostValues = [];
+                    if (empty($postValues) === false) {
+                        foreach ($postValues as $key => $newValue) {
+                            if ($key != 'FKUserId' && $key != 'error') {
+                                $newKey = lcfirst(str_replace('post', '', $key));
+                                $newPostValues[$newKey] = $newValue;
+                            }
+                        }
+
+                        $varValue['postValue'] = $newPostValues;
+                    }
+                    $this->superGlobal->createFlashMessage($postValues->getError());
             }
             } else {
                 if (empty($postValue) === false) {

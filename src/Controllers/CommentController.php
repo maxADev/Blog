@@ -106,10 +106,10 @@ class CommentController extends SuperGlobal
             $commentValue['content'] = $commentValue['comment_content_modification'];
             $commentValue['id'] = $comment['id'];
             $newComment = new CommentEntity($commentValue);
-            if($newComment->isValid() === true) {
+            if ($newComment->isValid() === true) {
                 if ($this->commentModel->commentModification($newComment) === true) {
                     $return = true;
-                };
+                }
             } else {
                 $return = $newComment->getError();
             }
