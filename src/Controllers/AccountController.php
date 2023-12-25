@@ -53,7 +53,6 @@ class AccountController
 
 
         if ($this->superGlobal->postExist() === true) {
-            $post = [];
             $postValue = $this->superGlobal->getPost();
             if (isset($postValue['comment']) === true) {
                 $commentController = new CommentController();
@@ -61,7 +60,7 @@ class AccountController
                 if (empty($commentList) === false) {
                     $varValue['commentList'] = $commentList;
                 }
-            } elseif (isset($postValue['post']) === true) {
+            } else if (isset($postValue['post']) === true) {
                 $postController = new PostController();
                 $postList = $postController->getUserPost($varValue['user']['id']);
                 if (empty($postList) === false) {

@@ -173,7 +173,7 @@ class SuperGlobal
 
         return $return;
 
-    }//end getExist()
+    }//end getDataExist()
 
 
     /**
