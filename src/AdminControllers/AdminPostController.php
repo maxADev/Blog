@@ -139,40 +139,56 @@ class AdminPostController
             $getValuePostId = $this->superGlobal->getGetData('postId');
             $postValue = $this->adminPostModel->adminGetPost($getValuePostId);
             if (empty($postValue) === false) {
-                $varValue['post'] = $postValue;
+                $varValue['postValue'] = $postValue;
             }
         }
 
         if ($this->superGlobal->postExist() === true) {
-            $post = [];
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type'    => 'danger',
-                                'message' => 'Le champ est obligatoire : '.$key.''
-                                ];
-                } else {
-                    $post[$key] = $this->superGlobal->getPostData($key);
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (empty($errors) === true) {
-                $post['id'] = $getValuePostId;
-                if ($this->adminPostModel->adminPostModification($post) === true) {
-                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
-                    $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $post['title']).'');
-                }
+                $postValue['id'] = $getValuePostId;
+                $postValues = new PostEntity($postValue);
+                if ($postValues->isValid() === true) {
+                    if ($this->adminPostModel->adminPostModification($postValue) === true) {
+                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
+                        $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
+                    }
             } else {
+                    $newPostValues = [];
+                    if (empty($postValues) === false) {
+                        foreach ($postValues as $key => $newValue) {
+                            if ($key != 'FKUserId' && $key != 'error') {
+                                $newKey = lcfirst(str_replace('post', '', $key));
+                                $newPostValues[$newKey] = $newValue;
+                            }
+                        }
+
+                        $varValue['postValue'] = $newPostValues;
+                    }
+                    $this->superGlobal->createFlashMessage($postValues->getError());
+            }
+            } else {
+                if (empty($postValue) === false) {
+                    $varValue['postValue'] = $postValue;
+                }
                 $this->superGlobal->createFlashMessage($errors);
             }
         }//end if
 
+        $varValue['formSetting'] = [
+                                   "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
+                                   "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
+                                   "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
+                                   ];
+
+        $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
         $view['folder'] = 'adminTemplates\post';
         $view['file'] = 'adminPostModification.twig';
         $view['var'] = $varValue;
+        $view['flashMessageList'] = $flashMessageList;
         return $view;
 
     }//end adminPostModification()

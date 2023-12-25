@@ -5,23 +5,6 @@
 
 {% block content %}
 
-{% if flashMessageList is defined %}
-    <div class="container text-center text-danger mt-3">
-        {% for flashMessage in flashMessageList %}
-            {% if flashMessage.type == "danger" %}
-                <div class="container text-center text-danger mt-3">
-                    <p>Erreur :<p>
-                    <p>{{flashMessage.message}}<p>
-                </div>
-            {% else %}
-                <div class="container text-center text-success mt-3">
-                    <p>{{flashMessage.message}}<p>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-{% endif %}
-
 <div class="container text-center">
     <p>Connexion Admin</p>
     <form action="" method="post">

@@ -301,6 +301,7 @@ class LoginController
             if (empty($errors) === true) {
                 $postValue['id'] = $getValueUserId;
                 $postValue['token'] = $getValueToken;
+                if(strlen($postValue['password']) <= 60 && strlen($postValue['password']) >= 8) {
                 if ($postValue['password'] === $postValue['confirmPassword']) {
                     if ($this->userModel->changePassword($postValue) === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Votre mot de passe a bien été changé']);
@@ -311,6 +312,9 @@ class LoginController
                 } else {
                     $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Les mots de passe sont différents']);
                 }
+            } else {
+                $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le mot de passe doit faire entre 8 et 60 caractères']);
+            }
             } else {
                 $this->superGlobal->createFlashMessage($errors);
             }

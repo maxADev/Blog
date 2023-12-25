@@ -50,6 +50,13 @@ class PostEntity
 
 
     /**
+     *
+     * @var error error
+     */
+    public $error;
+
+
+    /**
      * Create a Post
      *
      * @param $arrayValue value
@@ -80,6 +87,24 @@ class PostEntity
     }//end hydrate()
 
 
+    /**
+     * Check no error value
+     *
+     * @return boolean
+     */
+    public function isValid()
+    {
+        $return = false;
+        if(empty($this->error) === true)
+        {
+            $return = true;
+        }
+
+        return $return;
+
+    }//end isValid()
+
+
     // Setters.
 
 
@@ -103,7 +128,11 @@ class PostEntity
      */
     public function setPostTitle($postTitle)
     {
-        $this->postTitle = $postTitle;
+        if (strlen($postTitle) <= 50) {
+            $this->postTitle = $postTitle;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Le titre ne doit pas dépasser 50 caractères'];
+        }
 
     }
 
@@ -115,7 +144,11 @@ class PostEntity
      */
     public function setPostChapo($postChapo)
     {
-        $this->postChapo = $postChapo;
+        if (strlen($postChapo) <= 50) {
+            $this->postChapo = $postChapo;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Le chapo ne doit pas dépasser 150 caractères'];
+        }
 
     }
 
@@ -251,6 +284,17 @@ class PostEntity
     public function getPostFKUserId()
     {
         return $this->FKUserId;
+
+    }
+
+    /**
+     * Get error
+     *
+     * @return error
+     */
+    public function getError()
+    {
+        return $this->error;
 
     }
 

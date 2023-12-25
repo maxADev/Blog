@@ -132,25 +132,19 @@ class AdminCommentController extends SuperGlobal
 
         if ($this->superGlobal->postExist() === true) {
             $postValue = [];
-
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type'    => 'danger',
-                                'message' => 'Le champ est obligatoire : '.$key.''
-                                ];
-                } else {
-                    $postValue[$key] = $this->superGlobal->getPostData($key);
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (empty($errors) === true) {
                 $postValue['id'] = $getValueCommentId;
-                if ($this->adminCommentModel->adminCommentUpdate($postValue) === true) {
+                $postValue['content'] = $postValue['comment_content_modification'];
+                $comment = new CommentEntity($postValue);
+                if ($comment->isValid() === true) {
+                    $this->adminCommentModel->adminCommentUpdate($comment);
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été modifié']);
                     $this->redirect->getRedirect('/admin/comments');
+                } else {
+                    $this->superGlobal->createFlashMessage($comment->getError());
                 }
             } else {
                 $this->superGlobal->createFlashMessage($errors);

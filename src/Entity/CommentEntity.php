@@ -50,6 +50,13 @@ class CommentEntity
 
 
     /**
+     *
+     * @var error error
+     */
+    public $error;
+
+
+    /**
      * Create a comment
      *
      * @param $arrayValue value
@@ -80,6 +87,24 @@ class CommentEntity
     }//end hydrate()
 
 
+    /**
+     * Check no error value
+     *
+     * @return boolean
+     */
+    public function isValid()
+    {
+        $return = false;
+        if(empty($this->error) === true)
+        {
+            $return = true;
+        }
+
+        return $return;
+
+    }//end isValid()
+
+
     // Setters.
 
 
@@ -103,7 +128,11 @@ class CommentEntity
      */
     public function setCommentContent($commentContent)
     {
-        $this->commentContent = $commentContent;
+        if (strlen($commentContent) <= 150) {
+            $this->commentContent = $commentContent;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Le commentaire ne doit pas dépasser 150 caractères'];
+        }
 
     }//end setCommentContent()
 
@@ -251,6 +280,18 @@ class CommentEntity
     public function getcommentFKPostId()
     {
         return $this->FKPostId;
+
+    }
+
+
+    /**
+     * Get error
+     *
+     * @return error
+     */
+    public function getError()
+    {
+        return $this->error;
 
     }
 

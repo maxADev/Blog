@@ -70,9 +70,14 @@ class CommentController extends SuperGlobal
     {
         $return = false;
         $comment = new CommentEntity($commentValue);
-        if ($this->commentModel->createComment($comment) === true) {
-            $return = true;
-        };
+
+        if ($comment->isValid() === true) {
+            if ($this->commentModel->createComment($comment) === true) {
+                $return = true;
+            }
+        } else {
+            $return = $comment->getError();
+        }
 
         return $return;
 
@@ -88,7 +93,7 @@ class CommentController extends SuperGlobal
     public function commentPostModification($commentValue)
     {
         $varValue = [];
-        $return = false;
+        $return = ['type' => 'danger', 'message' => 'Vous ne pouvez pas modifier ce commentaire'];
 
         if (empty($this->superGlobal->getCurrentUser()) === false) {
             $varValue['user'] = $this->superGlobal->getCurrentUser();
@@ -97,11 +102,17 @@ class CommentController extends SuperGlobal
         }
 
         $comment = $this->commentModel->getComment($commentValue['commentId']);
-
         if ($varValue['user']['id'] === $comment['FK_user_id']) {
-            if ($this->commentModel->commentModification($commentValue) === true) {
-                $return = true;
-            };
+            $commentValue['content'] = $commentValue['comment_content_modification'];
+            $commentValue['id'] = $comment['id'];
+            $newComment = new CommentEntity($commentValue);
+            if ($newComment->isValid() === true) {
+                if ($this->commentModel->commentModification($newComment) === true) {
+                    $return = true;
+                }
+            } else {
+                $return = $newComment->getError();
+            }
         }
 
         return $return;
