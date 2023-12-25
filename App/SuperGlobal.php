@@ -99,6 +99,30 @@ class SuperGlobal
 
 
     /**
+     * Check Post Data
+     *
+     * @param $postValue post value
+     * @return string
+     */
+    public function checkPostData($postValue)
+    {
+        $errors = [];
+
+        foreach ($postValue as $key => $value) {
+            if (empty($value) === true) {
+                $errors[] = [
+                            'type' => 'danger',
+                            'message'   => 'Le champ est obligatoire : '.$key.''
+                            ];
+            }
+        }
+
+        return $errors;
+
+    }//end checkPostData()
+
+
+    /**
      * Create a $_GET
      *
      * @param $getValue $_GET value

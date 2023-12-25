@@ -70,29 +70,42 @@ class PostController
         if ($this->superGlobal->postExist() === true) {
             $post = [];
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
-                                ];
-                } else {
-                    $post[$key] = $this->superGlobal->getPostData($key);
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (empty($errors) === true) {
-                $post['FkUserId'] = $varValue['user']['id'];
-                $postValues = new PostEntity($post);
+                $postValue['FkUserId'] = $varValue['user']['id'];
+                $postValues = new PostEntity($postValue);
+                if ($postValues->isValid() === true) {
                 if ($this->postModel->createPost($postValues) === true) {
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été créé']);
                     $this->redirect->getRedirect('/posts');
                 }
             } else {
+                    $newPostValues = [];
+                    if (empty($postValues) === false) {
+                        foreach($postValues as $key => $newValue) {
+                            if ($key != 'FKUserId' && $key != 'error') {
+                                $newKey = lcfirst(str_replace('post', '', $key));
+                                $newPostValues[$newKey] = $newValue;
+                            }
+                        }
+                        $varValue['postValue'] = $newPostValues;
+                    }
+                    $this->superGlobal->createFlashMessage($postValues->getError());
+            }
+            } else {
+                if (empty($postValue) === false) {
+                    $varValue['postValue'] = $postValue;
+                }
                 $this->superGlobal->createFlashMessage($errors);
             }
         }//end if
+
+        $varValue['formSetting'] = [
+                                   "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
+                                   "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
+                                   "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
+                                    ];
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
@@ -170,36 +183,31 @@ class PostController
         if ($this->superGlobal->postExist() === true) {
             $postValue = [];
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
-                                ];
-                } else {
-                    $postValue[$key] = $this->superGlobal->getPostData($key);
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (empty($errors) === true) {
+                $postValue['FKUserId'] = $varValue['user']['id'];
                 $postValue['FKPostId'] = $getValuePostId;
                 if (isset($postValue['comment_content_modification']) === false) {
                     if (empty($varValue['user']['id']) === false) {
-                        if ($this->commentController->createPostComment($postValue) === true) {
+                        $commentResult = $this->commentController->createPostComment($postValue);
+                        if ($commentResult === true) {
                             $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été posté, il est en attente de validation']);
                             $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);
+                        } else {
+                            $this->superGlobal->createFlashMessage($commentResult);    
                         }
                     }
                 } else {
                     $postValue['commentContent'] = $postValue['comment_content_modification'];
                     $postValue['commentId'] = $getValueCommentId;
                     $commentValue = $postValue;
-                    if ($this->commentController->commentPostModification($commentValue) === true) {
+                    $commentResult = $this->commentController->commentPostModification($commentValue);
+                    if ($commentResult === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été modifié, il est en attente de validation']);
                         $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
                     } else {
-                        $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Vous ne pouvez pas modifier ce commentaire']);
+                        $this->superGlobal->createFlashMessage($commentResult);
                         $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
                     }
                 }
@@ -241,36 +249,49 @@ class PostController
                 if ($varValue['user']['id'] !== $postValue['FK_user_id']) {
                     $this->redirect->getRedirect('/posts');
                 }
-                $varValue['post'] = $postValue;
+                $varValue['postValue'] = $postValue;
             }
         }
 
         if ($this->superGlobal->postExist() === true) {
-            $post = [];
-
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
-                                ];
-                } else {
-                    $post[$key] = $this->superGlobal->getPostData($key);
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (empty($errors) === true) {
-                $post['id'] = $getValuePostId;
-                if ($this->postModel->postModification($post) === true) {
+                $postValue['id'] = $getValuePostId;
+                $postValues = new PostEntity($postValue);
+                if ($postValues->isValid() === true) {
+                if ($this->postModel->postModification($postValue) === true) {
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
                     $this->redirect->getRedirect('/post/'.$getValuePostId.'/'.$getValuePostTtile.'');
                 }
             } else {
+                    $newPostValues = [];
+                    if (empty($postValues) === false) {
+                        foreach($postValues as $key => $newValue) {
+                            if ($key != 'FKUserId' && $key != 'error') {
+                                $newKey = lcfirst(str_replace('post', '', $key));
+                                $newPostValues[$newKey] = $newValue;
+                            }
+                        }
+                        $varValue['postValue'] = $newPostValues;
+                    }
+                    $this->superGlobal->createFlashMessage($postValues->getError());
+            }
+            } else {
+                if (empty($postValue) === false) {
+                    $varValue['postValue'] = $postValue;
+                }
                 $this->superGlobal->createFlashMessage($errors);
             }
         }//end if
+
+
+        $varValue['formSetting'] = [
+                                   "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
+                                   "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
+                                   "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
+                                   ];
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];

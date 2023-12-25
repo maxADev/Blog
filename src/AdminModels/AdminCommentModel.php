@@ -179,8 +179,8 @@ class AdminCommentModel extends Model
         $sql = 'UPDATE comment SET content = :content, modification_date = NOW() WHERE id = :id';
 
         $request = $this->connection->prepare($sql);
-        $request->bindValue(":id", $commentValue['id'], PDO::PARAM_INT);
-        $request->bindValue(":content", $commentValue['comment_content_modification'], PDO::PARAM_STR);
+        $request->bindValue(":id", $commentValue->getCommentId(), PDO::PARAM_INT);
+        $request->bindValue(":content", $commentValue->getCommentContent(), PDO::PARAM_STR);
         return $request->execute();
 
     }//end adminCommentUpdate()

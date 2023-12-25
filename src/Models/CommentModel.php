@@ -77,8 +77,8 @@ class CommentModel extends Model
         $sql = 'UPDATE comment SET content = :content, FK_statut_comment_id = 1, modification_date = NOW() WHERE id = :id';
 
         $request = $this->connection->prepare($sql);
-        $request->bindValue(":content", $comment['commentContent'], PDO::PARAM_STR);
-        $request->bindValue(":id", $comment['commentId'], PDO::PARAM_INT);
+        $request->bindValue(":content", $comment->getCommentContent(), PDO::PARAM_STR);
+        $request->bindValue(":id", $comment->getCommentId(), PDO::PARAM_INT);
 
         return $request->execute();
 
