@@ -68,7 +68,7 @@ class AdminCommentController extends SuperGlobal
     public function adminCommentList()
     {
         $varValue = [];
-        $getValueCommentSetting;
+        $getValueCommentSetting = '';
 
         if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
@@ -76,7 +76,7 @@ class AdminCommentController extends SuperGlobal
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
-        if ($this->superGlobal->getExist() === true) {
+        if ($this->superGlobal->getDataExist('commentSetting') === true) {
             $getValueCommentSetting = $this->superGlobal->getGetData('commentSetting');
         }
 
@@ -117,13 +117,11 @@ class AdminCommentController extends SuperGlobal
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
-        if ($this->superGlobal->getExist() === true) {
-            $getValueCommentId = $this->superGlobal->getGetData('commentId');
-        }
-
-        if (empty($getValueCommentId) === true) {
+        if ($this->superGlobal->getDataExist('commentId') === false) {
             $this->redirect->getRedirect('/admin/comments');
         }
+
+        $getValueCommentId = $this->superGlobal->getGetData('commentId');
 
         $commentValue = $this->adminCommentModel->adminGetComment($getValueCommentId);
         if (empty($commentValue) === false) {
@@ -135,18 +133,16 @@ class AdminCommentController extends SuperGlobal
             $postValue = $this->superGlobal->getPost();
             $errors = $this->superGlobal->checkPostData($postValue);
 
-            if (empty($errors) === true) {
-                $postValue['id'] = $getValueCommentId;
-                $postValue['content'] = $postValue['comment_content_modification'];
-                $comment = new CommentEntity($postValue);
-                if ($comment->isValid() === true) {
+            $postValue['id'] = $getValueCommentId;
+            $postValue['content'] = $postValue['comment_content_modification'];
+            $comment = new CommentEntity($postValue);
+
+            if (empty($errors) === true && $comment->isValid() === true) {
                     $this->adminCommentModel->adminCommentUpdate($comment);
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été modifié']);
                     $this->redirect->getRedirect('/admin/comments');
-                } else {
-                    $this->superGlobal->createFlashMessage($comment->getError());
-                }
             } else {
+                $this->superGlobal->createFlashMessage($comment->getError());
                 $this->superGlobal->createFlashMessage($errors);
             }
         }//end if
@@ -173,16 +169,16 @@ class AdminCommentController extends SuperGlobal
             $this->redirect->getRedirect('login');
         };
 
-        if ($this->superGlobal->getExist() === true) {
-            $commentId = $this->superGlobal->getGetData('commentId');
+        if ($this->superGlobal->getDataExist('commentId') === false) {
+            $this->redirect->getRedirect('/admin/comments');
         }
 
-        if (empty($commentId) === false) {
-            if ($this->adminCommentModel->adminCommentValidate($commentId) === true) {
-                $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été validé']);
-                $this->redirect->getRedirect('/admin/comment/invalid');
-            }
-        }//end if
+        $commentId = $this->superGlobal->getGetData('commentId');
+
+        if ($this->adminCommentModel->adminCommentValidate($commentId) === true) {
+            $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été validé']);
+            $this->redirect->getRedirect('/admin/comment/invalid');
+        }
 
     }//end adminCommentValidation()
 
@@ -198,17 +194,16 @@ class AdminCommentController extends SuperGlobal
             $this->redirect->getRedirect('login');
         };
 
-        if ($this->superGlobal->getExist() === true) {
-            $commentId = $this->superGlobal->getGetData('commentId');
+        if ($this->superGlobal->getDataExist('commentId') === false) {
+            $this->redirect->getRedirect('/admin/comments');
         }
 
-        if (empty($commentId) === false) {
-            if ($this->adminCommentModel->adminCommentInvalidate($commentId) === true) {
-                $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été invalidé']);
-                $this->redirect->getRedirect('/admin/comment/valid');
-            }
-        }//end if
+        $commentId = $this->superGlobal->getGetData('commentId');
 
+        if ($this->adminCommentModel->adminCommentInvalidate($commentId) === true) {
+            $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été invalidé']);
+            $this->redirect->getRedirect('/admin/comment/valid');
+        }
     }//end adminCommentInvalidation()
 
 
@@ -242,19 +237,19 @@ class AdminCommentController extends SuperGlobal
             $this->redirect->getRedirect('login');
         };
 
-        if ($this->superGlobal->getExist() === true) {
-            $commentId = $this->superGlobal->getGetData('commentId');
+        if ($this->superGlobal->getDataExist('commentId') === false) {
+            $this->redirect->getRedirect('/admin/comments');
         }
 
-        if (empty($commentId) === false) {
-            if ($this->adminCommentModel->adminDeleteComment($commentId) === true) {
-                $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
-                $this->redirect->getRedirect('/admin/comments');
-            } else {
-                $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le commentaire ne peut pas être supprimé']);
-                $this->redirect->getRedirect('/admin/comments');
-            }
-        }//end if
+        $commentId = $this->superGlobal->getGetData('commentId');
+
+        if ($this->adminCommentModel->adminDeleteComment($commentId) === true) {
+            $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
+            $this->redirect->getRedirect('/admin/comments');
+        } else {
+            $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le commentaire ne peut pas être supprimé']);
+            $this->redirect->getRedirect('/admin/comments');
+        }
 
     }//end adminCommentDeletion()
 

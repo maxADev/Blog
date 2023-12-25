@@ -48,6 +48,10 @@ class SuperGlobal
             $this->SESSION['flashMessage'] = $this->SESSION['flashMessage'];
         };
 
+        if ($this->getExist() === true) {
+            $this->GET = $this->GET;
+        }
+
     }//end __construct()
 
 
@@ -152,6 +156,24 @@ class SuperGlobal
         return $return;
 
     }//end getExist()
+
+
+    /**
+     * Check if $_GET data exist
+     *
+     * @param $key key
+     * @return boolean
+     */
+    public function getDataExist($key)
+    {
+        $return = false;
+        if (isset($this->GET[$key]) === true && empty($this->GET[$key]) === false) {
+            $return = true;
+        }
+
+        return $return;
+
+    }//end getDataExist()
 
 
     /**

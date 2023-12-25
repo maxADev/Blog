@@ -95,13 +95,13 @@ class CommentController extends SuperGlobal
         $varValue = [];
         $return = ['type' => 'danger', 'message' => 'Vous ne pouvez pas modifier ce commentaire'];
 
-        if (empty($this->superGlobal->getCurrentUser()) === false) {
-            $varValue['user'] = $this->superGlobal->getCurrentUser();
-        } else {
+        if (empty($this->superGlobal->getCurrentUser()) === true) {
             $this->redirect->getRedirect('/login');
         }
 
+        $varValue['user'] = $this->superGlobal->getCurrentUser();
         $comment = $this->commentModel->getComment($commentValue['commentId']);
+
         if ($varValue['user']['id'] === $comment['FK_user_id']) {
             $commentValue['content'] = $commentValue['comment_content_modification'];
             $commentValue['id'] = $comment['id'];
@@ -129,11 +129,13 @@ class CommentController extends SuperGlobal
     {
         $varValue = [];
 
-        if (empty($this->superGlobal->getCurrentUser()) === false) {
-            $varValue['user'] = $this->superGlobal->getCurrentUser();
+        if (empty($this->superGlobal->getCurrentUser()) === true) {
+            $this->redirect->getRedirect('/login');
         };
 
-        if ($this->superGlobal->getExist() === true) {
+        $varValue['user'] = $this->superGlobal->getCurrentUser();
+
+        if ($this->superGlobal->getDataExist('commentId') === true) {
             $getValueCommentId = $this->superGlobal->getGetData('commentId');
             $commentValue = $this->commentModel->getComment($getValueCommentId);
             if (empty($commentValue) === false) {
@@ -141,18 +143,34 @@ class CommentController extends SuperGlobal
                 $post = $postModel->getPost($commentValue['FK_post_id']);
                 if ($varValue['user']['id'] !== $commentValue['FK_user_id']) {
                     $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
-                }
-
-                if (empty($commentValue) === false) {
+                } else {
                     if ($this->commentModel->deleteComment($getValueCommentId) === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
                         $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
                     }
                 }
+            } else {
+                $this->redirect->getRedirect('/posts');
             }
         }//end if
 
     }//end commentDeletion()
+
+
+    /**
+     * Get user comment
+     *
+     * @param $userId user id
+     * @return void
+     */
+    public function getUserComment($userId)
+    {
+        if (empty($userId) === false) {
+            $commentList = $this->commentModel->getUserComments($userId);
+            return $commentList;
+        }
+
+    }//end getUserComment()
 
 
 }//end class

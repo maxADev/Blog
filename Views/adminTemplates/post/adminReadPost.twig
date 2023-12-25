@@ -19,9 +19,9 @@
                     <p class="card-text"><i class="bi bi-calendar"></i> {{ varList.post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
                 {% endif %}
                 <p class="card-text">Ecrit par : {{varList.post.last_name}} {{varList.post.first_name}}</p>
-                {% if varList.post.FK_user_id == varList.user.id %}
+                {% if varList.userAdmin.FK_type_user_id == 2 %}
                     <div class="col-5">
-                        <a class="btn btn-primary" href={{"post-modification-#{varList.post.id}-#{varList.post.title}"|replace({' ': '-'})}}>Modifier</a>
+                        <a class="btn btn-primary" href={{"/admin/post/modification/#{varList.post.id}/#{varList.post.title}"|replace({' ': '-'})}}>Modifier</a>
                     </div>
                 {% endif %}
             </div>

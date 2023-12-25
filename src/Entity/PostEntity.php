@@ -196,7 +196,11 @@ class PostEntity
      */
     public function setPostFKUserId($FKUserId)
     {
-        $this->FKUserId = $FKUserId;
+        if (empty($FKUserId) === false) {
+            $this->FKUserId = $FKUserId;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Vous devez être connecté pour créer un post'];
+        }
 
     }
 

@@ -58,15 +58,7 @@ class AdminLoginController
 
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type'    => 'danger',
-                                'message' => 'Le champ est obligatoire : '.$key.''
-                                ];
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (empty($errors) === true) {
                 $user = $this->userModel->loginAdmin($postValue['login']);

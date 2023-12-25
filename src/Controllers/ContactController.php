@@ -48,21 +48,10 @@ class ContactController
         };
 
         if ($this->superGlobal->postExist() === true) {
-            $user = [];
             $errors = [];
 
             $postValue = $this->superGlobal->getPost();
-
-            foreach ($postValue as $key => $value) {
-                if (empty($value) === true) {
-                    $errors[] = [
-                                'type' => 'danger',
-                                'message'   => 'Le champ est obligatoire : '.$key.''
-                                ];
-                } else {
-                    $user[$key] = $this->superGlobal->getPostData($key);
-                }
-            }
+            $errors = $this->superGlobal->checkPostData($postValue);
 
             if (filter_var($postValue['email'], FILTER_VALIDATE_EMAIL) === false) {
                 $errors[] = [
