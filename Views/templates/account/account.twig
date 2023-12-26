@@ -8,7 +8,6 @@
         <p>Mon compte {{ varList.user.first_name }}</p>
         <form action="" method="post">
             <button type="submit" name="comment" class="btn btn-primary">Voir mes commentaires</button>
-            <button type="submit" name="post" class="btn btn-primary">Voir mes posts</button>
         </from>
         {% if varList.commentList is defined %}
             <div class="container text-center mt-3">
@@ -33,28 +32,6 @@
                     </div>
                 </div>
             {% endfor %}
-            </div>
-        {% endif %}
-        {% if varList.postList is defined %}
-            <div class="container text-center mt-3 row justify-content-around">
-                {% for post in varList.postList %}
-                    <div class="card col-5 mt-5">
-                        <div class="card-body">
-                            <h5 class="card-title">{{post.title}}</h5>
-                            <p class="card-text">{{post.chapo}}</p>
-                            {% if post.modification_date is not null %}
-                                <p class="card-text"><i class="bi bi-calendar"></i> {{ post.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
-                            {% else %}
-                                <p class="card-text"><i class="bi bi-calendar"></i> {{ post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
-                            {% endif %}
-                            <div class="col-12 row justify-content-around">
-                                <div class="col-5">
-                                    <a class="btn btn-primary" href={{"/post/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Voir</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
             </div>
         {% endif %}
     </div>

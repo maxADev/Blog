@@ -60,15 +60,8 @@ class AccountController
                 if (empty($commentList) === false) {
                     $varValue['commentList'] = $commentList;
                 }
-            } else if (isset($postValue['post']) === true) {
-                $postController = new PostController();
-                $postList = $postController->getUserPost($varValue['user']['id']);
-                if (empty($postList) === false) {
-                    $varValue['postList'] = $postList;
-                }
             }
         }
-
        
         $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];

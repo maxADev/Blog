@@ -1,6 +1,6 @@
-{% extends "layout.twig" %}
+{% extends "adminLayout.twig" %}
 {% block head %}
-    <title>Modifier un post</title>
+    <title>Créer un post</title>
 {% endblock %}
 
 {% block content %}
@@ -20,8 +20,7 @@
                     </div>
                 {% endif %}
             {% endfor %}
-            <button type="submit" class="btn btn-primary">Modifier</button>
-            <a class="btn btn-danger" href={{"/post/#{varList.postValue.id}/#{varList.postValue.title}"|replace({' ': '-'})}}>Annuler</a>
+            <button type="submit" class="btn btn-primary">Valider</button>
         </form>
     </div>
 {% endblock %}
