@@ -68,7 +68,6 @@ class AdminPostController
         $varValue = ['userAdmin' => $this->superGlobal->getCurrentUser()];
 
         if ($this->superGlobal->postExist() === true) {
-            $post = [];
             $postValue = $this->superGlobal->getPost();
             $errors = $this->superGlobal->checkPostData($postValue);
 
@@ -91,7 +90,7 @@ class AdminPostController
                                    "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
                                    "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
                                    "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
-                                    ];
+                                   ];
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
@@ -224,7 +223,7 @@ class AdminPostController
             $postValue['id'] = $getValuePostId;
             $postValues = new PostEntity($postValue);
 
-            if ($varValue['userAdmin']['id'] != $post['FK_user_id']) {
+            if ($varValue['userAdmin']['id'] !== $post['FK_user_id']) {
                 $errors = ['type' => 'danger', 'message' => 'Ce n\'est pas votre post'];
             }
 
@@ -264,6 +263,8 @@ class AdminPostController
      */
     public function adminPostDeletion()
     {
+        $varValue = [];
+
         if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
         };
