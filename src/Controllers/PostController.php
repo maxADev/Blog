@@ -163,4 +163,17 @@ class PostController
     }//end readPost()
 
 
+    /**
+     * Get post list home
+     *
+     * @return view
+     */
+    public function postListHome()
+    {
+        $postList = $this->postModel->getPostListHome();
+        return $postList;
+
+    }//end postListHome()
+
+
 }//end class

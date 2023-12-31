@@ -1,3 +1,11 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
 .modal-container {
     display: none;
     position: fixed;
@@ -9,7 +17,7 @@
     background-color: rgba(0,0,0,0.5);
 }
 
-.modal-content {
+.modal-content-value {
     background-color: #fefefe;
     padding: 25px;
     border: 1px solid #888;
@@ -29,4 +37,128 @@
     background-color: #fefefe;
     padding: 25px;
     border: 1px solid #888;
+}
+
+.img-avatar {
+    width: 100%;
+}
+
+.img-avatar-home {
+    filter: grayscale(50%);
+    width: 100%;
+}
+
+.menu {
+    list-style: none;
+    margin-left: 50px;
+}
+
+.menu li a {
+    color: #fff!important;
+    text-decoration: none!important;
+}
+
+.menu-button-container {
+    display: none;
+}
+
+.post-image {
+    max-height: 350px;
+}
+
+#menu-container {
+    width: 300px;
+    position: fixed;
+}
+
+.main-content {
+    margin-left: 300px;
+}
+
+.footer-container {
+    position: fixed;
+    bottom: 0;
+}
+
+.footer-container > div > a {
+   text-decoration: none;
+   color: #fff;
+}
+
+.logo > a {
+    font-size: 35px!important;
+    margin: 5px;
+}
+
+.post-date {
+    font-size: 13px;
+}
+
+.post {
+    transition: scale 500ms;
+}
+
+.post:hover {
+    scale: 1.05;
+    transition: scale 500ms;
+}
+
+@media screen and (max-width: 1200px) {
+
+}
+
+@media screen and (max-width: 992px) {
+    .main-content {
+        margin-top: 2.05rem;
+    }
+
+    #menu-button {
+        border-radius: unset!important;
+    }
+
+    .menu-button-container {
+        position: fixed;
+        display: block;
+        top: 0;
+        z-index: 1;
+    }
+
+    #menu-container {
+        z-index: 1;
+        width: 100%;
+        text-align: center;
+        transform: translateY(-1000px);
+        transition: transform 500ms;
+    }
+
+    .menu-hide {
+        display: none;
+    }
+
+    .menu-container-display {
+        transform: translateY(0px)!important;
+        transition: transform 500ms!important;
+    }
+
+    .img-avatar {
+        width: 50%;
+    }
+
+    .main-content {
+        margin-left: 0px;
+    }
+
+    .menu {
+        margin-left: 0px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .logo > i {
+        font-size: 25px!important;
+    }
+}
+
+@media screen and (max-width: 576px) {
+
 }

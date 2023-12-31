@@ -4,19 +4,26 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container text-center">
-        <p>Connexion</p>
+    <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+        <div class="container col-12">
+            <h3>Connexion</h3>
+            <p>Connectez-vous pour commenter les posts et partager votre avis</p>
+        </div>
+    </div>
+    <div class="container text-center col-12 col-sm-12 col-lg-8 col-xl-8 bg-light rounded p-3">
         <form action="" method="post">
             <div class="form-group">
                 <label for="login">Email ou Identifiant</label>
-                <input type="text" class="form-control" id="login" name="login" placeholder="Votre email ou identifiant">
+                <input type="text" class="form-control" id="login" name="login" placeholder="Votre email ou votre identifiant">
             </div>
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <label for="password">Mot de passe</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Votre mot de passe">
             </div>
-            <button type="submit" class="btn btn-primary">Valider</button>
-            <a href="/login/reset/password">J'ai oublié mon mot de passe</a>
+            <button type="submit" class="btn btn-primary mt-3">Valider</button>
+            <div class="container mt-3">
+                <a href="/login/reset/password">J'ai oublié mon mot de passe</a>
+            </div>
         </form>
     </div>
 {% endblock %}

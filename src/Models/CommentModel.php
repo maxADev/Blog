@@ -54,7 +54,7 @@ class CommentModel extends Model
                 INNER JOIN user ON user.id = comment.FK_user_id
                 INNER JOIN comment_statut ON comment_statut.id = comment.FK_statut_comment_id
                 WHERE FK_post_id = :FK_post_id
-                ORDER BY comment.creation_date ASC';
+                ORDER BY comment.creation_date DESC';
 
         $request = $this->connection->prepare($sql);
         $request->bindValue(":FK_post_id", $postId, PDO::PARAM_INT);
@@ -75,7 +75,7 @@ class CommentModel extends Model
      */
     public function getUserComments($userId)
     {
-        $sql = 'SELECT comment.id, comment.content, comment.creation_date, comment.modification_date, comment.FK_statut_comment_id, comment.FK_user_id, comment.FK_post_id, post.title FROM comment
+        $sql = 'SELECT comment.id, comment.content, comment.creation_date, comment.modification_date, comment.FK_statut_comment_id, comment.FK_user_id, comment.FK_post_id, comment_statut.comment_statut_name, post.title FROM comment
                 INNER JOIN post ON post.id = comment.FK_post_id
                 INNER JOIN comment_statut ON comment_statut.id = comment.FK_statut_comment_id
                 WHERE comment.FK_user_id = :FK_user_id';

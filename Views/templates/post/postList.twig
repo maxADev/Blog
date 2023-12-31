@@ -4,25 +4,35 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container text-center">
-    <p>Les posts</p>
+    <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+        <div class="container col-12">
+            <h3>Les posts</h3>
+            <p>Créé par les admins</p>
+        </div>
+    </div>
+    <div class="container">
     {% if varList.postList is defined %}
-        <div class="container text-center mt-3 row justify-content-around">
+        <div class="container mt-3 row justify-content-around">
             {% for post in varList.postList %}
-                <div class="card col-5 mt-5">
+                <div class="card post bg-light col-12 col-sm-5 col-lg-3 col-xl-3 m-1 mt-5 p-0">
+                   {% if post.image is not null %}
+                        <img class="card-img-top post-image" src={{"#{post.image}"}} alt="Card image cap">
+                    {% else %}
+                        <img class="card-img-top post-image" src="https://mablog.projetformationma.com/public/assets/img/post.jpg" alt="Card image cap">
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{post.title}}</h5>
                         <p class="card-text">{{post.chapo}}</p>
-                        {% if post.modification_date is not null %}
-                            <p class="card-text"><i class="bi bi-calendar"></i> {{ post.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
-                        {% else %}
-                            <p class="card-text"><i class="bi bi-calendar"></i> {{ post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
-                        {% endif %}
                         <div class="col-12 row justify-content-around">
-                            <div class="col-5">
-                                <a class="btn btn-primary" href={{"/post/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Voir</a>
+                            <div class="col-12">
+                                <a class="btn btn-primary" href={{"/post/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Lire</a>
                             </div>
                         </div>
+                        {% if post.modification_date is not null %}
+                            <p class="card-text post-date mt-3 mb-0">Posté le {{ post.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
+                        {% else %}
+                            <p class="card-text post-date mt-3 mb-0">Posté le {{ post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

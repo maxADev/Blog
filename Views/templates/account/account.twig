@@ -4,34 +4,63 @@
 {% endblock %}
 
 {% block content %}
+    <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+        <div class="container col-12">
+            <h3>Mon compte : {{ varList.user.last_name }} {{ varList.user.first_name }}</h3>
+            <p>Bienvenue, sur cette page, vous avez accès à la gestion de vos commentaires</p>
+        </div>
+    </div>
     <div class="container text-center">
-        <p>Mon compte {{ varList.user.first_name }}</p>
         <form action="" method="post">
-            <button type="submit" name="comment" class="btn btn-primary">Voir mes commentaires</button>
+            {% if varList.commentList is not defined %}
+                <button type="submit" name="comment" class="btn btn-primary">Voir mes commentaires</button>
+            {% else %}
+                <button type="submit" name="hide-comment" class="btn btn-primary">Fermer</button>
+            {% endif %}
         </from>
         {% if varList.commentList is defined %}
             <div class="container text-center mt-3">
             {% for comment in varList.commentList %}
-                <div class="container col-5 mt-3 border border-dark rounded text-start">
-                    <div class="container">
-                        <p>Ecrit par vous -
+                <div class="container col-12 col-sm-12 col-lg-5 col-xl-5 mt-3 bg-light border border-dark rounded text-start">
+                    <div class="container mt-3">
+                        <p>{{comment.content}}</p>
+                        <p>{{comment.comment_statut_name}}</p>
+                    </div>
+                    <div class="col-12 mt-3 mb-3 text-center">
+                        <a class="btn btn-primary" href={{"/post/#{comment.FK_post_id}/#{comment.title}"|replace({' ': '-'})}}>Voir Le Post concerné</a>
+                    </div>
+                    <div class="container mt-3 p-0">
+                        <p class="post-date">Posté le 
                         {% if comment.modification_date is not null %}
                             {{comment.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
                         {% else %}
                             {{comment.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
                         {% endif %}
                     </div>
-                    <div class="container">
-                        <p>{{comment.content}}</p>
-                        <p>{{comment.comment_statut_name}}</p>
-                    </div>
-                    <div class="col-6 row">
-                        <div class="col-6">
-                            <a class="btn btn-primary" href={{"/post/#{comment.FK_post_id}/#{comment.title}"|replace({' ': '-'})}}>Voir Le Post concerné</a>
-                        </div>
-                    </div>
                 </div>
             {% endfor %}
+            </div>
+        {% endif %}
+        {% if varList.postList is defined %}
+            <div class="container text-center mt-3 row justify-content-around">
+                {% for post in varList.postList %}
+                    <div class="card col-5 mt-5">
+                        <div class="card-body">
+                            <h5 class="card-title">{{post.title}}</h5>
+                            <p class="card-text">{{post.chapo}}</p>
+                            {% if post.modification_date is not null %}
+                                <p class="card-text"><i class="bi bi-calendar"></i> {{ post.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
+                            {% else %}
+                                <p class="card-text"><i class="bi bi-calendar"></i> {{ post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
+                            {% endif %}
+                            <div class="col-12 row justify-content-around">
+                                <div class="col-5">
+                                    <a class="btn btn-primary" href={{"/post/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Voir</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         {% endif %}
     </div>

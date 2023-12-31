@@ -63,4 +63,23 @@ class PostModel extends Model
     }//end getPost()
 
 
+    /**
+     * Get post list home
+     *
+     * @return post
+     */
+    public function getPostListHome()
+    {
+        $sql = 'SELECT * FROM post LIMIT 3';
+
+        $request = $this->connection->prepare($sql);
+        $request->execute();
+
+        $postList = $request->fetchAll(PDO::FETCH_ASSOC);
+
+        return $postList;
+
+    }//end getPostListHome()
+
+
 }//end class
