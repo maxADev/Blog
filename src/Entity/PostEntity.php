@@ -42,6 +42,14 @@ class PostEntity
      */
     public $postModificationDate;
 
+
+    /**
+     *
+     * @var postImage post image
+     */
+    public $postImage;
+
+
     /**
      *
      * @var FKUserId post fk user id
@@ -190,6 +198,18 @@ class PostEntity
 
 
     /**
+     * Add value post image
+     *
+     * @return void
+     */
+    public function setPostImage($postImage)
+    {
+        $this->postImage = $postImage;
+
+    }
+
+
+    /**
      * Add value post fk user id
      *
      * @return void
@@ -211,11 +231,11 @@ class PostEntity
     /**
      * Get value post id
      *
-     * @return post_id
+     * @return postId
      */
     public function getPostId()
     {
-        return $this->post_id;
+        return $this->postId;
 
     }
 
@@ -276,6 +296,18 @@ class PostEntity
     public function getPostModificationDate()
     {
         return $this->postModificationDate;
+
+    }
+
+
+    /**
+     * Get value post image
+     *
+     * @return postImage
+     */
+    public function getPostImage()
+    {
+        return $this->postImage;
 
     }
 

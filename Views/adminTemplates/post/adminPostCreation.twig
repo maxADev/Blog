@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="container text-center col-12 col-sm-12 col-lg-8 col-xl-8 bg-light rounded p-3">
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             {% for keyFormSetting in varList.formSetting|keys %}
                 {% set formValue = varList.formSetting[keyFormSetting] %}
                 {% if varList.postValue[keyFormSetting] is not empty %}

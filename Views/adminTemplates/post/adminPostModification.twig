@@ -11,9 +11,13 @@
         </div>
     </div>
     <div class="container text-center col-12 col-sm-12 col-lg-8 col-xl-8 bg-light rounded p-3">
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             {% for keyFormSetting in varList.formSetting|keys %}
                 {% set formValue = varList.formSetting[keyFormSetting] %}
+                {% if keyFormSetting == "image" and varList.postValue.image is not null %}
+                    <p>Image du post</p>
+                    <img class="card-img-top post-image" src={{"https://mablog.projetformationma.com/public/upload/#{varList.postValue.id}/#{varList.postValue.image}"}} alt="Card image cap">
+                {% endif %}
                 {% if varList.postValue[keyFormSetting] is not empty %}
                     <div class="form-group mt-3">
                         <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
