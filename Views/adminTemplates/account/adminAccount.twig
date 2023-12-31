@@ -4,8 +4,10 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="container text-center">
-    <p>Mon compte Admin {{ varList.user.first_name }}</p>
-</div>
+    <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+        <div class="container col-12">
+            <h3>Mon compte admin : {{ varList.userAdmin.last_name }} {{ varList.userAdmin.first_name }}</h3>
+            <p>Bienvenue, sur la partie administration du blog</p>
+        </div>
+    </div>
 {% endblock %}

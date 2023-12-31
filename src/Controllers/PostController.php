@@ -53,58 +53,6 @@ class PostController
 
 
     /**
-     * Create post page
-     *
-     * @return view
-     */
-    public function postCreation()
-    {
-        $errors;
-
-        if (empty($this->superGlobal->getCurrentUser()) === true) {
-            $this->redirect->getRedirect('/login');
-        };
-
-        $varValue = ['user' => $this->superGlobal->getCurrentUser()];
-
-        if ($this->superGlobal->postExist() === true) {
-            $post = [];
-            $postValue = $this->superGlobal->getPost();
-            $errors = $this->superGlobal->checkPostData($postValue);
-
-            $postValue['FkUserId'] = $varValue['user']['id'];
-            $postValues = new PostEntity($postValue);
-
-            if (empty($errors) === true && $postValues->isValid() === true) {
-                if ($this->postModel->createPost($postValues) === true) {
-                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été créé']);
-                    $this->redirect->getRedirect('/posts');
-                }
-            } else {
-                $varValue['postValue'] = $postValue;
-                $this->superGlobal->createFlashMessage($errors);
-                $this->superGlobal->createFlashMessage($errors);
-            }
-        }//end if
-
-        $varValue['formSetting'] = [
-                                   "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
-                                   "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
-                                   "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
-                                    ];
-
-        $flashMessageList = $this->superGlobal->getFlashMessage();
-        $view = [];
-        $view['folder'] = 'templates\post';
-        $view['file'] = 'postCreation.twig';
-        $view['var'] = $varValue;
-        $view['flashMessageList'] = $flashMessageList;
-        return $view;
-
-    }//end postCreation()
-
-
-    /**
      * Get post list
      *
      * @return view
@@ -216,117 +164,16 @@ class PostController
 
 
     /**
-     * Get post list
+     * Get post list home
      *
      * @return view
      */
-    public function postModification()
+    public function postListHome()
     {
-        $varValue = [];
-        $errors;
+        $postList = $this->postModel->getPostListHome();
+        return $postList;
 
-        if (empty($this->superGlobal->getCurrentUser()) === true) {
-            $this->redirect->getRedirect('/login');
-        };
-
-        $varValue['user'] = $this->superGlobal->getCurrentUser();
-
-        if ($this->superGlobal->getDataExist('postId') === true) {
-            $getValuePostId = $this->superGlobal->getGetData('postId');
-            $getValuePostTtile = $this->superGlobal->getGetData('postTitle');
-            $postValue = $this->postModel->getPost($getValuePostId);
-            if (empty($postValue) === false) {
-                if ($varValue['user']['id'] !== $postValue['FK_user_id']) {
-                    $this->redirect->getRedirect('/posts');
-                }
-                $varValue['postValue'] = $postValue;
-            }
-        }
-
-        if ($this->superGlobal->postExist() === true) {
-            $postValue = $this->superGlobal->getPost();
-            $errors = $this->superGlobal->checkPostData($postValue);
-
-            $postValue['id'] = $getValuePostId;
-            $postValues = new PostEntity($postValue);
-
-            if (empty($errors) === true && $postValues->isValid() === true) {
-                if ($this->postModel->postModification($postValue) === true) {
-                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
-                    $this->redirect->getRedirect('/post/'.$getValuePostId.'/'.$getValuePostTtile.'');
-                }
-            } else {
-                $varValue['postValue'] = $postValue;
-                $this->superGlobal->createFlashMessage($postValues->getError());
-                $this->superGlobal->createFlashMessage($errors);
-            }
-        }//end if
-
-
-        $varValue['formSetting'] = [
-                                   "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
-                                   "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
-                                   "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
-                                   ];
-
-        $flashMessageList = $this->superGlobal->getFlashMessage();
-        $view = [];
-        $view['folder'] = 'templates\post';
-        $view['file'] = 'postModification.twig';
-        $view['var'] = $varValue;
-        $view['flashMessageList'] = $flashMessageList;
-        return $view;
-
-    }//end postModification()
-
-
-    /**
-     * Post deletion
-     *
-     * @return void
-     */
-    public function postDeletion()
-    {
-        $varValue = [];
-
-        if (empty($this->superGlobal->getCurrentUser()) === false) {
-            $varValue['user'] = $this->superGlobal->getCurrentUser();
-        };
-
-        if ($this->superGlobal->getExist() === true) {
-            $getValuePostId = $this->superGlobal->getGetData('postId');
-            $postValue = $this->postModel->getPost($getValuePostId);
-            if (empty($postValue) === false) {
-                if ($varValue['user']['id'] !== $postValue['FK_user_id']) {
-                    $this->redirect->getRedirect('/posts');
-                }
-
-                if (empty($postValue) === false) {
-                    if ($this->postModel->postDeletion($getValuePostId) === true) {
-                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été supprimé']);
-                        $this->redirect->getRedirect('/posts');
-                    }
-                }
-            }
-        }//end if
-
-    }//end postDeletion()
-
-
-    /**
-     * Get user post
-     *
-     * @param $userId user id
-     * @return void
-     */
-    public function getUserPost($userId)
-    {
-        if (empty($userId) === false) {
-            $postList = $this->postModel->getUserPosts($userId);
-            return $postList;
-        }
-
-    }//end getUserPost()
+    }//end postListHome()
 
 
 }//end class

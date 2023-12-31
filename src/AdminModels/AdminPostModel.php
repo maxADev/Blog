@@ -22,13 +22,41 @@ class AdminPostModel extends Model
 
 
     /**
+     * Admin create post
+     *
+     * @param  $postValues post
+     * @return void
+     */
+    public function adminCreatePost($postValues)
+    {
+        $return = false;
+
+        $sql = 'INSERT INTO post (title, chapo, content, creation_date, modification_date, FK_user_id) VALUES (:title, :chapo, :content, NOW(), :modification_date, :FK_user_id)';
+
+        $request = $this->connection->prepare($sql);
+        $request->bindValue(":title", $postValues->getPostTitle(), PDO::PARAM_STR);
+        $request->bindValue(":chapo", $postValues->getPostChapo(), PDO::PARAM_STR);
+        $request->bindValue(":content", $postValues->getPostContent(), PDO::PARAM_STR);
+        $request->bindValue(":modification_date", NULL);
+        $request->bindValue(":FK_user_id", $postValues->getPostFKUserId(), PDO::PARAM_STR);
+
+        if ($request->execute() === true) {
+            $return = true;
+        }
+
+        return $return;
+
+    }//end adminCreatePost()
+
+
+    /**
      * Admin get post list
      *
      * @return post
      */
     public function adminGetPostList()
     {
-        $sql = 'SELECT * FROM post';
+        $sql = 'SELECT * FROM post ORDER BY creation_date DESC';
 
         $request = $this->connection->prepare($sql);
         $request->execute();

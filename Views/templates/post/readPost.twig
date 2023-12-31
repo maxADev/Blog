@@ -4,13 +4,21 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container text-center">
     {% if varList.post is defined %}
-        <div class="container text-center mt-3 row justify-content-around">
-            <div class="card col-8 mt-3 mb-5">
+        <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+            <div class="container col-12">
+                <h3>{{varList.post.title}}</h3>
+                <p>{{varList.post.chapo}}</p>
+            </div>
+        </div>
+        <div class="container m-auto text-center mt-3 row justify-content-around">
+            <div class="card col-12 col-sm-12 col-lg-8 col-xl-8 mt-3 mb-5">
+                {% if varList.post.image is not null %}
+                    <img class="card-img-top post-image" src={{"#{post.image}"}} alt="Card image cap">
+                {% else %}
+                    <img class="card-img-top post-image" src="https://mablog.projetformationma.com/public/assets/img/post.jpg" alt="Card image cap">
+                {% endif %}
                 <div class="card-body">
-                    <h5 class="card-title">{{varList.post.title}}</h5>
-                    <p class="card-text">{{varList.post.chapo}}</p>
                     <p class="card-text">{{varList.post.content}}</p>
                     {% if varList.post.modification_date is not null %}
                         <p class="card-text"><i class="bi bi-calendar"></i> {{ varList.post.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
@@ -18,11 +26,6 @@
                         <p class="card-text"><i class="bi bi-calendar"></i> {{ varList.post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
                     {% endif %}
                     <p class="card-text">Ecrit par : {{varList.post.last_name}} {{varList.post.first_name}}</p>
-                    {% if varList.post.FK_user_id == varList.user.id %}
-                        <div class="col-5">
-                            <a class="btn btn-primary" href={{"/post/modification/#{varList.post.id}/#{varList.post.title}"|replace({' ': '-'})}}>Modifier</a>
-                        </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -31,21 +34,21 @@
                     {% for comment in varList.commentList %}
                         {% if comment.FK_user_id == varList.user.id or comment.FK_statut_comment_id != 1 %}
                             {% if varList.commentModificationId != comment.id %}
-                            <div class="container col-5 mt-3 border border-dark rounded text-start">
+                            <div class="container col-12 col-sm-12 col-lg-5 col-xl-5 mt-3 bg-light border border-dark rounded text-start">
                                 <div class="container">
-                                    <p>{{comment.last_name}} {{comment.first_name}} -
+                                    <p>{{comment.content}}</p>
+                                    <p>{{comment.comment_statut_name}}</p>
+                                </div>
+                                <div class="container mt-3 p-0">
+                                    <p class="post-date">Posté le 
                                     {% if comment.modification_date is not null %}
                                         {{comment.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
                                     {% else %}
                                         {{comment.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
                                     {% endif %}
                                 </div>
-                                <div class="container">
-                                    <p>{{comment.content}}</p>
-                                    <p>{{comment.comment_statut_name}}</p>
-                                </div>
                                 {% if comment.FK_user_id == varList.user.id %}
-                                    <div class="col-6 row">
+                                    <div class="col-12 row mb-3 text-center">
                                         <div class="col-6">
                                             <a class="btn btn-primary" href={{"/post/#{varList.post.id}/#{varList.post.title}/comment/modification/#{comment.id}"|replace({' ': '-'})}}>Modifier</a>
                                         </div>
@@ -57,14 +60,9 @@
                             </div>
                             {% else %}
                             <div class="comment-modification-container">
-                                <div class="comment-modification-content container col-5 mt-5 border border-dark rounded text-start">
+                                <div class="comment-modification-content container col-12 col-sm-12 col-lg-5 col-xl-5 mt-3 bg-light border border-dark rounded text-start">
                                     <div class="container">
-                                        <p>{{comment.last_name}} {{comment.first_name}} -
-                                        {% if comment.modification_date is not null %}
-                                            {{ comment.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
-                                        {% else %}
-                                            {{ comment.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
-                                        {% endif %}
+                                        <p>{{comment.last_name}} {{comment.first_name}}</p>
                                     </div>
                                     <div class="container">
                                         <form action="" method="post">
@@ -72,11 +70,19 @@
                                                 <input type="text" class="form-control" id="comment_content_modification" name="comment_content_modification" value="{{"#{comment.content}"}}">
                                                 <p>{{comment.comment_statut_name}}</p>
                                             </div>
-                                            <div class="container row">
-                                                <div class="container col-5">
+                                             <div class="container mt-3 p-0">
+                                                <p class="post-date">Posté le 
+                                                {% if comment.modification_date is not null %}
+                                                    {{comment.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
+                                                {% else %}
+                                                    {{comment.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
+                                                {% endif %}
+                                            </div>
+                                            <div class="container col-12 row text-center">
+                                                <div class="container col-6">
                                                     <button type="submit" class="btn btn-primary">Valider</button>
                                                 </div>
-                                                <div class="container col-5">
+                                                <div class="container col-6">
                                                     <a class="btn btn-danger" href={{"/post/#{varList.post.id}/#{varList.post.title}"|replace({' ': '-'})}}>Annuler</a>
                                                 </div>
                                             </div>
@@ -97,29 +103,28 @@
 
         {% if varList.commentModificationId == 0 %}
             {% if varList.user is defined %}
-                <div class="container col-8 mt-3 mb-5 text-center">
+                <div class="container text-center col-12 col-sm-12 col-lg-8 col-xl-8 bg-light rounded p-3 mt-3 mb-5">
                     <form action="" method="post">
                         <div class="form-group">
                             <label for="content">Commenter</label>
                             <input type="text" class="form-control" id="content" name="content" placeholder="Contenu du commentaire">
                         </div>
-                        <button type="submit" class="btn btn-primary">Commenter</button>
+                        <button type="submit" class="btn btn-primary mt-3">Commenter</button>
                     </form>
                 </div>
             {% endif %}
         {% endif %}
-    </div>
 
     <div id="comment-deletion-container" class="modal-container">
-        <div class="modal-content comment-deletion-content container col-5 mt-5 border border-dark rounded text-start">
-            <div class="container col-5">
+        <div class="modal-content-value comment-deletion-content container col-5 mt-5 border border-dark rounded text-start">
+            <div class="container col-12 text-center">
                 <p>Confimer la suppression ?</p>
             </div>
-            <div class="container row">
-                <div class="container col-5">
+            <div class="container col-12 row text-center">
+                <div class="container col-6">
                     <a id="confirm-comment-deletion" class="btn btn-danger">Supprimer</a>
                 </div>
-                <div class="container col-5">
+                <div class="container col-6">
                     <button id="delete-comment-close" class="btn btn-primary">Annuler</button>
                 </div>
             </div>

@@ -1,27 +1,32 @@
-{% extends "layout.twig" %}
+{% extends "adminLayout.twig" %}
 {% block head %}
-    <title>Modifier un post</title>
+    <title>Créer un post</title>
 {% endblock %}
 
 {% block content %}
-    <div class="container text-center">
+    <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+        <div class="container col-12">
+            <h3>Créer un post</h3>
+            <p>Créez votre post et publiez-le</p>
+        </div>
+    </div>
+    <div class="container text-center col-12 col-sm-12 col-lg-8 col-xl-8 bg-light rounded p-3">
         <form action="" method="post">
             {% for keyFormSetting in varList.formSetting|keys %}
                 {% set formValue = varList.formSetting[keyFormSetting] %}
                 {% if varList.postValue[keyFormSetting] is not empty %}
-                    <div class="form-group">
+                    <div class="form-group mt-3">
                         <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
                         <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" value="{{"#{varList.postValue[keyFormSetting]}"}}">
                     </div>
                 {% else %}
-                    <div class="form-group">
+                    <div class="form-group mt-3">
                         <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
                         <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" placeholder="{{"#{formValue.placeholder}"}}">
                     </div>
                 {% endif %}
             {% endfor %}
-            <button type="submit" class="btn btn-primary">Modifier</button>
-            <a class="btn btn-danger" href={{"/post/#{varList.postValue.id}/#{varList.postValue.title}"|replace({' ': '-'})}}>Annuler</a>
+            <button type="submit" class="btn btn-primary mt-3">Valider</button>
         </form>
     </div>
 {% endblock %}

@@ -6,34 +6,40 @@
 {% block content %}
 
 {% if varList.commentValue is defined %}
+    <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+        <div class="container col-12">
+            <h3>Modifier un commentaire</h3>
+            <p>Vous avez la possibilité de modifier un commentaire</p>
+        </div>
+    </div>
     <div class="container text-center mt-3">
-        <div class="container col-5 mt-3 border border-dark rounded text-start">
-            <div class="container">
-                <p>{{varList.commentValue.last_name}} {{varList.commentValue.first_name}} -
-                {% if varList.commentValue.modification_date is not null %}
-                    {{varList.commentValue.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
-                {% else %}
-                    {{varList.commentValue.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
-                {% endif %}
+        <div class="container col-12 col-sm-12 col-lg-5 col-xl-5 mt-3 bg-light border border-dark rounded text-start">
+            <div class="container mt-3">
+                <p>{{varList.commentValue.last_name}} {{varList.commentValue.first_name}}<p>
             </div>
             <div class="container">
-                <div class="container">
-                    <form action="" method="post">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="comment_content_modification" name="comment_content_modification" value="{{"#{varList.commentValue.content}"}}">
-                            <p>{{varList.commentValue.comment_statut_name}}</p>
+                <form action="" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="comment_content_modification" name="comment_content_modification" value="{{"#{varList.commentValue.content}"}}">
+                        <p>{{varList.commentValue.comment_statut_name}}</p>
+                    </div>
+                        <div class="container mt-3 p-0">
+                        <p class="post-date">Posté le 
+                        {% if varList.comment.modification_date is not null %}
+                            {{varList.comment.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
+                        {% else %}
+                            {{varList.comment.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
+                        {% endif %}
+                    </div>
+                    <div class="container col-12 row text-center">
+                        <div class="container col-6 mt-3 mb-3">
+                            <button type="submit" class="btn btn-primary">Valider</button>
                         </div>
-                        <div class="container row">
-                            <div class="container col-5">
-                                <button type="submit" class="btn btn-primary">Valider</button>
-                            </div>
-                            <div class="container col-5">
-                                <a class="btn btn-danger" href="/admin/comments">Annuler</a>
-                            </div>
+                        <div class="container col-6">
+                            <a class="btn btn-danger mt-3 mb-3" href="/admin/comments">Annuler</a>
                         </div>
-                    </form>
-                </div>
-                <p>{{varList.commentValue.commentValue_statut_name}}</p>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

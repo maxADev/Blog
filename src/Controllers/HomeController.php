@@ -2,6 +2,7 @@
 
 namespace src\Controllers;
 use App\SuperGlobal;
+use src\Controllers\PostController;
 
 // Home Controller.
 class HomeController extends SuperGlobal
@@ -15,10 +16,18 @@ class HomeController extends SuperGlobal
      */
     public function index()
     {
-        $varValue = '';
+        $varValue = [];
         if (empty($this->getCurrentUser()) === false) {
-            $varValue = ['user' => $this->getCurrentUser()];
+            $varValue['user'] = $this->getCurrentUser();
         };
+
+        $postController = new PostController;
+
+        $postList = $postController->postListHome();
+
+        if (empty($postList) === false) {
+            $varValue['postList'] = $postList;
+        }
 
         $view = [];
         $view['folder'] = 'templates\home';
