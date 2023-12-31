@@ -16,6 +16,12 @@ class SuperGlobal
 
     /**
      *
+     * @var $_FILES $_FILES value
+     */
+    private $FILES;
+
+    /**
+     *
      * @var $_GET $_GET value
      */
     private $GET;
@@ -74,6 +80,24 @@ class SuperGlobal
 
 
     /**
+     * Check if $_FILES exist
+     *
+     * @return boolean
+     */
+    public function postFileExist()
+    {
+        $return = false;
+        if (isset($_FILES['image']['name']) === true && empty($_FILES['image']['name']) === false) {
+            $this->FILES = $_FILES;
+            $return = true;
+        }
+
+        return $return;
+
+    }//end postFileExist()
+
+
+    /**
      * Get Post
      *
      * @return array
@@ -85,6 +109,20 @@ class SuperGlobal
         }
 
     }//end getPost()
+
+
+    /**
+     * Get File Post
+     *
+     * @return array
+     */
+    public function getFilePost()
+    {
+        if (empty($this->FILES) === false) {
+            return $this->FILES;
+        }
+
+    }//end getFilePost()
 
 
     /**
@@ -113,11 +151,13 @@ class SuperGlobal
         $errors = [];
 
         foreach ($postValue as $key => $value) {
-            if (empty($value) === true) {
-                $errors[] = [
-                            'type' => 'danger',
-                            'message'   => 'Le champ est obligatoire : '.$key.''
-                            ];
+            if ($key !== 'image') {
+                if (empty($value) === true) {
+                    $errors[] = [
+                                'type' => 'danger',
+                                'message'   => 'Le champ est obligatoire : '.$key.''
+                                ];
+                }
             }
         }
 

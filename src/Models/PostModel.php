@@ -48,7 +48,7 @@ class PostModel extends Model
      */
     public function getPost($postId)
     {
-        $sql = 'SELECT post.id, post.title, post.chapo, post.content, post.creation_date, post.modification_date, post.FK_user_id, user.last_name, user.first_name FROM post
+        $sql = 'SELECT post.id, post.title, post.chapo, post.content, post.creation_date, post.modification_date, post.image, post.FK_user_id, user.last_name, user.first_name FROM post
                 INNER JOIN user ON user.id = post.FK_user_id
                 WHERE post.id = :id';
 

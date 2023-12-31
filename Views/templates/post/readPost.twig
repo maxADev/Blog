@@ -14,7 +14,7 @@
         <div class="container m-auto text-center mt-3 row justify-content-around">
             <div class="card col-12 col-sm-12 col-lg-8 col-xl-8 mt-3 mb-5">
                 {% if varList.post.image is not null %}
-                    <img class="card-img-top post-image" src={{"#{post.image}"}} alt="Card image cap">
+                    <img class="card-img-top post-image" src={{"https://mablog.projetformationma.com/public/upload/#{varList.post.id}/#{varList.post.image}"}} alt="Card image cap">
                 {% else %}
                     <img class="card-img-top post-image" src="https://mablog.projetformationma.com/public/assets/img/post.jpg" alt="Card image cap">
                 {% endif %}

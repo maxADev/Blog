@@ -60,6 +60,7 @@ class AdminPostController
     public function adminPostCreation()
     {
         $errors;
+        $image = '';
 
         if ($this->superGlobal->userIsAdmin() === false) {
             $this->redirect->getRedirect('login');
@@ -73,9 +74,24 @@ class AdminPostController
 
             $postValue['FkUserId'] = $varValue['userAdmin']['id'];
             $postValues = new PostEntity($postValue);
+;
+
+            if($this->superGlobal->postFileExist()) {
+                $image = $this->superGlobal->getFilePost();
+                if ($this->checkImage($image) === true) {
+                    $fileFormat = pathinfo($image['image']["name"], PATHINFO_EXTENSION);
+                    $postValues->setPostImage('postImage.'.$fileFormat);
+                } else {
+                    $errors = ['type' => 'danger', 'message' => "Votre image n'est pas valide"];
+                }
+            }
 
             if (empty($errors) === true && $postValues->isValid() === true) {
-                if ($this->adminPostModel->adminCreatePost($postValues) === true) {
+                $checkPostCreation = $this->adminPostModel->adminCreatePost($postValues);
+                if ($checkPostCreation['return'] === true && empty($checkPostCreation['lastPostId'] === false)) {
+                    if (empty($image) === false) {
+                        $this->uploadImage($image, $checkPostCreation['lastPostId'], $fileFormat);
+                    }
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été créé']);
                     $this->redirect->getRedirect('/admin/posts');
                 }
@@ -87,6 +103,7 @@ class AdminPostController
         }//end if
 
         $varValue['formSetting'] = [
+                                   "image"   => ["label" => "Image", "type" => "file", "placeholder" => "Votre image(non obligatoire)"],
                                    "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
                                    "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
                                    "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
@@ -197,6 +214,7 @@ class AdminPostController
      */
     public function adminPostModification()
     {
+        $image = '';
         $varValue = [];
         $errors = [];
 
@@ -227,8 +245,22 @@ class AdminPostController
                 $errors = ['type' => 'danger', 'message' => 'Ce n\'est pas votre post'];
             }
 
+            if($this->superGlobal->postFileExist()) {
+                $image = $this->superGlobal->getFilePost();
+                if ($this->checkImage($image) === true) {
+                    $fileFormat = pathinfo($image['image']["name"], PATHINFO_EXTENSION);
+                    $postValues->setPostImage('postImage.'.$fileFormat);
+                } else {
+                    $errors = ['type' => 'danger', 'message' => "Votre image n'est pas valide"];
+                }
+            }
+
             if (empty($errors) === true && $postValues->isValid() === true) {
-                    if ($this->adminPostModel->adminPostModification($postValue) === true) {
+                    if ($this->adminPostModel->adminPostModification($postValues) === true) {
+                        if (empty($image) === false) {
+                            $this->deleteImage($getValuePostId);
+                            $this->uploadImage($image, $getValuePostId, $fileFormat);
+                        }
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
                         $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
                     }
@@ -240,6 +272,7 @@ class AdminPostController
         }//end if
 
         $varValue['formSetting'] = [
+                                   "image"   => ["label" => "Image", "type" => "file", "placeholder" => "Votre image(non obligatoire)"],
                                    "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
                                    "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
                                    "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
@@ -288,6 +321,96 @@ class AdminPostController
         }//end if
 
     }//end adminPostDeletion()
+
+
+    /**
+     * Upload Image
+     *
+     * @param $image image value
+     * @param $lastPostId lastPostId value
+     * @param $fileFormat fileFormat value
+     * @return void
+     */
+    public function uploadImage($image, $lastPostId, $fileFormat)
+    {
+        if (mkdir("public/upload/".$lastPostId) === true) {
+            move_uploaded_file($image["image"]["tmp_name"], "public/upload/".$lastPostId."/postImage.".$fileFormat);
+        } else {
+            $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le dossier pour l\'image ne peut pas être créé']);
+        }
+
+    }//end uploadImage()
+
+
+    /**
+     * Check Image
+     *
+     * @param $image image value
+     * @return void
+     */
+    public function checkImage($image)
+    {
+        $return = false;
+        $errors = [];
+        $formatAllowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
+        $fileName = $image['image']["name"];
+        $fileType = $image['image']["type"];
+        $fileSize = $image['image']["size"];
+
+        $fileFormat = pathinfo($fileName, PATHINFO_EXTENSION);
+        if (array_key_exists($fileFormat, $formatAllowed) === false) {
+            $errors = ['type' => 'danger', 'message' => 'Ce type d\'image n\'est pas autorisé'];
+        }
+
+        $maxsize = 5 * 1024 * 1024;
+        if ($fileSize > $maxsize) {
+            $errors = ['type' => 'danger', 'message' => 'Le poids ne doit pas dépasser 5mo'];
+        }
+
+        if (in_array($fileType, $allowed) === false) {
+            $errors = ['type' => 'danger', 'message' => 'Ce type MIME n\'est pas autorisé'];
+        }
+
+        if(file_exists("public/upload/".$lastPostId."/postImage.".$fileFormat) === true){
+            $errors = ['type' => 'danger', 'message' => 'Cette image existe déjà'];
+        } 
+
+        if (empty($errors) === true) {
+            $return = true;
+        } else {
+            $this->superGlobal->createFlashMessage($errors);
+        }
+
+        return $return;
+
+    }//end uploadImage()
+
+
+    /**
+     * Delete Image
+     *
+     * @param $postId postId value
+     * @return void
+     */
+    public function deleteImage($postId)
+    {
+        if ($this->superGlobal->userIsAdmin() === false) {
+            $this->redirect->getRedirect('login');
+        };
+
+        if (file_exists("public/upload/".$postId) === true) {
+            $files = glob("public/upload/".$postId . '/*');
+
+            foreach ($files as $file) {
+                if (is_file($file) === true) {
+                    unlink($file);
+                }
+            }
+
+            rmdir("public/upload/".$postId);
+        }
+
+    }//end deleteImage()
 
 
 }//end class
