@@ -74,9 +74,8 @@ class AdminPostController
 
             $postValue['FkUserId'] = $varValue['userAdmin']['id'];
             $postValues = new PostEntity($postValue);
-;
 
-            if($this->superGlobal->postFileExist()) {
+            if ($this->superGlobal->postFileExist() === true) {
                 $image = $this->superGlobal->getFilePost();
                 if ($this->checkImage($image) === true) {
                     $fileFormat = pathinfo($image['image']["name"], PATHINFO_EXTENSION);
@@ -92,6 +91,7 @@ class AdminPostController
                     if (empty($image) === false) {
                         $this->uploadImage($image, $checkPostCreation['lastPostId'], $fileFormat);
                     }
+
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été créé']);
                     $this->redirect->getRedirect('/admin/posts');
                 }
@@ -245,7 +245,7 @@ class AdminPostController
                 $errors = ['type' => 'danger', 'message' => 'Ce n\'est pas votre post'];
             }
 
-            if($this->superGlobal->postFileExist()) {
+            if($this->superGlobal->postFileExist() === true) {
                 $image = $this->superGlobal->getFilePost();
                 if ($this->checkImage($image) === true) {
                     $fileFormat = pathinfo($image['image']["name"], PATHINFO_EXTENSION);
@@ -256,14 +256,14 @@ class AdminPostController
             }
 
             if (empty($errors) === true && $postValues->isValid() === true) {
-                    if ($this->adminPostModel->adminPostModification($postValues) === true) {
-                        if (empty($image) === false) {
-                            $this->deleteImage($getValuePostId);
-                            $this->uploadImage($image, $getValuePostId, $fileFormat);
-                        }
-                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
-                        $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
+                if ($this->adminPostModel->adminPostModification($postValues) === true) {
+                    if (empty($image) === false) {
+                        $this->deleteImage($getValuePostId);
+                        $this->uploadImage($image, $getValuePostId, $fileFormat);
                     }
+                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
+                    $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
+                }
             } else {
                 $varValue['postValue'] = $postValue;
                 $this->superGlobal->createFlashMessage($postValues->getError());
@@ -326,7 +326,7 @@ class AdminPostController
     /**
      * Upload Image
      *
-     * @param $image image value
+     * @param $image      image value
      * @param $lastPostId lastPostId value
      * @param $fileFormat fileFormat value
      * @return void
@@ -362,18 +362,14 @@ class AdminPostController
             $errors = ['type' => 'danger', 'message' => 'Ce type d\'image n\'est pas autorisé'];
         }
 
-        $maxsize = 5 * 1024 * 1024;
+        $maxsize = (5 * 1024) * 1024;
         if ($fileSize > $maxsize) {
             $errors = ['type' => 'danger', 'message' => 'Le poids ne doit pas dépasser 5mo'];
         }
 
-        if (in_array($fileType, $allowed) === false) {
+        if (in_array($fileType, $formatAllowed) === false) {
             $errors = ['type' => 'danger', 'message' => 'Ce type MIME n\'est pas autorisé'];
         }
-
-        if(file_exists("public/upload/".$lastPostId."/postImage.".$fileFormat) === true){
-            $errors = ['type' => 'danger', 'message' => 'Cette image existe déjà'];
-        } 
 
         if (empty($errors) === true) {
             $return = true;
@@ -383,7 +379,7 @@ class AdminPostController
 
         return $return;
 
-    }//end uploadImage()
+    }//end checkImage()
 
 
     /**

@@ -44,9 +44,9 @@ class AdminPostModel extends Model
         if ($request->execute() === true) {
             $lastPostId = $this->connection->lastInsertId();
             $return = [
-                        'return'    => true,
-                        'lastPostId' => $lastPostId
-                        ];
+                       'return'     => true,
+                       'lastPostId' => $lastPostId
+                      ];
         }
 
         return $return;
@@ -88,7 +88,6 @@ class AdminPostModel extends Model
         $request = $this->connection->prepare($sql);
         $request->bindValue(":id", $postId, PDO::PARAM_INT);
         $request->execute();
-        
 
         $post = $request->fetch(PDO::FETCH_ASSOC);
 
