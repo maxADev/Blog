@@ -94,7 +94,7 @@ class CommentController extends SuperGlobal
     {
         $varValue = [];
         $return = [
-                   'type' => 'danger',
+                   'type'    => 'danger',
                    'message' => 'Vous ne pouvez pas modifier ce commentaire'
                   ];
 

@@ -90,10 +90,12 @@ class AdminPostController
                         $this->uploadImage($image, $checkPostCreation['lastPostId'], $fileFormat);
                     }
 
-                    $this->superGlobal->createFlashMessage([
-                                                            'type' => 'success',
+                    $this->superGlobal->createFlashMessage(
+                                                           [
+                                                            'type'    => 'success',
                                                             'message' => 'Le post a bien été créé'
-                                                           ]);
+                                                           ]
+                                                          );
                     $this->redirect->getRedirect('/admin/posts');
                 }
             } else {
@@ -152,7 +154,6 @@ class AdminPostController
         $postList = $this->adminPostModel->adminGetPostList();
 
         if (empty($postList) === false) {
-            $errors = [];
             $varValue['postList'] = $postList;
         }
 
@@ -238,7 +239,7 @@ class AdminPostController
 
             if ($varValue['userAdmin']['id'] !== $post['FK_user_id']) {
                 $errors = [
-                           'type' => 'danger',
+                           'type'    => 'danger',
                            'message' => 'Ce n\'est pas votre post'
                           ];
             }
@@ -349,7 +350,12 @@ class AdminPostController
     {
         $return = false;
         $errors = [];
-        $formatAllowed = ["jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png"];
+        $formatAllowed = [
+                          'jpg'  => 'image/jpg',
+                          'jpeg' => 'image/jpeg',
+                          'gif'  => 'image/gif',
+                          'png'  => 'image/png'
+                          ];
         $fileName = $image['image']["name"];
         $fileType = $image['image']["type"];
         $fileSize = $image['image']["size"];

@@ -52,7 +52,8 @@ class AdminLoginController
     public function adminLoginPage()
     {
         $errors = [];
-        
+        $varValue = [];
+
         if (empty($this->superGlobal->getCurrentUser()) === false) {
             $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
             if ((int) $varValue['userAdmin']['FK_type_user_id'] === 2) {
