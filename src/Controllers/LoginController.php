@@ -84,12 +84,12 @@ class LoginController
         }//end if
 
         $varValue['formSetting'] = [
-                                   "lastName"        => ["label" => "Nom", "type" => "text", "placeholder" => "Votre nom"],
-                                   "firstName"       => ["label" => "Prénom", "type" => "text", "placeholder" => "Votre prénom"],
-                                   "email"           => ["label" => "Email", "type" => "email", "placeholder" => "Votre email"],
-                                   "login"           => ["label" => "Identifiant", "type" => "text", "placeholder" => "Votre identifiant"],
-                                   "password"        => ["label" => "Mot de passe", "type" => "password", "placeholder" => "Votre mot de passe"],
-                                   "confirmPassword" => ["label" => "Confirmation du mot de passe", "type" => "password", "placeholder" => "Confirmer votre mot de passe"]
+                                    "lastName"        => ["label" => "Nom",                          "type" => "text",     "placeholder" => "Votre nom"],
+                                    "firstName"       => ["label" => "Prénom",                       "type" => "text",     "placeholder" => "Votre prénom"],
+                                    "email"           => ["label" => "Email",                        "type" => "email", "   placeholder" => "Votre email"],
+                                    "login"           => ["label" => "Identifiant",                  "type" => "text", "    placeholder" => "Votre identifiant"],
+                                    "password"        => ["label" => "Mot de passe",                 "type" => "password", "placeholder" => "Votre mot de passe"],
+                                    "confirmPassword" => ["label" => "Confirmation du mot de passe", "type" => "password", "placeholder" => "Confirmer votre mot de passe"],
                                    ];
 
         $flashMessageList = $this->superGlobal->getFlashMessage();

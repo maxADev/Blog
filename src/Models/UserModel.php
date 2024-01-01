@@ -49,7 +49,7 @@ class UserModel extends Model
                 $return = [
                            'userId'    => $usersId,
                            'userEmail' => $userValues->getUserEmail(),
-                           'userToken' => $userToken
+                           'userToken' => $userToken,
                           ];
             }
         }//end if
@@ -185,6 +185,7 @@ class UserModel extends Model
      */
     public function changePassword($userValues)
     {
+        $return = false;
         $user = self::checkUserToken($userValues['token']);
         if (empty($user) === false && $user['id'] === $userValues['id']) {
             $sql = 'UPDATE user SET password = :password, token = :token WHERE id = :id';
@@ -192,10 +193,12 @@ class UserModel extends Model
             $request->bindValue(":password", password_hash($userValues['password'], PASSWORD_BCRYPT), PDO::PARAM_STR);
             $request->bindValue(":token", null, PDO::PARAM_STR);
             $request->bindValue(":id", $userValues['id'], PDO::PARAM_INT);
-            return $request->execute();
-        } else {
-            return false;
+            if ($request->execute() === true) {
+                $return = true;
+            }
         }
+
+        return $return;
 
     }//end changePassword()
 

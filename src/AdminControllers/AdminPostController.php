@@ -79,7 +79,10 @@ class AdminPostController
                     $fileFormat = pathinfo($image['image']["name"], PATHINFO_EXTENSION);
                     $postValues->setPostImage('postImage.'.$fileFormat);
                 } else {
-                    $errors = ['type' => 'danger', 'message' => "Votre image n'est pas valide"];
+                    $errors = [
+                               'type'    => 'danger',
+                               'message' => "Votre image n'est pas valide",
+                              ];
                 }
             }
 
@@ -90,12 +93,7 @@ class AdminPostController
                         $this->uploadImage($image, $checkPostCreation['lastPostId'], $fileFormat);
                     }
 
-                    $this->superGlobal->createFlashMessage(
-                                                           [
-                                                            'type'    => 'success',
-                                                            'message' => 'Le post a bien été créé'
-                                                           ]
-                                                          );
+                    $this->superGlobal->createFlashMessage(['type' => 'success','message' => 'Le post a bien été créé']);
                     $this->redirect->getRedirect('/admin/posts');
                 }
             } else {
@@ -106,10 +104,10 @@ class AdminPostController
         }//end if
 
         $varValue['formSetting'] = [
-                                    "image"   => ["label" => "Image", "type" => "file", "placeholder" => "Votre image(non obligatoire)"],
-                                    "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
-                                    "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
-                                    "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
+                                    "image"   => ["label" => "Image",   "type"   => "file",     "placeholder" => "Votre image(non obligatoire)"],
+                                    "title"   => ["label" => "Titre",   "type"   => "text",     "placeholder" => "Titre du post"],
+                                    "chapo"   => ["label" => "Chapo",   "type"   => "text",     "placeholder" => "Chapo du post"],
+                                    "content" => ["label" => "Contenu", "type"   => "textarea", "placeholder" => "Contenu du post"],
                                    ];
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
@@ -176,7 +174,6 @@ class AdminPostController
     public function adminReadPost()
     {
         $varValue = [];
-        $errors = [];
 
         $this->superGlobal->userIsAdmin();
 
@@ -240,7 +237,7 @@ class AdminPostController
             if ($varValue['userAdmin']['id'] !== $post['FK_user_id']) {
                 $errors = [
                            'type'    => 'danger',
-                           'message' => 'Ce n\'est pas votre post'
+                           'message' => 'Ce n\'est pas votre post',
                           ];
             }
 
@@ -250,7 +247,10 @@ class AdminPostController
                     $fileFormat = pathinfo($image['image']["name"], PATHINFO_EXTENSION);
                     $postValues->setPostImage('postImage.'.$fileFormat);
                 } else {
-                    $errors = ['type' => 'danger', 'message' => "Votre image n'est pas valide"];
+                    $errors = [
+                               'type' => 'danger',
+                               'message' => "Votre image n'est pas valide",
+                              ];
                 }
             }
 
@@ -272,10 +272,10 @@ class AdminPostController
         }//end if
 
         $varValue['formSetting'] = [
-                                   "image"   => ["label" => "Image", "type" => "file", "placeholder" => "Votre image(non obligatoire)"],
-                                   "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
-                                   "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
-                                   "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
+                                    "image"   => ["label" => "Image",   "type" => "file",     "placeholder" => "Votre image(non obligatoire)"],
+                                    "title"   => ["label" => "Titre",   "type" => "text",     "placeholder" => "Titre du post"],
+                                    "chapo"   => ["label" => "Chapo",   "type" => "text",     "placeholder" => "Chapo du post"],
+                                    "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"],
                                    ];
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
@@ -354,7 +354,7 @@ class AdminPostController
                           'jpg'  => 'image/jpg',
                           'jpeg' => 'image/jpeg',
                           'gif'  => 'image/gif',
-                          'png'  => 'image/png'
+                          'png'  => 'image/png',
                          ];
         $fileName = $image['image']["name"];
         $fileType = $image['image']["type"];
@@ -362,16 +362,25 @@ class AdminPostController
 
         $fileFormat = pathinfo($fileName, PATHINFO_EXTENSION);
         if (array_key_exists($fileFormat, $formatAllowed) === false) {
-            $errors = ['type' => 'danger', 'message' => 'Ce type d\'image n\'est pas autorisé'];
+            $errors = [
+                       'type'    => 'danger',
+                       'message' => 'Ce type d\'image n\'est pas autorisé',
+                      ];
         }
 
         $maxsize = ((5 * 1024) * 1024);
         if ($fileSize > $maxsize) {
-            $errors = ['type' => 'danger', 'message' => 'Le poids ne doit pas dépasser 5mo'];
+            $errors = [
+                       'type' => 'danger',
+                       'message' => 'Le poids ne doit pas dépasser 5mo',
+                      ];
         }
 
         if (in_array($fileType, $formatAllowed) === false) {
-            $errors = ['type' => 'danger', 'message' => 'Ce type MIME n\'est pas autorisé'];
+            $errors = [
+                       'type' => 'danger',
+                       'message' => 'Ce type MIME n\'est pas autorisé',
+                      ];
         }
 
         if (empty($errors) === true) {

@@ -95,7 +95,7 @@ class CommentController extends SuperGlobal
         $varValue = [];
         $return = [
                    'type'    => 'danger',
-                   'message' => 'Vous ne pouvez pas modifier ce commentaire'
+                   'message' => 'Vous ne pouvez pas modifier ce commentaire',
                   ];
 
         if (empty($this->superGlobal->getCurrentUser()) === true) {
