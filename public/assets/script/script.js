@@ -77,8 +77,9 @@ function modalDeleteCommentClose() {
  */
 function adminModalDeletePost() {
     let postId = this.dataset.postId;
+    let token = this.dataset.token;
     document.getElementById("admin-post-deletion-container").style.display = "block";
-    document.getElementById("admin-confirm-post-deletion").href = "/admin/post/deletion/"+postId;
+    document.getElementById("admin-confirm-post-deletion").href = "/admin/post/deletion/"+postId+"/"+token;
 }
 
 /**
@@ -94,8 +95,9 @@ function adminModalDeletePostClose() {
  */
 function adminModalDeleteComment() {
     let commentId = this.dataset.commentId;
+    let token = this.dataset.token;
     document.getElementById("admin-comment-deletion-container").style.display = "block";
-    document.getElementById("admin-confirm-comment-deletion").href = "/admin/comment/deletion/"+commentId;
+    document.getElementById("admin-confirm-comment-deletion").href = "/admin/comment/deletion/"+commentId+"/"+token;
 }
 
 /**

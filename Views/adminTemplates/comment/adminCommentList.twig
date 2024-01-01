@@ -54,7 +54,7 @@
                             <a class="btn btn-primary" href={{"/admin/comment/modification/#{comment.id}"}}>Modifier</a>
                         </div>
                         <div class="col-6 mb-3">
-                            <button class="btn btn-danger admin-delete-comment" data-comment-id={{"#{comment.id}"}}>Supprimer</button>
+                            <button class="btn btn-danger admin-delete-comment" data-comment-id={{"#{comment.id}"}} data-token={{"#{varList.userAdmin.token}"}}>Supprimer</button>
                         </div>
                     </div>
                 </div>

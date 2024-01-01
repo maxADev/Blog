@@ -98,6 +98,7 @@ class AdminLoginController
     {
         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Vous êtes bien déconnecté']);
         $this->superGlobal->deleteSession('auth');
+        $this->superGlobal->deleteSession('token');
         $this->redirect->getRedirect('/admin/login');
 
     }//end adminLogout()

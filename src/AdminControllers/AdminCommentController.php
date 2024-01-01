@@ -226,18 +226,22 @@ class AdminCommentController extends SuperGlobal
     {
         $this->superGlobal->userIsAdmin();
 
-        if ($this->superGlobal->getDataExist('commentId') === false) {
-            $this->redirect->getRedirect('/admin/comments');
-        }
+        if ($this->superGlobal->checkToken($this->superGlobal->getGetData('token')) === true) {
+            if ($this->superGlobal->getDataExist('commentId') === false) {
+                $this->redirect->getRedirect('/admin/comments');
+            }
 
-        $commentId = $this->superGlobal->getGetData('commentId');
+            $commentId = $this->superGlobal->getGetData('commentId');
 
-        if ($this->adminCommentModel->adminDeleteComment($commentId) === true) {
-            $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
-            $this->redirect->getRedirect('/admin/comments');
+            if ($this->adminCommentModel->adminDeleteComment($commentId) === true) {
+                $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
+                $this->redirect->getRedirect('/admin/comments');
+            } else {
+                $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le commentaire ne peut pas être supprimé']);
+                $this->redirect->getRedirect('/admin/comments');
+            }
         } else {
-            $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le commentaire ne peut pas être supprimé']);
-            $this->redirect->getRedirect('/admin/comments');
+            // $this->redirect->getRedirect('/admin/logout');
         }
 
     }//end adminCommentDeletion()

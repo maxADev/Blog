@@ -255,7 +255,9 @@ class SuperGlobal
     public function createSession($sessionValue)
     {
         if (isset($_SESSION['auth']) === false) {
+            $this->createToken();
             $_SESSION['auth'] = $sessionValue;
+            $_SESSION['auth']['token'] = $_SESSION['token'];
             $this->SESSION['auth'] = $_SESSION['auth'];
         } else {
             $this->SESSION['auth'] = $_SESSION['auth'];
@@ -392,6 +394,39 @@ class SuperGlobal
         unset($_SESSION[$value]);
 
     }//end deleteSession()
+
+
+    /**
+     * Create token
+     *
+     * @return void
+     */
+    public function createToken()
+    {
+        if (isset($_SESSION['token']) === false) {
+            $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(6));
+        }
+
+    }//end createToken()
+
+
+    /**
+     * Check token
+     *
+     * @return void
+     */
+    public function checkToken($token)
+    {
+        $return = false;
+        if (empty($this->user['token']) === false && empty($token) === false) {
+            if ($this->user['token'] === $token) {
+                $return = true;
+            }
+        }
+
+        return $return;
+
+    }//end checkToken()
 
 
 }//end class
