@@ -248,7 +248,7 @@ class AdminPostController
                     $postValues->setPostImage('postImage.'.$fileFormat);
                 } else {
                     $errors = [
-                               'type' => 'danger',
+                               'type'    => 'danger',
                                'message' => "Votre image n'est pas valide",
                               ];
                 }
