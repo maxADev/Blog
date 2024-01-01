@@ -62,9 +62,7 @@ class AdminPostController
         $errors;
         $image = '';
 
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         $varValue = ['userAdmin' => $this->superGlobal->getCurrentUser()];
 
@@ -87,12 +85,17 @@ class AdminPostController
 
             if (empty($errors) === true && $postValues->isValid() === true) {
                 $checkPostCreation = $this->adminPostModel->adminCreatePost($postValues);
-                if ($checkPostCreation['return'] === true && empty($checkPostCreation['lastPostId'] === false)) {
+                if ($checkPostCreation['return'] === true && empty($checkPostCreation['lastPostId']) === false) {
                     if (empty($image) === false) {
                         $this->uploadImage($image, $checkPostCreation['lastPostId'], $fileFormat);
                     }
 
-                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été créé']);
+                    $this->superGlobal->createFlashMessage(
+                                                           [
+                                                            'type'    => 'success',
+                                                            'message' => 'Le post a bien été créé'
+                                                           ]
+                                                          );
                     $this->redirect->getRedirect('/admin/posts');
                 }
             } else {
@@ -103,10 +106,10 @@ class AdminPostController
         }//end if
 
         $varValue['formSetting'] = [
-                                   "image"   => ["label" => "Image", "type" => "file", "placeholder" => "Votre image(non obligatoire)"],
-                                   "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
-                                   "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
-                                   "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
+                                    "image"   => ["label" => "Image", "type" => "file", "placeholder" => "Votre image(non obligatoire)"],
+                                    "title"   => ["label" => "Titre", "type" => "text", "placeholder" => "Titre du post"],
+                                    "chapo"   => ["label" => "Chapo", "type" => "text", "placeholder" => "Chapo du post"],
+                                    "content" => ["label" => "Contenu", "type" => "textarea", "placeholder" => "Contenu du post"]
                                    ];
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
@@ -145,15 +148,12 @@ class AdminPostController
     {
         $varValue = [];
 
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
         $postList = $this->adminPostModel->adminGetPostList();
 
         if (empty($postList) === false) {
-            $errors = [];
             $varValue['postList'] = $postList;
         }
 
@@ -178,9 +178,7 @@ class AdminPostController
         $varValue = [];
         $errors = [];
 
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
@@ -218,9 +216,7 @@ class AdminPostController
         $varValue = [];
         $errors = [];
 
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
@@ -242,10 +238,13 @@ class AdminPostController
             $postValues = new PostEntity($postValue);
 
             if ($varValue['userAdmin']['id'] !== $post['FK_user_id']) {
-                $errors = ['type' => 'danger', 'message' => 'Ce n\'est pas votre post'];
+                $errors = [
+                           'type'    => 'danger',
+                           'message' => 'Ce n\'est pas votre post'
+                          ];
             }
 
-            if($this->superGlobal->postFileExist() === true) {
+            if ($this->superGlobal->postFileExist() === true) {
                 $image = $this->superGlobal->getFilePost();
                 if ($this->checkImage($image) === true) {
                     $fileFormat = pathinfo($image['image']["name"], PATHINFO_EXTENSION);
@@ -261,6 +260,7 @@ class AdminPostController
                         $this->deleteImage($getValuePostId);
                         $this->uploadImage($image, $getValuePostId, $fileFormat);
                     }
+
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
                     $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
                 }
@@ -298,9 +298,7 @@ class AdminPostController
     {
         $varValue = [];
 
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
@@ -352,7 +350,12 @@ class AdminPostController
     {
         $return = false;
         $errors = [];
-        $formatAllowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
+        $formatAllowed = [
+                          'jpg'  => 'image/jpg',
+                          'jpeg' => 'image/jpeg',
+                          'gif'  => 'image/gif',
+                          'png'  => 'image/png'
+                         ];
         $fileName = $image['image']["name"];
         $fileType = $image['image']["type"];
         $fileSize = $image['image']["size"];
@@ -362,7 +365,7 @@ class AdminPostController
             $errors = ['type' => 'danger', 'message' => 'Ce type d\'image n\'est pas autorisé'];
         }
 
-        $maxsize = (5 * 1024) * 1024;
+        $maxsize = ((5 * 1024) * 1024);
         if ($fileSize > $maxsize) {
             $errors = ['type' => 'danger', 'message' => 'Le poids ne doit pas dépasser 5mo'];
         }
@@ -390,12 +393,10 @@ class AdminPostController
      */
     public function deleteImage($postId)
     {
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         if (file_exists("public/upload/".$postId) === true) {
-            $files = glob("public/upload/".$postId . '/*');
+            $files = glob("public/upload/".$postId.'/*');
 
             foreach ($files as $file) {
                 if (is_file($file) === true) {

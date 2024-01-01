@@ -47,10 +47,10 @@ class Router
 
         $routeExist = false;
 
+        $controllerFolder = "Controllers";
+
         if (strpos($httpRequest, '/admin/') !== false) {
             $controllerFolder = "AdminControllers";
-        } else {
-            $controllerFolder = "Controllers";
         }
 
         // For each routes from xml file.
@@ -133,16 +133,19 @@ class Router
                 $viewVar = $viewValue['var'];
                 $viewVarValue['varList'] = $viewVar;
             }
+
             if (empty($viewValue['flashMessageList']) !== true) {
-                $viewVarFlashMessageList = $viewValue['flashMessageList'];
-                $viewVarValue['flashMessageList'] = $viewVarFlashMessageList;
+                $flashMessageList = $viewValue['flashMessageList'];
+                $viewVarValue['flashMessageList'] = $flashMessageList;
             }
+
             $view = $viewValue['folder'].'\\'.$viewValue['file'];
+
         } else {
             if (empty($this->superGlobal->getCurrentUser()) === false) {
                 $viewVarValue['varList']['user'] = $this->superGlobal->getCurrentUser();
-            };
-        }
+            }
+        }//end if
 
         $viewVarValue['cssLink'] = $cssLink;
         $viewVarValue['bootstrapLink'] = $bootstrapLink;

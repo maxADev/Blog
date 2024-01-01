@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use App\Redirect;
 
 session_start();
 
@@ -57,6 +58,8 @@ class SuperGlobal
         if ($this->getExist() === true) {
             $this->GET = $this->GET;
         }
+
+        $this->redirect = new Redirect();
 
     }//end __construct()
 
@@ -318,12 +321,9 @@ class SuperGlobal
      */
     public function userIsAdmin()
     {
-        $return = false;
-        if (isset($this->SESSION['auth']) === true && (int) $this->SESSION['auth']['FK_type_user_id'] === 2) {
-            $return = true;
+        if (isset($this->SESSION['auth']) != true || (int) $this->SESSION['auth']['FK_type_user_id'] != 2) {
+            $this->redirect->getRedirect('/login');
         }
-
-        return $return;
 
     }//end userIsAdmin()
 

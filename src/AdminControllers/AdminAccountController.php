@@ -41,9 +41,7 @@ class AdminAccountController
      */
     public function index()
     {
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('/admin/login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         $user = $this->superGlobal->getCurrentUser();
 

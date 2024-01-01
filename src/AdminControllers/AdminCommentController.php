@@ -68,21 +68,19 @@ class AdminCommentController extends SuperGlobal
     public function adminCommentList()
     {
         $varValue = [];
-        $getValueCommentSetting = '';
+        $commentSetting = '';
 
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
         if ($this->superGlobal->getDataExist('commentSetting') === true) {
-            $getValueCommentSetting = $this->superGlobal->getGetData('commentSetting');
+            $commentSetting = $this->superGlobal->getGetData('commentSetting');
         }
 
-        if ($getValueCommentSetting === 'invalid') {
+        if ($commentSetting === 'invalid') {
             $commentList = $this->adminCommentModel->adminGetCommentByStatut(1);
-        } else if ($getValueCommentSetting === 'valid') {
+        } else if ($commentSetting === 'valid') {
             $commentList = $this->adminCommentModel->adminGetCommentByStatut(2);
         } else {
             $commentList = $this->adminCommentModel->adminGetAllComment();
@@ -111,9 +109,7 @@ class AdminCommentController extends SuperGlobal
         $errors = [];
         $getValueCommentId;
 
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
@@ -165,9 +161,7 @@ class AdminCommentController extends SuperGlobal
      */
     public function adminCommentValidation()
     {
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         if ($this->superGlobal->getDataExist('commentId') === false) {
             $this->redirect->getRedirect('/admin/comments');
@@ -190,9 +184,7 @@ class AdminCommentController extends SuperGlobal
      */
     public function adminCommentInvalidation()
     {
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         if ($this->superGlobal->getDataExist('commentId') === false) {
             $this->redirect->getRedirect('/admin/comments');
@@ -204,6 +196,7 @@ class AdminCommentController extends SuperGlobal
             $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été invalidé']);
             $this->redirect->getRedirect('/admin/comment/valid');
         }
+
     }//end adminCommentInvalidation()
 
 
@@ -215,9 +208,7 @@ class AdminCommentController extends SuperGlobal
      */
     public function adminCommentListDeletion($postId)
     {
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         if (empty($postId) === false) {
             return $this->adminCommentModel->adminDeleteCommentList($postId);
@@ -233,9 +224,7 @@ class AdminCommentController extends SuperGlobal
      */
     public function adminCommentDeletion()
     {
-        if ($this->superGlobal->userIsAdmin() === false) {
-            $this->redirect->getRedirect('login');
-        };
+        $this->superGlobal->userIsAdmin();
 
         if ($this->superGlobal->getDataExist('commentId') === false) {
             $this->redirect->getRedirect('/admin/comments');
