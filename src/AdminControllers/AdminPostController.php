@@ -217,59 +217,64 @@ class AdminPostController
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
-        if ($this->superGlobal->getDataExist('postId') === false) {
-            $this->redirect->getRedirect('/admin/posts');
-        }
+        if ($this->superGlobal->checkToken($this->superGlobal->getGetData('token')) === true) {
 
-        $getValuePostId = $this->superGlobal->getGetData('postId');
-        $post = $this->adminPostModel->adminGetPost($getValuePostId);
-        if (empty($post) === false) {
-            $varValue['postValue'] = $post;
-        }
-
-        if ($this->superGlobal->postExist() === true) {
-            $postValue = $this->superGlobal->getPost();
-            $errors = $this->superGlobal->checkPostData($postValue);
-
-            $postValue['id'] = $getValuePostId;
-            $postValues = new PostEntity($postValue);
-
-            if ($varValue['userAdmin']['id'] !== $post['FK_user_id']) {
-                $errors = [
-                           'type'    => 'danger',
-                           'message' => 'Ce n\'est pas votre post',
-                          ];
+            if ($this->superGlobal->getDataExist('postId') === false) {
+                $this->redirect->getRedirect('/admin/posts');
             }
 
-            if ($this->superGlobal->postFileExist() === true) {
-                $image = $this->superGlobal->getFilePost();
-                if ($this->checkImage($image) === true) {
-                    $fileFormat = pathinfo($image['image']["name"], PATHINFO_EXTENSION);
-                    $postValues->setPostImage('postImage.'.$fileFormat);
-                } else {
+            $getValuePostId = $this->superGlobal->getGetData('postId');
+            $post = $this->adminPostModel->adminGetPost($getValuePostId);
+            if (empty($post) === false) {
+                $varValue['postValue'] = $post;
+            }
+
+            if ($this->superGlobal->postExist() === true) {
+                $postValue = $this->superGlobal->getPost();
+                $errors = $this->superGlobal->checkPostData($postValue);
+
+                $postValue['id'] = $getValuePostId;
+                $postValues = new PostEntity($postValue);
+
+                if ($varValue['userAdmin']['id'] !== $post['FK_user_id']) {
                     $errors = [
-                               'type'    => 'danger',
-                               'message' => "Votre image n'est pas valide",
-                              ];
+                            'type'    => 'danger',
+                            'message' => 'Ce n\'est pas votre post',
+                            ];
                 }
-            }
 
-            if (empty($errors) === true && $postValues->isValid() === true) {
-                if ($this->adminPostModel->adminPostModification($postValues) === true) {
-                    if (empty($image) === false) {
-                        $this->deleteImage($getValuePostId);
-                        $this->uploadImage($image, $getValuePostId, $fileFormat);
+                if ($this->superGlobal->postFileExist() === true) {
+                    $image = $this->superGlobal->getFilePost();
+                    if ($this->checkImage($image) === true) {
+                        $fileFormat = pathinfo($image['image']["name"], PATHINFO_EXTENSION);
+                        $postValues->setPostImage('postImage.'.$fileFormat);
+                    } else {
+                        $errors = [
+                                'type'    => 'danger',
+                                'message' => "Votre image n'est pas valide",
+                                ];
                     }
-
-                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
-                    $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
                 }
-            } else {
-                $varValue['postValue'] = $postValue;
-                $this->superGlobal->createFlashMessage($postValues->getError());
-                $this->superGlobal->createFlashMessage($errors);
-            }
-        }//end if
+
+                if (empty($errors) === true && $postValues->isValid() === true) {
+                    if ($this->adminPostModel->adminPostModification($postValues) === true) {
+                        if (empty($image) === false) {
+                            $this->deleteImage($getValuePostId);
+                            $this->uploadImage($image, $getValuePostId, $fileFormat);
+                        }
+
+                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
+                        $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
+                    }
+                } else {
+                    $varValue['postValue'] = $postValue;
+                    $this->superGlobal->createFlashMessage($postValues->getError());
+                    $this->superGlobal->createFlashMessage($errors);
+                }
+            }//end if
+        } else {
+            $this->redirect->getRedirect('/admin/logout');
+        }
 
         $varValue['formSetting'] = [
                                     "image"   => ["label" => "Image",   "type" => "file",     "placeholder" => "Votre image(non obligatoire)"],
@@ -302,21 +307,25 @@ class AdminPostController
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
-        if ($this->superGlobal->getDataExist('postId') === true) {
-            $getValuePostId = $this->superGlobal->getGetData('postId');
-            $postValue = $this->adminPostModel->adminGetPost($getValuePostId);
-            if (empty($postValue) === false && $varValue['userAdmin']['id'] === $postValue['FK_user_id']) {
-                if ($this->adminCommentController->adminCommentListDeletion($getValuePostId) === true) {
-                    if ($this->adminPostModel->adminPostDeletion($getValuePostId) === true) {
-                        $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été supprimé']);
-                        $this->redirect->getRedirect('/admin/posts');
+        if ($this->superGlobal->checkToken($this->superGlobal->getGetData('token')) === true) {
+            if ($this->superGlobal->getDataExist('postId') === true) {
+                $getValuePostId = $this->superGlobal->getGetData('postId');
+                $postValue = $this->adminPostModel->adminGetPost($getValuePostId);
+                if (empty($postValue) === false && $varValue['userAdmin']['id'] === $postValue['FK_user_id']) {
+                    if ($this->adminCommentController->adminCommentListDeletion($getValuePostId) === true) {
+                        if ($this->adminPostModel->adminPostDeletion($getValuePostId) === true) {
+                            $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été supprimé']);
+                            $this->redirect->getRedirect('/admin/posts');
+                        }
                     }
+                } else {
+                    $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Ce n\'est pas votre post']);
+                    $this->redirect->getRedirect('/admin/posts');
                 }
-            } else {
-                $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Ce n\'est pas votre post']);
-                $this->redirect->getRedirect('/admin/posts');
-            }
-        }//end if
+            }//end if
+        } else {
+            $this->redirect->getRedirect('/admin/logout');
+        }
 
     }//end adminPostDeletion()
 

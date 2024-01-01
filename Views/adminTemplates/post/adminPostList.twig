@@ -29,10 +29,10 @@
                         {% if varList.userAdmin.FK_type_user_id == 2 and post.FK_user_id == varList.userAdmin.id %}
                         <div class="container col-12 row justify-content-around p-0">
                             <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
-                                <a class="btn btn-primary" href={{"/admin/post/modification/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Modifier</a>
+                                <a class="btn btn-primary" href={{"/admin/post/modification/#{post.id}/#{varList.userAdmin.token}"}}>Modifier</a>
                             </div>
                             <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
-                                <a class="btn btn-danger admin-delete-post" data-post-id={{"#{post.id}"}}>Supprimer</a>
+                                <a class="btn btn-danger admin-delete-post" data-post-id={{"#{post.id}"}} data-token={{"#{varList.userAdmin.token}"}}>Supprimer</a>
                             </div>
                         </div>
                         {% endif %}
