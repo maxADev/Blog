@@ -355,7 +355,7 @@ class AdminPostController
                           'jpeg' => 'image/jpeg',
                           'gif'  => 'image/gif',
                           'png'  => 'image/png'
-                          ];
+                         ];
         $fileName = $image['image']["name"];
         $fileType = $image['image']["type"];
         $fileSize = $image['image']["size"];
