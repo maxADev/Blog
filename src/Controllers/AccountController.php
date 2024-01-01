@@ -51,7 +51,6 @@ class AccountController
 
         $varValue['user'] = $this->superGlobal->getCurrentUser();
 
-
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
             if (isset($postValue['comment']) === true) {

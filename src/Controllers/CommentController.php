@@ -93,7 +93,10 @@ class CommentController extends SuperGlobal
     public function commentPostModification($commentValue)
     {
         $varValue = [];
-        $return = ['type' => 'danger', 'message' => 'Vous ne pouvez pas modifier ce commentaire'];
+        $return = [
+                   'type' => 'danger',
+                   'message' => 'Vous ne pouvez pas modifier ce commentaire'
+                  ];
 
         if (empty($this->superGlobal->getCurrentUser()) === true) {
             $this->redirect->getRedirect('/login');
