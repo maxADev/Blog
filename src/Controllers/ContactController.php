@@ -55,8 +55,8 @@ class ContactController
 
             if (filter_var($postValue['email'], FILTER_VALIDATE_EMAIL) === false) {
                 $errors[] = [
-                            'type'    => 'danger',
-                            'message' => 'Email invalide'
+                             'type'    => 'danger',
+                             'message' => 'Email invalide',
                             ];
             }
 

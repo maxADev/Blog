@@ -140,7 +140,6 @@ class Router
             }
 
             $view = $viewValue['folder'].'\\'.$viewValue['file'];
-
         } else {
             if (empty($this->superGlobal->getCurrentUser()) === false) {
                 $viewVarValue['varList']['user'] = $this->superGlobal->getCurrentUser();
