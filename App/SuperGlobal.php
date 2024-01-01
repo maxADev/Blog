@@ -47,7 +47,10 @@ class SuperGlobal
      */
     public function __construct()
     {
+  
+
         if ($this->authSessionExist() === true) {
+            $this->checkSession();
             $this->user = $this->SESSION['auth'];
         };
 
@@ -258,6 +261,8 @@ class SuperGlobal
             $this->createToken();
             $_SESSION['auth'] = $sessionValue;
             $_SESSION['auth']['token'] = $_SESSION['token'];
+            $_SESSION['ipAddress'] = $_SERVER['REMOTE_ADDR'];
+            $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
             $this->SESSION['auth'] = $_SESSION['auth'];
         } else {
             $this->SESSION['auth'] = $_SESSION['auth'];
@@ -427,6 +432,21 @@ class SuperGlobal
         return $return;
 
     }//end checkToken()
+
+
+    /**
+     * Check session
+     *
+     * @return void
+     */
+    public function checkSession()
+    {
+        if ($_SERVER['REMOTE_ADDR'] != $_SESSION['ipAddress'] || $_SERVER['HTTP_USER_AGENT'] != $_SESSION['userAgent']) {
+            session_unset();
+            session_destroy();
+        }
+
+    }//end checkSession()
 
 
 }//end class
