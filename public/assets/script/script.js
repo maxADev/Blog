@@ -60,8 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 function modalDeleteComment() {
     let commentId = this.dataset.commentId;
+    let token = this.dataset.token;
     document.getElementById("comment-deletion-container").style.display = "block";
-    document.getElementById("confirm-comment-deletion").href = "/comment/deletion/"+commentId;
+    document.getElementById("confirm-comment-deletion").href = "/comment/deletion/"+commentId+"/"+token;
 }
 
 /**

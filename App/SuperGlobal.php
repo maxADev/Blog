@@ -422,14 +422,9 @@ class SuperGlobal
      */
     public function checkToken($token)
     {
-        $return = false;
-        if (empty($this->user['token']) === false && empty($token) === false) {
-            if ($this->user['token'] === $token) {
-                $return = true;
-            }
+        if (empty($this->user['token']) === true || empty($token) === true || $this->user['token'] != $token) {
+            $this->redirect->getRedirect('/logout');
         }
-
-        return $return;
 
     }//end checkToken()
 

@@ -10,8 +10,8 @@
   <route url="/logout" controller="Login" action="logout"></route>
   <route url="/posts" controller="Post" action="postList"></route>
   <route url="/post/([0-9]+)/([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postId,postTitle"></route>
-  <route url="/post/([0-9]+)/([a-z-A-Z-0-9]+)/comment/modification/([0-9]+)" controller="Post" action="readPost" vars="postId,postTitle,commentId"></route>
-  <route url="/comment/deletion/([0-9]+)" controller="Comment" action="commentDeletion" vars="commentId"></route>
+  <route url="/post/([0-9]+)/([a-z-A-Z-0-9]+)/comment/modification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postId,postTitle,commentId,token"></route>
+  <route url="/comment/deletion/([0-9]+)/([a-z-A-Z-0-9]+)" controller="Comment" action="commentDeletion" vars="commentId,token"></route>
   <route url="/admin/login" controller="AdminLogin" action="adminLoginPage"></route>
   <route url="/admin/account" controller="AdminAccount" action="index"></route>
   <route url="/admin/logout" controller="AdminLogin" action="AdminLogout"></route>
@@ -22,9 +22,8 @@
   <route url="/admin/post/deletion/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostDeletion" vars="postId,token"></route>
   <route url="/admin/comments" controller="AdminComment" action="adminCommentList"></route>
   <route url="/admin/comment/([a-z-A-Z-0-9]+)" controller="AdminComment" action="adminCommentList" vars="commentSetting"></route>
-  <route url="/admin/comment/validation/([0-9]+)" controller="AdminComment" action="adminCommentValidation" vars="commentId"></route>
-  <route url="/admin/comment/invalidation/([0-9]+)" controller="AdminComment" action="adminCommentInvalidation" vars="commentId"></route>
-  <route url="/admin/comment/modification/([0-9]+)" controller="AdminComment" action="adminCommentModification" vars="commentId"></route>
+  <route url="/admin/comment/validation/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminComment" action="adminCommentValidation" vars="commentId,token"></route>
+  <route url="/admin/comment/invalidation/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminComment" action="adminCommentInvalidation" vars="commentId,token"></route>
   <route url="/admin/comment/deletion/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminComment" action="adminCommentDeletion" vars="commentId,token"></route>
   <route url="/contact" controller="Contact" action="index"></route>
   <route url="/legalNotice" controller="LegalNotice" action="index"></route>

@@ -169,24 +169,6 @@ class AdminCommentModel extends Model
 
 
     /**
-     * Admin comment update
-     *
-     * @param $commentValue comment value
-     * @return boolean
-     */
-    public function adminCommentUpdate($commentValue)
-    {
-        $sql = 'UPDATE comment SET content = :content, modification_date = NOW() WHERE id = :id';
-
-        $request = $this->connection->prepare($sql);
-        $request->bindValue(":id", $commentValue->getCommentId(), PDO::PARAM_INT);
-        $request->bindValue(":content", $commentValue->getCommentContent(), PDO::PARAM_STR);
-        return $request->execute();
-
-    }//end adminCommentUpdate()
-
-
-    /**
      * Admin delete comment
      *
      * @param $commentId comment id
