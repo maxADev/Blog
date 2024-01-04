@@ -99,62 +99,6 @@ class AdminCommentController extends SuperGlobal
 
 
     /**
-     * Admin comment modification
-     *
-     * @return view
-     */
-    public function adminCommentModification()
-    {
-        $varValue = [];
-        $errors = [];
-        $getValueCommentId;
-
-        $this->superGlobal->userIsAdmin();
-
-        $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
-
-        if ($this->superGlobal->getDataExist('commentId') === false) {
-            $this->redirect->getRedirect('/admin/comments');
-        }
-
-        $getValueCommentId = $this->superGlobal->getGetData('commentId');
-
-        $commentValue = $this->adminCommentModel->adminGetComment($getValueCommentId);
-        if (empty($commentValue) === false) {
-            $varValue['commentValue'] = $commentValue;
-        }
-
-        if ($this->superGlobal->postExist() === true) {
-            $postValue = [];
-            $postValue = $this->superGlobal->getPost();
-            $errors = $this->superGlobal->checkPostData($postValue);
-
-            $postValue['id'] = $getValueCommentId;
-            $postValue['content'] = $postValue['comment_content_modification'];
-            $comment = new CommentEntity($postValue);
-
-            if (empty($errors) === true && $comment->isValid() === true) {
-                    $this->adminCommentModel->adminCommentUpdate($comment);
-                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été modifié']);
-                    $this->redirect->getRedirect('/admin/comments');
-            } else {
-                $this->superGlobal->createFlashMessage($comment->getError());
-                $this->superGlobal->createFlashMessage($errors);
-            }
-        }//end if
-
-        $flashMessageList = $this->superGlobal->getFlashMessage();
-        $view = [];
-        $view['folder'] = 'adminTemplates\comment';
-        $view['file'] = 'adminCommentModification.twig';
-        $view['var'] = $varValue;
-        $view['flashMessageList'] = $flashMessageList;
-        return $view;
-
-    }//end adminCommentModification()
-
-
-    /**
      * Admin comment validation
      *
      * @return void
@@ -162,6 +106,7 @@ class AdminCommentController extends SuperGlobal
     public function adminCommentValidation()
     {
         $this->superGlobal->userIsAdmin();
+        $this->superGlobal->checkToken($this->superGlobal->getGetData('token'));
 
         if ($this->superGlobal->getDataExist('commentId') === false) {
             $this->redirect->getRedirect('/admin/comments');
@@ -185,6 +130,7 @@ class AdminCommentController extends SuperGlobal
     public function adminCommentInvalidation()
     {
         $this->superGlobal->userIsAdmin();
+        $this->superGlobal->checkToken($this->superGlobal->getGetData('token'));
 
         if ($this->superGlobal->getDataExist('commentId') === false) {
             $this->redirect->getRedirect('/admin/comments');
@@ -225,23 +171,20 @@ class AdminCommentController extends SuperGlobal
     public function adminCommentDeletion()
     {
         $this->superGlobal->userIsAdmin();
+        $this->superGlobal->checkToken($this->superGlobal->getGetData('token'));
 
-        if ($this->superGlobal->checkToken($this->superGlobal->getGetData('token')) === true) {
-            if ($this->superGlobal->getDataExist('commentId') === false) {
-                $this->redirect->getRedirect('/admin/comments');
-            }
+        if ($this->superGlobal->getDataExist('commentId') === false) {
+            $this->redirect->getRedirect('/admin/comments');
+        }
 
-            $commentId = $this->superGlobal->getGetData('commentId');
+        $commentId = $this->superGlobal->getGetData('commentId');
 
-            if ($this->adminCommentModel->adminDeleteComment($commentId) === true) {
-                $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
-                $this->redirect->getRedirect('/admin/comments');
-            } else {
-                $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le commentaire ne peut pas être supprimé']);
-                $this->redirect->getRedirect('/admin/comments');
-            }
+        if ($this->adminCommentModel->adminDeleteComment($commentId) === true) {
+            $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été supprimé']);
+            $this->redirect->getRedirect('/admin/comments');
         } else {
-            // $this->redirect->getRedirect('/admin/logout');
+            $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Le commentaire ne peut pas être supprimé']);
+            $this->redirect->getRedirect('/admin/comments');
         }
 
     }//end adminCommentDeletion()

@@ -161,7 +161,7 @@ class UserModel extends Model
         $request->bindValue(":id", $userId, PDO::PARAM_INT);
 
         if ($request->execute() === true) {
-            $sql = 'UPDATE user SET token = :token WHERE id = :id';
+            $sql = 'UPDATE user SET creation_date = NOW(), token = :token WHERE id = :id';
 
             $request = $this->connection->prepare($sql);
             $request->bindValue(":token", null, PDO::PARAM_STR);
@@ -211,7 +211,7 @@ class UserModel extends Model
      */
     public function login($login)
     {
-        $sql = 'SELECT * FROM user WHERE (login = :login OR email = :login ) AND (token IS NULL OR FK_type_user_id != 3)';
+        $sql = 'SELECT * FROM user WHERE (login = :login OR email = :login ) AND FK_type_user_id != 3';
 
         $request = $this->connection->prepare($sql);
         $request->bindValue(":login", $login, PDO::PARAM_STR);

@@ -44,6 +44,12 @@ class UserEntity
 
     /**
      *
+     * @var userCreationDate user creation date
+     */
+    public $userCreationDate;
+
+    /**
+     *
      * @var userToken user token
      */
     public $userToken;
@@ -208,6 +214,17 @@ class UserEntity
 
 
     /**
+     * Add value user creation date
+     *
+     * @return void
+     */
+    public function setUserCreationDate($userCreationDate)
+    {
+        $this->userCreationDate = $userCreationDate;
+    }
+
+
+    /**
      * Add value user token
      *
      * @return void
@@ -302,6 +319,18 @@ class UserEntity
     public function getUserPassword()
     {
         return $this->userPassword;
+
+    }
+
+
+    /**
+     * Get value user creation date
+     *
+     * @return userCreationDate
+     */
+    public function getUserCreationDate()
+    {
+        return $this->userCreationDate;
 
     }
 

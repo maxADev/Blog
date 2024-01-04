@@ -102,7 +102,9 @@ class CommentController extends SuperGlobal
             $this->redirect->getRedirect('/login');
         }
 
+        $this->superGlobal->checkToken($this->superGlobal->getGetData('token'));
         $varValue['user'] = $this->superGlobal->getCurrentUser();
+
         $comment = $this->commentModel->getComment($commentValue['commentId']);
 
         if ($varValue['user']['id'] === $comment['FK_user_id']) {
@@ -136,6 +138,7 @@ class CommentController extends SuperGlobal
             $this->redirect->getRedirect('/login');
         };
 
+        $this->superGlobal->checkToken($this->superGlobal->getGetData('token'));
         $varValue['user'] = $this->superGlobal->getCurrentUser();
 
         if ($this->superGlobal->getDataExist('commentId') === true) {
