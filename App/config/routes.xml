@@ -25,6 +25,8 @@
   <route url="/admin/comment/validation/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminComment" action="adminCommentValidation" vars="commentId,token"></route>
   <route url="/admin/comment/invalidation/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminComment" action="adminCommentInvalidation" vars="commentId,token"></route>
   <route url="/admin/comment/deletion/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminComment" action="adminCommentDeletion" vars="commentId,token"></route>
+  <route url="/admin/users" controller="AdminUser" action="index"></route>
+  <route url="/admin/user/([a-z-A-Z-0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminUser" action="index" vars="userSetting,token"></route>
   <route url="/contact" controller="Contact" action="index"></route>
   <route url="/legalNotice" controller="LegalNotice" action="index"></route>
 </routes>
