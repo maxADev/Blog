@@ -1,0 +1,52 @@
+{% extends "adminLayout.twig" %}
+{% block head %}
+    <title>Les utilisateurs</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+        <div class="container col-12">
+            <h3>Les utilisateurs</h3>
+            <p>Administration des utilisateurs du blog</p>
+        </div>
+    </div>
+    <div class="container-fluid col-12 row m-0 text-center">
+        <div class="container col-4 mb-3">
+            {% if varList.userList is not defined %}
+                <a class="btn btn-primary" href={{"/admin/user/list/#{varList.userAdmin.token}"}}>Liste des utilisateurs</a>
+            {% else %}
+                <a class="btn btn-primary" href={{"/admin/users"}}>Fermer</a>
+            {% endif %}
+        </div>
+    </div>
+    {% if varList.userList is defined %}
+        <div class="container text-center mt-3">
+            {% for user in varList.userList %}
+                <div class="container col-12 col-sm-12 col-lg-5 col-xl-5 mt-3 bg-light border border-dark rounded text-start">
+                    <div class="container">
+                        <p class="m-0">Nom : {{user.last_name}}</p>
+                        <p class="m-0">Prénom : {{user.first_name}}</p>
+                    </div>
+                    <div class="container mb-1">
+                        <p class="m-0 post-date">Inscrit le {{user.creation_date|date("d/m/Y", "Europe/Paris")}}</p>
+                    </div>
+                    <div class="col-12 text-center">
+                        <form action="" method="post">
+                            <input type="hidden" name="userId" value="{{user.id}}">
+                            <select class="form-control" name="userStatut">
+                                {% for typeUser in varList.typeUserList %}
+                                    {% set selected = '' %}
+                                    {% if typeUser.id == user.FK_type_user_id %}
+                                        {% set selected = 'selected' %}
+                                    {% endif %}
+                                    <option value="{{typeUser.id}}" {{selected}}>{{typeUser.type_user_name}}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-primary mt-3 mb-3">Changer le statut</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
