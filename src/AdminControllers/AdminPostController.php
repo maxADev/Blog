@@ -112,7 +112,7 @@ class AdminPostController
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été créé']);
                     $this->redirect->getRedirect('/admin/posts');
                 } else {
-                    $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Erreur lors de la création du post']);;
+                    $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Erreur lors de la création du post']);
                 }
             } else {
                 $varValue['postValue'] = $postValue;
@@ -183,23 +183,25 @@ class AdminPostController
 
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
-            $varValue['postFilterValue'] = (int) $postValue['postFilter'];
+            $postValueFilter = (int) $postValue['postFilter'];
+            $varValue['postFilterValue'] = $postValueFilter;
 
+   
             foreach ($postList as $post) {
-                if ($postValue['postFilter'] == 1) {
-                    if ($post['FK_user_id'] == $varValue['userAdmin']['id']) {
+                if ($postValueFilter === 1) {
+                    if ($post['FK_user_id'] === $varValue['userAdmin']['id']) {
                         $newPostList[] = $post;
                     }
-                } else if ($postValue['postFilter'] == 2) {
-                    if ($post['FK_post_statut_id'] == 2) {
+                } else if ($postValueFilter === 2) {
+                    if ((int) $post['FK_post_statut_id'] === 2) {
                         $newPostList[] = $post;
                     }
-                } else if ($postValue['postFilter'] == 3) {
-                    if ($post['FK_post_statut_id'] == 1) {
+                } else if ($postValueFilter === 3) {
+                    if ((int) $post['FK_post_statut_id'] === 1) {
                         $newPostList[] = $post;
                     }
-                } else if ($postValue['postFilter'] == 4) {
-                    if ($post['FK_post_statut_id'] == 3) {
+                } else if ($postValueFilter === 4) {
+                    if ((int) $post['FK_post_statut_id'] === 3) {
                         $newPostList[] = $post;
                     }
                 } else {
