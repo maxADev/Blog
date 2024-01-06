@@ -88,7 +88,7 @@ class ContactController
     public function sendEmailContact($contactValue)
     {
         $contactEmail = "maximealaphilippe12@gmail.com";
-        mail($contactEmail, 'Formulaire de contact : '.$contactValue['object'].'', 'message de : '.$contactValue['lastName'].''.$contactValue['firstName'].'<br> Contenu : '.$contactValue['message'].' envoyé par : '.$contactValue['email']);
+        mail($contactEmail, 'Formulaire de contact : '.$contactValue['object'].'', 'message de : '.$contactValue['lastName'].''.$contactValue['firstName'].'Contenu : '.$contactValue['message'].' envoyé par : '.$contactValue['email']);
 
     }//end sendEmailContact()
 

@@ -47,7 +47,7 @@ class LoginController
     /**
      * Registration
      *
-     * @return void
+     * @return view
      */
     public function registration()
     {
@@ -86,8 +86,8 @@ class LoginController
         $varValue['formSetting'] = [
                                     "lastName"        => ["label" => "Nom",                          "type" => "text",     "placeholder" => "Votre nom"],
                                     "firstName"       => ["label" => "Prénom",                       "type" => "text",     "placeholder" => "Votre prénom"],
-                                    "email"           => ["label" => "Email",                        "type" => "email", "   placeholder" => "Votre email"],
-                                    "login"           => ["label" => "Identifiant",                  "type" => "text", "    placeholder" => "Votre identifiant"],
+                                    "email"           => ["label" => "Email",                        "type" => "email",    "placeholder" => "Votre email"],
+                                    "login"           => ["label" => "Identifiant",                  "type" => "text",     "placeholder" => "Votre identifiant"],
                                     "password"        => ["label" => "Mot de passe",                 "type" => "password", "placeholder" => "Votre mot de passe"],
                                     "confirmPassword" => ["label" => "Confirmation du mot de passe", "type" => "password", "placeholder" => "Confirmer votre mot de passe"],
                                    ];
@@ -106,7 +106,7 @@ class LoginController
     /**
      * Login
      *
-     * @return void
+     * @return view
      */
     public function loginPage()
     {
@@ -166,9 +166,11 @@ class LoginController
         $userToken = $createUser['userToken'];
         $userEmail = $createUser['userEmail'];
 
-        $message = 'Valider votre compte en cliquant sur le lien : http://mablog.projetformationma.com/login/validation/'.$userId.'/'.$userToken.'';
+        $headers = 'From: Blog-MA';
 
-        mail($userEmail, 'Ma-Blog inscription', $message);
+        $message = 'Valider votre compte en cliquant sur le lien : '.$this->superGlobal->getDomain().'/login/validation/'.$userId.'/'.$userToken.'';
+
+        mail($userEmail, 'Ma-Blog inscription', $message, $headers);
 
     }//end sendEmailRegistration()
 
@@ -185,9 +187,11 @@ class LoginController
         $userEmail = $userValue['email'];
         $userToken = $userValue['token'];
 
-        $message = 'Réinitialiser votre mot de passe en cliquant sur le lien : http://mablog.projetformationma.com/login/reset/password/'.$userId.'/'.$userToken.'';
+        $headers = 'From: Blog-MA';
 
-        mail($userEmail, 'Ma-Blog réinitialisation', $message);
+        $message = 'Réinitialiser votre mot de passe en cliquant sur le lien : '.$this->superGlobal->getDomain().'/login/reset/password/'.$userId.'/'.$userToken.'';
+
+        mail($userEmail, 'Ma-Blog réinitialisation', $message, $headers);
 
     }//end sendEmailResetPassword()
 
@@ -195,7 +199,7 @@ class LoginController
     /**
      * Reset Password page
      *
-     * @return void
+     * @return view
      */
     public function resetPasswordPage()
     {
@@ -229,7 +233,7 @@ class LoginController
     /**
      * Reset Password
      *
-     * @return void
+     * @return view
      */
     public function resetPassword()
     {

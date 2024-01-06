@@ -47,18 +47,16 @@ class AdminLoginController
     /**
      * Admin Login
      *
-     * @return void
+     * @return view
      */
     public function adminLoginPage()
     {
         $errors = [];
         $varValue = [];
+        $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
-        if (empty($this->superGlobal->getCurrentUser()) === false) {
-            $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
-            if ((int) $varValue['userAdmin']['FK_type_user_id'] === 2) {
-                $this->redirect->getRedirect('/admin/account');
-            }
+        if ((int) $varValue['userAdmin']['FK_type_user_id'] === 2) {
+            $this->redirect->getRedirect('/admin/account');
         }
 
         if ($this->superGlobal->postExist() === true) {

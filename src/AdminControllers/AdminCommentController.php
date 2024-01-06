@@ -73,10 +73,7 @@ class AdminCommentController extends SuperGlobal
         $this->superGlobal->userIsAdmin();
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
-
-        if ($this->superGlobal->getDataExist('commentSetting') === true) {
-            $commentSetting = $this->superGlobal->getGetData('commentSetting');
-        }
+        $commentSetting = $this->superGlobal->getGetData('commentSetting');
 
         if ($commentSetting === 'invalid') {
             $commentList = $this->adminCommentModel->adminGetCommentByStatut(1);

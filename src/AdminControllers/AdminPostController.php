@@ -65,7 +65,7 @@ class AdminPostController
 
         $this->superGlobal->userIsAdmin();
 
-        $varValue = ['userAdmin' => $this->superGlobal->getCurrentUser()];
+        $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
         $postCategoryList = $this->adminPostModel->adminGetPostCategoryList();
         $varValue['postCategoryList'] = $postCategoryList;
 
@@ -143,7 +143,7 @@ class AdminPostController
      * Get user post
      *
      * @param $userId user id
-     * @return void
+     * @return postList
      */
     public function getUserPost($userId)
     {
@@ -310,9 +310,9 @@ class AdminPostController
 
             if ($varValue['userAdmin']['id'] !== $post['FK_user_id']) {
                 $errors = [
-                        'type'    => 'danger',
-                        'message' => 'Ce n\'est pas votre post',
-                        ];
+                           'type'    => 'danger',
+                           'message' => 'Ce n\'est pas votre post',
+                          ];
             }
 
             if ($this->superGlobal->postFileExist() === true) {
@@ -322,9 +322,9 @@ class AdminPostController
                     $postValues->setPostImage('postImage.'.$fileFormat);
                 } else {
                     $errors = [
-                            'type'    => 'danger',
-                            'message' => "Votre image n'est pas valide",
-                            ];
+                               'type'    => 'danger',
+                               'message' => "Votre image n'est pas valide",
+                              ];
                 }
             } else {
                 $postValues->setPostImage($post['image']);
@@ -490,7 +490,7 @@ class AdminPostController
      * Check Image
      *
      * @param $image image value
-     * @return void
+     * @return boolean
      */
     public function checkImage($image)
     {

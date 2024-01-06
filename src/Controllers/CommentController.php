@@ -49,7 +49,7 @@ class CommentController extends SuperGlobal
      * Get post comment list
      *
      * @param $postId post id
-     * @return comment
+     * @return commentList
      */
     public function getPostCommentList($postId)
     {
@@ -64,7 +64,7 @@ class CommentController extends SuperGlobal
      * Create post comment
      *
      * @param $commentValue comment value
-     * @return comment
+     * @return boolean
      */
     public function createPostComment($commentValue)
     {
@@ -88,7 +88,7 @@ class CommentController extends SuperGlobal
      * Comment post modification
      *
      * @param $commentValue comment value
-     * @return comment
+     * @return boolean
      */
     public function commentPostModification($commentValue)
     {

@@ -57,10 +57,7 @@ class AdminUserController
         $this->superGlobal->userIsAdmin();
 
         $varValue = ['userAdmin' => $this->superGlobal->getCurrentUser()];
-
-        if ($this->superGlobal->getDataExist('userSetting') === true) {
-            $userSetting = $this->superGlobal->getGetData('userSetting');
-        }
+        $userSetting = $this->superGlobal->getGetData('userSetting');
 
         if ($userSetting === 'list') {
             $userList = $this->getUserList();
@@ -99,7 +96,7 @@ class AdminUserController
     /**
      * Get User List
      *
-     * @return view
+     * @return userList
      */
     public function getUserList()
     {
