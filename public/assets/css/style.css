@@ -66,6 +66,10 @@ body {
     max-height: 350px;
 }
 
+.read-post-image {
+    max-height: 650px;
+}
+
 #menu-container {
     width: 300px;
     position: fixed;

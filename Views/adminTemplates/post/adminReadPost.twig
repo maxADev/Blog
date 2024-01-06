@@ -12,11 +12,11 @@
             </div>
         </div>
         <div class="container m-auto text-center mt-3 row justify-content-around">
-            <div class="card col-12 col-sm-12 col-lg-8 col-xl-8 mt-3 mb-5">
+            <div class="card col-12 col-sm-12 col-lg-8 col-xl-8 mt-3 mb-5 p-0">
                 {% if varList.post.image is not null %}
-                    <img class="card-img-top post-image" src={{"/public/upload/#{varList.post.id}/#{varList.post.image}"}} alt="Card image cap">
+                    <img class="card-img-top read-post-image" src={{"/public/upload/#{varList.post.id}/#{varList.post.image}"}} alt="Card image cap">
                 {% else %}
-                    <img class="card-img-top post-image" src="/public/assets/img/post.jpg" alt="Card image cap">
+                    <img class="card-img-top read-post-image" src="/public/assets/img/post.jpg" alt="Card image cap">
                 {% endif %}
                 <div class="card-body">
                     <p class="card-text">{{varList.post.content}}</p>
@@ -29,11 +29,11 @@
                     {% if varList.userAdmin.FK_type_user_id == 2 %}
                         {% if varList.post.FK_user_id == varList.userAdmin.id %}
                             <div class="col-5">
-                                <a class="btn btn-primary" href={{"/admin/post/modification/#{varList.post.id}/#{varList.userAdmin.token}"}}>Modifier</a>
+                                <a class="btn btn-primary" href={{"/admin/post/modification/#{varList.post.slug}/#{varList.userAdmin.token}"}}>Modifier</a>
                             </div>
                         {% else %}
                             <div class="col-5">
-                                <a class="btn btn-primary" href={{"/admin/post/adminModification/#{varList.post.id}/#{varList.userAdmin.token}"}}>Administrer</a>
+                                <a class="btn btn-primary" href={{"/admin/post/adminModification/#{varList.post.slug}/#{varList.userAdmin.token}"}}>Administrer</a>
                             </div>
                         {% endif %}
                     {% endif %}

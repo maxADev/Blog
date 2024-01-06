@@ -14,16 +14,22 @@
         <form action="" method="post" enctype="multipart/form-data">
             {% for keyFormSetting in varList.formSetting|keys %}
                     {% set formValue = varList.formSetting[keyFormSetting] %}
-                    {% if varList.postValue[keyFormSetting] is not empty %}
+                    {% if varList.postValue[keyFormSetting] is not empty and keyFormSetting != 'content' %}
                         <div class="form-group mt-3">
                             <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
                             <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" value="{{"#{varList.postValue[keyFormSetting]}"}}">
                         </div>
-                    {% else %}
+                    {% elseif keyFormSetting != 'content' %}
                         <div class="form-group mt-3">
                             <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
                             <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" placeholder="{{"#{formValue.placeholder}"}}">
                         </div>
+                    {% elseif varList.postValue[keyFormSetting] is not empty and keyFormSetting == 'content' %}
+                        <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
+                        <textarea  class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" placeholder="{{"#{formValue.placeholder}"}}">{{varList.postValue[keyFormSetting]}}</textarea>
+                    {% else %}
+                        <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
+                        <textarea  class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" placeholder="{{"#{formValue.placeholder}"}}"></textarea>
                     {% endif %}
             {% endfor %}
             <div class="col-12 text-center mt-3">

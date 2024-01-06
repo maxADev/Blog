@@ -35,18 +35,6 @@
         <div class="container text-center col-12 col-sm-12 col-lg-8 col-xl-8 bg-light rounded mt-3 p-3">
             <form action="" method="post">
                 <div class="col-12 text-center mt-3">
-                    <label for="user">Auteur</label>
-                    <select class="form-control" name="user">
-                        {% for user in varList.userList %}
-                            {% set selectedUser = '' %}
-                            {% if user.id == varList.postValue.FK_user_id %}
-                                {% set selectedUser = 'selected' %}
-                            {% endif %}
-                            <option value="{{user.id}}" {{selectedUser}}>{{user.last_name}} {{user.first_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-12 text-center mt-3">
                     <label for="statut">Statut</label>
                     <select class="form-control" name="statut">
                         <option value="">Statut</option>

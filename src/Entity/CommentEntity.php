@@ -80,7 +80,7 @@ class CommentEntity
         foreach ($data as $attribut => $value) {
             $method = 'setComment'.str_replace(' ', '', $attribut);
             if (is_callable([$this, $method]) === true) {
-                $this->$method($value);
+                $this->$method(htmlspecialchars($value));
             }
         }
 

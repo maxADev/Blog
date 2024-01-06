@@ -17,8 +17,8 @@
   <route url="/admin/logout" controller="AdminLogin" action="AdminLogout"></route>
   <route url="/admin/posts" controller="AdminPost" action="adminPostList"></route>
   <route url="/admin/post/creation" controller="AdminPost" action="adminPostCreation"></route>
-  <route url="/admin/post/modification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostModification" vars="postId,token"></route>
-  <route url="/admin/post/adminModification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostAdminModification" vars="postId,token"></route>
+  <route url="/admin/post/modification/([a-z-A-Z-0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostModification" vars="postSlug,token"></route>
+  <route url="/admin/post/adminModification/([a-z-A-Z-0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostAdminModification" vars="postSlug,token"></route>
   <route url="/admin/readPost/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminReadPost" vars="postSlug"></route>
   <route url="/admin/post/deletion/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostDeletion" vars="postId,token"></route>
   <route url="/admin/comments" controller="AdminComment" action="adminCommentList"></route>

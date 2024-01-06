@@ -99,10 +99,10 @@ class UserModel extends Model
         $return = false;
         $userToken = self::randomToken(15);
         $sql = 'SELECT user.id, user.email FROM user
-                WHERE email = :email';
+                WHERE login = :login OR email = :login';
 
         $request = $this->connection->prepare($sql);
-        $request->bindValue(":email", $userLogin, PDO::PARAM_STR);
+        $request->bindValue(":login", $userLogin, PDO::PARAM_STR);
         $request->execute();
         $userVerification = $request->fetch(PDO::FETCH_ASSOC);
 
