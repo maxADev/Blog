@@ -1,6 +1,8 @@
 # Blog
 Projet 5 - Créez votre premier blog en PHP
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/72dbe43bd24b49e988c6ffa3b4a3ce95)](https://app.codacy.com/gh/maxADev/Blog/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 <h3>INSTALLATION DU PROJET</h3>
 
 1 - Git clone ou téléchargement du repository.<br>
