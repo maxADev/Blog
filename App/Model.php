@@ -11,25 +11,25 @@ abstract class Model
      *
      * @var host database host
      */
-    private $host = "projetfmablog.mysql.db:3306";
+    private $host = "";
 
     /**
      *
      * @var dbName database name
      */
-    private $dbName = "projetfmablog";
+    private $dbName = "";
 
     /**
      *
      * @var username database login
      */
-    private $username = "projetfmablog";
+    private $username = "";
 
     /**
      *
      * @var password database password
      */
-    private $password = "PshOtondKED7VMo";
+    private $password = "";
 
     /**
      *
