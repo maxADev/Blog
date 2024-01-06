@@ -97,8 +97,9 @@ class PostController
             $varValue['user'] = $this->superGlobal->getCurrentUser();
         };
 
-        if ($this->superGlobal->getDataExist('postId') === true) {
-            $getValuePostId = $this->superGlobal->getGetData('postId');
+        if ($this->superGlobal->getDataExist('postSlug') === true) {
+            $getValuePostSlug = $this->superGlobal->getGetData('postSlug');
+            $getValuePostId = $this->postModel->getPostId($getValuePostSlug);
         }
 
         if ($this->superGlobal->getDataExist('commentId') === true) {
@@ -107,11 +108,11 @@ class PostController
         }
 
         if (empty($getValuePostId) === false) {
-            $post = $this->postModel->getPost($getValuePostId);
+            $post = $this->postModel->getPost($getValuePostId['id']);
             if (empty($post) === false) {
                 $errors = [];
                 $varValue['post'] = $post;
-                $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);
+                $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId['id']);
             }
         }
 
@@ -125,12 +126,12 @@ class PostController
 
             if (empty($errors) === true) {
                 $postValue['FKUserId'] = $varValue['user']['id'];
-                $postValue['FKPostId'] = $getValuePostId;
+                $postValue['FKPostId'] = $getValuePostId['id'];
                 if (isset($postValue['comment_content_modification']) === false) {
                     $commentResult = $this->commentController->createPostComment($postValue);
                     if ($commentResult === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été posté, il est en attente de validation']);
-                        $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId);
+                        $varValue['commentList'] = $this->commentController->getPostCommentList($getValuePostId['id']);
                     } else {
                         $this->superGlobal->createFlashMessage($commentResult);    
                     }
@@ -141,10 +142,10 @@ class PostController
                     $commentResult = $this->commentController->commentPostModification($commentValue);
                     if ($commentResult === true) {
                         $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le commentaire a bien été modifié, il est en attente de validation']);
-                        $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
+                        $this->redirect->getRedirect('/post/'.$post['slug'].'');
                     } else {
                         $this->superGlobal->createFlashMessage($commentResult);
-                        $this->redirect->getRedirect('/post/'.$post['id'].'/'.str_replace(' ', '-', $post['title']).'');
+                        $this->redirect->getRedirect('/post/'.$post['slug'].'');
                     }
                 }
             } else {

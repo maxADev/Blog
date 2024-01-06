@@ -25,14 +25,16 @@
                         <p class="card-text">{{post.chapo}}</p>
                         <div class="col-12 row justify-content-around">
                             <div class="col-12">
-                                <a class="btn btn-primary" href={{"/post/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Lire</a>
+                                <a class="btn btn-primary" href={{"/post/#{post.slug}"}}>Lire</a>
                             </div>
                         </div>
                         {% if post.modification_date is not null %}
-                            <p class="card-text post-date mt-3 mb-0">Posté le {{ post.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
+                            <p class="card-text post-date mt-3 mb-0">Modifié le {{ post.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
                         {% else %}
                             <p class="card-text post-date mt-3 mb-0">Posté le {{ post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
                         {% endif %}
+                        <p class="card-text post-date mb-0">Catégorie : {{post.name}}</p>
+                        <p class="card-text post-date mb-0">Statut : {{post.post_statut_name}}</p>
                     </div>
                 </div>
             {% endfor %}

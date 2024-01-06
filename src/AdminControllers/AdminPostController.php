@@ -6,6 +6,7 @@ use src\Entity\PostEntity;
 use src\AdminModels\AdminPostModel;
 use App\SuperGlobal;
 use App\Redirect;
+use src\AdminControllers\AdminUserController;
 use src\AdminControllers\AdminCommentController;
 
 // Admin Post Controller.
@@ -65,12 +66,20 @@ class AdminPostController
         $this->superGlobal->userIsAdmin();
 
         $varValue = ['userAdmin' => $this->superGlobal->getCurrentUser()];
+        $postCategoryList = $this->adminPostModel->adminGetPostCategoryList();
+        $varValue['postCategoryList'] = $postCategoryList;
+
+        $postStatutList = $this->adminPostModel->adminGetPostStatutList();
+        $varValue['postStatutList'] = $postStatutList;
 
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
             $errors = $this->superGlobal->checkPostData($postValue);
 
-            $postValue['FkUserId'] = $varValue['userAdmin']['id'];
+            $postValue['FKUserId'] = $varValue['userAdmin']['id'];
+            $postValue['FKPostStatutId'] = $postValue['statut'];
+            $postValue['FKCategoryId'] = $postValue['category'];
+
             $postValues = new PostEntity($postValue);
 
             if ($this->superGlobal->postFileExist() === true) {
@@ -86,6 +95,13 @@ class AdminPostController
                 }
             }
 
+            if ($this->adminPostModel->adminCheckPostSlug($postValues->getPostSlug()) !== true) {
+                $errors = [
+                           'type'    => 'danger',
+                           'message' => "Ce titre est déjà pris, merci de changer",
+                          ];
+            }
+
             if (empty($errors) === true && $postValues->isValid() === true) {
                 $checkPostCreation = $this->adminPostModel->adminCreatePost($postValues);
                 if ($checkPostCreation['return'] === true && empty($checkPostCreation['lastPostId']) === false) {
@@ -95,6 +111,8 @@ class AdminPostController
 
                     $this->superGlobal->createFlashMessage(['type' => 'success','message' => 'Le post a bien été créé']);
                     $this->redirect->getRedirect('/admin/posts');
+                } else {
+                    $this->superGlobal->createFlashMessage(['type' => 'danger','message' => 'Erreur lors de la création du post']);;
                 }
             } else {
                 $varValue['postValue'] = $postValue;
@@ -104,10 +122,10 @@ class AdminPostController
         }//end if
 
         $varValue['formSetting'] = [
-                                    "image"   => ["label" => "Image",   "type"   => "file",     "placeholder" => "Votre image(non obligatoire)"],
-                                    "title"   => ["label" => "Titre",   "type"   => "text",     "placeholder" => "Titre du post"],
-                                    "chapo"   => ["label" => "Chapo",   "type"   => "text",     "placeholder" => "Chapo du post"],
-                                    "content" => ["label" => "Contenu", "type"   => "textarea", "placeholder" => "Contenu du post"],
+                                    "image"    => ["label" => "Image",   "type"     => "file",     "placeholder" => "Votre image(non obligatoire)"],
+                                    "title"    => ["label" => "Titre",   "type"     => "text",     "placeholder" => "Titre du post"],
+                                    "chapo"    => ["label" => "Chapo",   "type"     => "text",     "placeholder" => "Chapo du post"],
+                                    "content"  => ["label" => "Contenu", "type"     => "textarea", "placeholder" => "Contenu du post"],
                                    ];
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
@@ -149,11 +167,47 @@ class AdminPostController
         $this->superGlobal->userIsAdmin();
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
+        $varValue['postFilterList'] = [
+                                       ['value' => '1', 'name' => "Mes posts"],
+                                       ['value' => '2', 'name' => 'Publié'],
+                                       ['value' => '3', 'name' => 'Brouillon'],
+                                       ['value' => '4', 'name' => 'Désactivé'],
+                                       ['value' => '5', 'name' => 'Tous'],
+                                      ];
         $postList = $this->adminPostModel->adminGetPostList();
 
         if (empty($postList) === false) {
             $varValue['postList'] = $postList;
         }
+
+        if ($this->superGlobal->postExist() === true) {
+            $postValue = $this->superGlobal->getPost();
+            $varValue['postFilterValue'] = $postValue['postFilter'];
+          
+            foreach($postList as $post) {
+                if ($postValue['postFilter'] == 1) {
+                    if ($post['FK_user_id'] == $varValue['userAdmin']['id']) {
+                        $newPostList[] = $post;
+                    }     
+                } else if($postValue['postFilter'] == 2) {
+                    if ($post['FK_post_statut_id'] == 2) {
+                        $newPostList[] = $post;
+                    }
+                } else if($postValue['postFilter'] == 3) {
+                    if ($post['FK_post_statut_id'] == 1) {
+                        $newPostList[] = $post;
+                    }
+                } else if($postValue['postFilter'] == 4) {
+                    if ($post['FK_post_statut_id'] == 3) {
+                        $newPostList[] = $post;
+                    }
+                } else {
+                    $newPostList[] = $post;
+                }
+            }
+            $varValue['postList'] = $newPostList;
+        }
+
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
@@ -179,13 +233,14 @@ class AdminPostController
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
-        if ($this->superGlobal->getDataExist('postId') === false) {
+        if ($this->superGlobal->getDataExist('postSlug') === false) {
             $this->redirect->getRedirect('/admin/posts');
         }
 
-        $getValuePostId = $this->superGlobal->getGetData('postId');
+        $getValuePostSlug = $this->superGlobal->getGetData('postSlug');
+        $getValuePostId = $this->adminPostModel->adminGetPostId($getValuePostSlug);
 
-        $post = $this->adminPostModel->adminGetPost($getValuePostId);
+        $post = $this->adminPostModel->adminGetPost($getValuePostId['id']);
         if (empty($post) === false) {
             $varValue['post'] = $post;
             $varValue['commentList'] = $this->adminCommentController->adminGetPostCommentList($getValuePostId);
@@ -222,6 +277,16 @@ class AdminPostController
             $this->redirect->getRedirect('/admin/posts');
         }
 
+        $postCategoryList = $this->adminPostModel->adminGetPostCategoryList();
+        $varValue['postCategoryList'] = $postCategoryList;
+
+        $postStatutList = $this->adminPostModel->adminGetPostStatutList();
+        $varValue['postStatutList'] = $postStatutList;
+
+        $adminUserController = new AdminUserController();
+        $userList = $adminUserController->getUserList();
+        $varValue['userList'] = $userList;
+
         $getValuePostId = $this->superGlobal->getGetData('postId');
         $post = $this->adminPostModel->adminGetPost($getValuePostId);
         if (empty($post) === false) {
@@ -233,6 +298,10 @@ class AdminPostController
             $errors = $this->superGlobal->checkPostData($postValue);
 
             $postValue['id'] = $getValuePostId;
+            $postValue['FKUserId'] = $postValue['user'];
+            $postValue['FKPostStatutId'] = $postValue['statut'];
+            $postValue['FKCategoryId'] = $postValue['category'];
+
             $postValues = new PostEntity($postValue);
 
             if ($varValue['userAdmin']['id'] !== $post['FK_user_id']) {
@@ -255,6 +324,13 @@ class AdminPostController
                 }
             }
 
+            if ($post['title'] != $postValues->getPostTitle() && $this->adminPostModel->adminCheckPostSlug($postValues->getPostSlug()) !== true) {
+                $errors = [
+                           'type'    => 'danger',
+                           'message' => "Ce titre est déjà pris, merci de changer",
+                          ];
+            }
+
             if (empty($errors) === true && $postValues->isValid() === true) {
                 if ($this->adminPostModel->adminPostModification($postValues) === true) {
                     if (empty($image) === false) {
@@ -263,7 +339,7 @@ class AdminPostController
                     }
 
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
-                    $this->redirect->getRedirect('/admin/post/'.$getValuePostId.'/'.str_replace(' ', '-', $postValue['title']).'');
+                    $this->redirect->getRedirect('/admin/readPost/'.$postValues->getPostSlug().'');
                 }
             } else {
                 $varValue['postValue'] = $postValue;
@@ -288,6 +364,74 @@ class AdminPostController
         return $view;
 
     }//end adminPostModification()
+
+
+    /**
+     * Admin Post Admin Modification
+     *
+     * @return view
+     */
+    public function adminPostAdminModification()
+    {
+        $image = '';
+        $varValue = [];
+        $errors = [];
+
+        $this->superGlobal->userIsAdmin();
+        $this->superGlobal->checkToken($this->superGlobal->getGetData('token'));
+
+        $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
+
+        if ($this->superGlobal->getDataExist('postId') === false) {
+            $this->redirect->getRedirect('/admin/posts');
+        }
+
+        $postCategoryList = $this->adminPostModel->adminGetPostCategoryList();
+        $varValue['postCategoryList'] = $postCategoryList;
+
+        $postStatutList = $this->adminPostModel->adminGetPostStatutList();
+        $varValue['postStatutList'] = $postStatutList;
+
+        $postStatutList = $this->adminPostModel->adminGetPostStatutList();
+        $varValue['postStatutList'] = $postStatutList;
+
+        $adminUserController = new AdminUserController();
+        $userList = $adminUserController->getUserList();
+        $varValue['userList'] = $userList;
+
+        $getValuePostId = $this->superGlobal->getGetData('postId');
+        $post = $this->adminPostModel->adminGetPost($getValuePostId);
+        if (empty($post) === false) {
+            $varValue['postValue'] = $post;
+        }
+
+        if ($this->superGlobal->postExist() === true) {
+            $postValue = $this->superGlobal->getPost();
+            $errors = $this->superGlobal->checkPostData($postValue);
+
+            $postValue['id'] = $getValuePostId;
+            $postValue['FKUserId'] = $postValue['user'];
+            $postValue['FKPostStatutId'] = $postValue['statut'];
+
+            if (empty($errors) === true) {
+                if ($this->adminPostModel->adminPostAdminModification($postValue) === true) {
+                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
+                    $this->redirect->getRedirect('/admin/readPost/'.$post['slug'].'');
+                }
+            } else {
+                $this->superGlobal->createFlashMessage($postValues->getError());
+            }
+        }
+
+        $flashMessageList = $this->superGlobal->getFlashMessage();
+        $view = [];
+        $view['folder'] = 'adminTemplates\post';
+        $view['file'] = 'adminPostAdminModification.twig';
+        $view['var'] = $varValue;
+        $view['flashMessageList'] = $flashMessageList;
+        return $view;
+
+    }//end adminPostAdminModification()
 
 
     /**

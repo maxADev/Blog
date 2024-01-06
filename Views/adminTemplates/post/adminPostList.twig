@@ -11,6 +11,22 @@
         </div>
     </div>
     <div class="container">
+        <div class="container text-center col-12 col-sm-12 col-lg-8 col-xl-8 bg-light rounded mt-3 p-3">
+            <form action="" method="post">
+                <label for="postFilter">Filtrer les posts</label>
+                <select class="form-control" name="postFilter">
+                    <option value="">Choisir</option>
+                    {% for postFilter in varList.postFilterList %}
+                        {% set selectedPostFilter = '' %}
+                        {% if varList.postFilterValue == postFilter.value %}
+                            {% set selectedPostFilter = 'selected' %}
+                        {% endif %}
+                        <option value={{"#{postFilter.value}"}} {{selectedPostFilter}}>{{postFilter.name}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary mt-3">Filtrer</button>
+            </from>
+        </div>
     {% if varList.postList is defined %}
         <div class="container-fluid mt-3 row justify-content-around">
             {% for post in varList.postList %}
@@ -24,23 +40,31 @@
                         <h5 class="card-title">{{post.title}}</h5>
                         <p class="card-text">{{post.chapo}}</p>
                         <div class="col-12">
-                            <a class="btn btn-primary" href={{"/admin/post/#{post.id}/#{post.title}"|replace({' ': '-'})}}>Lire</a>
+                            <a class="btn btn-primary" href={{"/admin/readPost/#{post.slug}"}}>Lire</a>
                         </div>
-                        {% if varList.userAdmin.FK_type_user_id == 2 and post.FK_user_id == varList.userAdmin.id %}
-                        <div class="container col-12 row justify-content-around p-0">
-                            <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
-                                <a class="btn btn-primary" href={{"/admin/post/modification/#{post.id}/#{varList.userAdmin.token}"}}>Modifier</a>
+                        {% if varList.userAdmin.FK_type_user_id == 2 %}
+                            <div class="container col-12 row justify-content-around p-0">
+                                {% if post.FK_user_id == varList.userAdmin.id %}
+                                        <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
+                                            <a class="btn btn-primary" href={{"/admin/post/modification/#{post.id}/#{varList.userAdmin.token}"}}>Modifier</a>
+                                        </div>
+                                        <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
+                                            <a class="btn btn-danger admin-delete-post" data-post-id={{"#{post.id}"}} data-token={{"#{varList.userAdmin.token}"}}>Supprimer</a>
+                                        </div>
+                                {% else %}
+                                        <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
+                                            <a class="btn btn-primary" href={{"/admin/post/adminModification/#{post.id}/#{varList.userAdmin.token}"}}>Administrer</a>
+                                        </div>
+                                {% endif %}
                             </div>
-                            <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
-                                <a class="btn btn-danger admin-delete-post" data-post-id={{"#{post.id}"}} data-token={{"#{varList.userAdmin.token}"}}>Supprimer</a>
-                            </div>
-                        </div>
                         {% endif %}
                         {% if post.modification_date is not null %}
-                            <p class="card-text post-date mt-3 mb-0">Posté le {{ post.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
+                            <p class="card-text post-date mt-3 mb-0">Modifié le {{post.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
                         {% else %}
-                            <p class="card-text post-date mt-3 mb-0">Posté le {{ post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
+                            <p class="card-text post-date mt-3 mb-0">Posté le {{post.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
                         {% endif %}
+                        <p class="card-text post-date mb-0">Catégorie : {{post.name}}</p>
+                        <p class="card-text post-date mb-0">Statut : {{post.post_statut_name}}</p>
                     </div>
                 </div>
             {% endfor %}

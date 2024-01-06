@@ -1,0 +1,73 @@
+{% extends "adminLayout.twig" %}
+{% block head %}
+    <title>Modifier un post</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+        <div class="container col-12">
+            <h3>Modifier un post</h3>
+            <p>Modifier votre post</p>
+        </div>
+    </div>
+    <div class="container">
+    {% if varList.postValue is defined %}
+        <div class="container-fluid mt-3 row justify-content-around">
+            <div class="card post bg-light col-12 col-sm-5 col-lg-4 col-xl-3 m-1 mt-5 p-0">
+                {% if varList.postValue.image is not null %}
+                    <img class="card-img-top post-image" src={{"https://mablog.projetformationma.com/public/upload/#{varList.postValue.id}/#{varList.postValue.image}"}} alt="Card image cap">
+                {% else %}
+                    <img class="card-img-top post-image" src="https://mablog.projetformationma.com/public/assets/img/post.jpg" alt="Card image cap">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{varList.postValue.title}}</h5>
+                    <p class="card-text">{{varList.postValue.chapo}}</p>
+                    {% if varList.postValue.modification_date is not null %}
+                        <p class="card-text post-date mt-3 mb-0">Modifié le {{varList.postValue.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
+                    {% else %}
+                        <p class="card-text post-date mt-3 mb-0">Posté le {{varList.postValue.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
+                    {% endif %}
+                    <p class="card-text post-date mb-0">Catégorie : {{varList.postValue.name}}</p>
+                    <p class="card-text post-date mb-0">Statut : {{varList.postValue.post_statut_name}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="container text-center col-12 col-sm-12 col-lg-8 col-xl-8 bg-light rounded mt-3 p-3">
+            <form action="" method="post">
+                <div class="col-12 text-center mt-3">
+                    <label for="user">Auteur</label>
+                    <select class="form-control" name="user">
+                        {% for user in varList.userList %}
+                            {% set selectedUser = '' %}
+                            {% if user.id == varList.postValue.FK_user_id %}
+                                {% set selectedUser = 'selected' %}
+                            {% endif %}
+                            <option value="{{user.id}}" {{selectedUser}}>{{user.last_name}} {{user.first_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 text-center mt-3">
+                    <label for="statut">Statut</label>
+                    <select class="form-control" name="statut">
+                        <option value="">Statut</option>
+                        {% for postStatut in varList.postStatutList %}
+                            {% set selectedStatut = '' %}
+                            {% if postStatut.id == varList.postValue.FK_post_statut_id %}
+                                {% set selectedStatut = 'selected' %}
+                            {% endif %}
+                            <option value="{{postStatut.id}}" {{selectedStatut}}>{{postStatut.post_statut_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Modifier</button>
+                <a class="btn btn-danger mt-3" href={{"/admin/readPost/#{varList.postValue.slug}"}}>Annuler</a>
+            </form>
+        </div>
+        {% else %}
+            <div class="container text-center mt-3">
+                <p>Aucun post trouvé</p>
+            </div>
+        {% endif %}
+    </div>
+    </div>
+{% endblock %}

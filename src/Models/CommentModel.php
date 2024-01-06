@@ -75,7 +75,7 @@ class CommentModel extends Model
      */
     public function getUserComments($userId)
     {
-        $sql = 'SELECT comment.id, comment.content, comment.creation_date, comment.modification_date, comment.FK_statut_comment_id, comment.FK_user_id, comment.FK_post_id, comment_statut.comment_statut_name, post.title FROM comment
+        $sql = 'SELECT comment.id, comment.content, comment.creation_date, comment.modification_date, comment.FK_statut_comment_id, comment.FK_user_id, comment_statut.comment_statut_name, post.slug FROM comment
                 INNER JOIN post ON post.id = comment.FK_post_id
                 INNER JOIN comment_statut ON comment_statut.id = comment.FK_statut_comment_id
                 WHERE comment.FK_user_id = :FK_user_id';

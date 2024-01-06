@@ -30,8 +30,46 @@
                     </div>
                 {% endif %}
             {% endfor %}
+            <div class="col-12 text-center mt-3">
+                <label for="category">Catégorie</label>
+                <select class="form-control" name="category">
+                    <option value="">Catégorie</option>
+                    {% for postCategory in varList.postCategoryList %}
+                        {% set selectedCategory = '' %}
+                        {% if postCategory.id == varList.postValue.FK_category_id %}
+                            {% set selectedCategory = 'selected' %}
+                        {% endif %}
+                        <option value="{{postCategory.id}}" {{selectedCategory}}>{{postCategory.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 text-center mt-3">
+                <label for="statut">Statut</label>
+                <select class="form-control" name="statut">
+                    <option value="">Statut</option>
+                    {% for postStatut in varList.postStatutList %}
+                        {% set selectedStatut = '' %}
+                        {% if postStatut.id == varList.postValue.FK_post_statut_id %}
+                            {% set selectedStatut = 'selected' %}
+                        {% endif %}
+                        <option value="{{postStatut.id}}" {{selectedStatut}}>{{postStatut.post_statut_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 text-center mt-3">
+                <label for="user">Auteur</label>
+                <select class="form-control" name="user">
+                    {% for user in varList.userList %}
+                        {% set selectedUser = '' %}
+                        {% if user.id == varList.postValue.FK_user_id %}
+                            {% set selectedUser = 'selected' %}
+                        {% endif %}
+                        <option value="{{user.id}}" {{selectedUser}}>{{user.last_name}} {{user.first_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary mt-3">Modifier</button>
-            <a class="btn btn-danger mt-3" href={{"/admin/post/#{varList.postValue.id}/#{varList.postValue.title}"|replace({' ': '-'})}}>Annuler</a>
+            <a class="btn btn-danger mt-3" href={{"/admin/readPost/#{varList.postValue.slug}"}}>Annuler</a>
         </form>
     </div>
 {% endblock %}

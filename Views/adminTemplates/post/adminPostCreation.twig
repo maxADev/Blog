@@ -13,19 +13,37 @@
     <div class="container text-center col-12 col-sm-12 col-lg-8 col-xl-8 bg-light rounded p-3">
         <form action="" method="post" enctype="multipart/form-data">
             {% for keyFormSetting in varList.formSetting|keys %}
-                {% set formValue = varList.formSetting[keyFormSetting] %}
-                {% if varList.postValue[keyFormSetting] is not empty %}
-                    <div class="form-group mt-3">
-                        <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
-                        <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" value="{{"#{varList.postValue[keyFormSetting]}"}}">
-                    </div>
-                {% else %}
-                    <div class="form-group mt-3">
-                        <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
-                        <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" placeholder="{{"#{formValue.placeholder}"}}">
-                    </div>
-                {% endif %}
+                    {% set formValue = varList.formSetting[keyFormSetting] %}
+                    {% if varList.postValue[keyFormSetting] is not empty %}
+                        <div class="form-group mt-3">
+                            <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
+                            <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" value="{{"#{varList.postValue[keyFormSetting]}"}}">
+                        </div>
+                    {% else %}
+                        <div class="form-group mt-3">
+                            <label for="{{"#{keyFormSetting}"}}">{{formValue.label}}</label>
+                            <input type="{{"#{formValue.type}"}}" class="form-control" id="{{"#{keyFormSetting}"}}" name="{{"#{keyFormSetting}"}}" placeholder="{{"#{formValue.placeholder}"}}">
+                        </div>
+                    {% endif %}
             {% endfor %}
+            <div class="col-12 text-center mt-3">
+                <label for="category">Catégorie</label>
+                <select class="form-control" name="category">
+                    <option value="">Catégorie</option>
+                    {% for postCategory in varList.postCategoryList %}
+                        <option value="{{postCategory.id}}">{{postCategory.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 text-center mt-3">
+                <label for="statut">Statut</label>
+                <select class="form-control" name="statut">
+                    <option value="">Statut</option>
+                    {% for postStatut in varList.postStatutList %}
+                        <option value="{{postStatut.id}}">{{postStatut.post_statut_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary mt-3">Valider</button>
         </form>
     </div>
