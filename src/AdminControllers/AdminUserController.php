@@ -106,7 +106,7 @@ class AdminUserController
         $this->superGlobal->userIsAdmin();
 
         $userList = $this->adminUserModel->adminGetUserList();
-        
+
         return $userList;
 
     }//end getUserList()

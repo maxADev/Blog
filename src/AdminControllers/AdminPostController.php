@@ -109,10 +109,10 @@ class AdminPostController
                         $this->uploadImage($image, $checkPostCreation['lastPostId'], $fileFormat);
                     }
 
-                    $this->superGlobal->createFlashMessage(['type' => 'success','message' => 'Le post a bien été créé']);
+                    $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été créé']);
                     $this->redirect->getRedirect('/admin/posts');
                 } else {
-                    $this->superGlobal->createFlashMessage(['type' => 'danger','message' => 'Erreur lors de la création du post']);;
+                    $this->superGlobal->createFlashMessage(['type' => 'danger', 'message' => 'Erreur lors de la création du post']);;
                 }
             } else {
                 $varValue['postValue'] = $postValue;
@@ -163,6 +163,7 @@ class AdminPostController
     public function adminPostList()
     {
         $varValue = [];
+        $newPostList = [];
 
         $this->superGlobal->userIsAdmin();
 
@@ -183,31 +184,31 @@ class AdminPostController
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
             $varValue['postFilterValue'] = $postValue['postFilter'];
-          
-            foreach($postList as $post) {
-                if ($postValue['postFilter'] == 1) {
+
+            foreach ($postList as $post) {
+                if ($postValue['postFilter'] === 1) {
                     if ($post['FK_user_id'] == $varValue['userAdmin']['id']) {
                         $newPostList[] = $post;
-                    }     
-                } else if($postValue['postFilter'] == 2) {
-                    if ($post['FK_post_statut_id'] == 2) {
+                    } 
+                } else if ($postValue['postFilter'] === 2) {
+                    if ($post['FK_post_statut_id'] === 2) {
                         $newPostList[] = $post;
                     }
-                } else if($postValue['postFilter'] == 3) {
-                    if ($post['FK_post_statut_id'] == 1) {
+                } else if ($postValue['postFilter'] === 3) {
+                    if ($post['FK_post_statut_id'] === 1) {
                         $newPostList[] = $post;
                     }
-                } else if($postValue['postFilter'] == 4) {
-                    if ($post['FK_post_statut_id'] == 3) {
+                } else if ($postValue['postFilter'] === 4) {
+                    if ($post['FK_post_statut_id'] === 3) {
                         $newPostList[] = $post;
                     }
                 } else {
                     $newPostList[] = $post;
                 }
+
             }
             $varValue['postList'] = $newPostList;
         }
-
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
         $view = [];
@@ -324,7 +325,7 @@ class AdminPostController
                 }
             }
 
-            if ($post['title'] != $postValues->getPostTitle() && $this->adminPostModel->adminCheckPostSlug($postValues->getPostSlug()) !== true) {
+            if ($post['title'] !== $postValues->getPostTitle() && $this->adminPostModel->adminCheckPostSlug($postValues->getPostSlug()) !== true) {
                 $errors = [
                            'type'    => 'danger',
                            'message' => "Ce titre est déjà pris, merci de changer",
@@ -373,7 +374,6 @@ class AdminPostController
      */
     public function adminPostAdminModification()
     {
-        $image = '';
         $varValue = [];
         $errors = [];
 
@@ -418,8 +418,6 @@ class AdminPostController
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
                     $this->redirect->getRedirect('/admin/readPost/'.$post['slug'].'');
                 }
-            } else {
-                $this->superGlobal->createFlashMessage($postValues->getError());
             }
         }
 

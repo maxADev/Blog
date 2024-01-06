@@ -212,6 +212,7 @@ class AdminPostModel extends Model
     /**
      * Admin check post slug
      *
+     * @param $value value
      * @return boolean
      */
     public function adminCheckPostSlug($value)

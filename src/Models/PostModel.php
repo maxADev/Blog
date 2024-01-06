@@ -96,6 +96,7 @@ class PostModel extends Model
     /**
      * Get post id
      *
+     * @param $value value
      * @return int
      */
     public function getPostId($value)
