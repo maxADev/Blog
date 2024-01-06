@@ -79,7 +79,9 @@
   </div>
   <footer class="container-fluid col-12 bg-dark footer-container text-center text-white row p-1">
     <div class="container col-6">
-      <a href="admin/login"><i class="bi bi-box-arrow-in-right"></i> Admin</a>
+      {% if varList.user is not defined %}
+        <a href="admin/login"><i class="bi bi-box-arrow-in-right"></i> Admin</a>
+      {% endif %}
     </div>
     <div class="container col-6">
       <a href="/legalNotice"><i class="bi bi-archive"></i> Mentions Légales</a>

@@ -444,4 +444,24 @@ class SuperGlobal
     }//end checkSession()
 
 
+    /**
+     * Get domain
+     *
+     * @return string
+     */
+    public function getDomain()
+    {
+        $http = 'http';
+
+        if ($_SERVER['HTTPS'] === 'on') {
+            $http = 'https';
+        }
+
+        $url = $http.'://'.$_SERVER['SERVER_NAME'];
+
+        return $url;
+
+    }//end getDomain()
+
+
 }//end class

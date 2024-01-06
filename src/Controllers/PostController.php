@@ -167,7 +167,7 @@ class PostController
     /**
      * Get post list home
      *
-     * @return view
+     * @return postList
      */
     public function postListHome()
     {
