@@ -12,5 +12,10 @@
             "src\\AdminModels\\": "src/AdminModels/",
             "src\\Entity\\": "src/Entity/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"copy('vendor/twbs/bootstrap/dist/css/bootstrap.min.css', 'public/assets/css/bootstrap.min.css');\""
+        ]
     }
 }
