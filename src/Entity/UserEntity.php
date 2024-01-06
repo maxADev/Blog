@@ -92,7 +92,7 @@ class UserEntity
         foreach ($data as $attribut => $value) {
             $method = 'setUser'.str_replace(' ', '', $attribut);
             if (is_callable([$this, $method]) === true) {
-                $this->$method($value);
+                $this->$method(htmlspecialchars($value));
             }
         }
 

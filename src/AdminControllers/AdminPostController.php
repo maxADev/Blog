@@ -173,7 +173,6 @@ class AdminPostController
                                        ['value' => '2', 'name' => 'Publié'],
                                        ['value' => '3', 'name' => 'Brouillon'],
                                        ['value' => '4', 'name' => 'Désactivé'],
-                                       ['value' => '5', 'name' => 'Tous'],
                                       ];
         $postList = $this->adminPostModel->adminGetPostList();
 
@@ -246,7 +245,7 @@ class AdminPostController
         $post = $this->adminPostModel->adminGetPost($getValuePostId['id']);
         if (empty($post) === false) {
             $varValue['post'] = $post;
-            $varValue['commentList'] = $this->adminCommentController->adminGetPostCommentList($getValuePostId);
+            $varValue['commentList'] = $this->adminCommentController->adminGetPostCommentList($getValuePostId['id']);
         }
 
         $flashMessageList = $this->superGlobal->getFlashMessage();
@@ -276,7 +275,7 @@ class AdminPostController
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
-        if ($this->superGlobal->getDataExist('postId') === false) {
+        if ($this->superGlobal->getDataExist('postSlug') === false) {
             $this->redirect->getRedirect('/admin/posts');
         }
 
@@ -290,8 +289,10 @@ class AdminPostController
         $userList = $adminUserController->getUserList();
         $varValue['userList'] = $userList;
 
-        $getValuePostId = $this->superGlobal->getGetData('postId');
-        $post = $this->adminPostModel->adminGetPost($getValuePostId);
+        $getValuePostSlug = $this->superGlobal->getGetData('postSlug');
+        $getValuePostId = $this->adminPostModel->adminGetPostId($getValuePostSlug);
+
+        $post = $this->adminPostModel->adminGetPost($getValuePostId['id']);
         if (empty($post) === false) {
             $varValue['postValue'] = $post;
         }
@@ -300,7 +301,7 @@ class AdminPostController
             $postValue = $this->superGlobal->getPost();
             $errors = $this->superGlobal->checkPostData($postValue);
 
-            $postValue['id'] = $getValuePostId;
+            $postValue['id'] = $getValuePostId['id'];
             $postValue['FKUserId'] = $postValue['user'];
             $postValue['FKPostStatutId'] = $postValue['statut'];
             $postValue['FKCategoryId'] = $postValue['category'];
@@ -339,8 +340,8 @@ class AdminPostController
             if (empty($errors) === true && $postValues->isValid() === true) {
                 if ($this->adminPostModel->adminPostModification($postValues) === true) {
                     if (empty($image) === false) {
-                        $this->deleteImage($getValuePostId);
-                        $this->uploadImage($image, $getValuePostId, $fileFormat);
+                        $this->deleteImage($getValuePostId['id']);
+                        $this->uploadImage($image, $getValuePostId['id'], $fileFormat);
                     }
 
                     $this->superGlobal->createFlashMessage(['type' => 'success', 'message' => 'Le post a bien été modifié']);
@@ -386,7 +387,7 @@ class AdminPostController
 
         $varValue['userAdmin'] = $this->superGlobal->getCurrentUser();
 
-        if ($this->superGlobal->getDataExist('postId') === false) {
+        if ($this->superGlobal->getDataExist('postSlug') === false) {
             $this->redirect->getRedirect('/admin/posts');
         }
 
@@ -399,12 +400,10 @@ class AdminPostController
         $postStatutList = $this->adminPostModel->adminGetPostStatutList();
         $varValue['postStatutList'] = $postStatutList;
 
-        $adminUserController = new AdminUserController();
-        $userList = $adminUserController->getUserList();
-        $varValue['userList'] = $userList;
+        $getValuePostSlug = $this->superGlobal->getGetData('postSlug');
+        $getValuePostId = $this->adminPostModel->adminGetPostId($getValuePostSlug);
 
-        $getValuePostId = $this->superGlobal->getGetData('postId');
-        $post = $this->adminPostModel->adminGetPost($getValuePostId);
+        $post = $this->adminPostModel->adminGetPost($getValuePostId['id']);
         if (empty($post) === false) {
             $varValue['postValue'] = $post;
         }
@@ -413,8 +412,7 @@ class AdminPostController
             $postValue = $this->superGlobal->getPost();
             $errors = $this->superGlobal->checkPostData($postValue);
 
-            $postValue['id'] = $getValuePostId;
-            $postValue['FKUserId'] = $postValue['user'];
+            $postValue['id'] = $getValuePostId['id'];
             $postValue['FKPostStatutId'] = $postValue['statut'];
 
             if (empty($errors) === true) {

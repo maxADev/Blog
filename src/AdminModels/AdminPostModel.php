@@ -141,10 +141,9 @@ class AdminPostModel extends Model
      */
     public function adminPostAdminModification($postValues)
     {
-        $sql = 'UPDATE post SET FK_user_id = :FK_user_id, FK_post_statut_id = :FK_post_statut_id, modification_date = NOW() WHERE id = :id';
+        $sql = 'UPDATE post SET FK_post_statut_id = :FK_post_statut_id, modification_date = NOW() WHERE id = :id';
 
         $request = $this->connection->prepare($sql);
-        $request->bindValue(":FK_user_id", $postValues['FKUserId'], PDO::PARAM_INT);
         $request->bindValue(":FK_post_statut_id", $postValues['FKPostStatutId'], PDO::PARAM_INT);
         $request->bindValue(":id", $postValues['id'], PDO::PARAM_INT);
 

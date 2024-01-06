@@ -15,7 +15,7 @@
             <form action="" method="post">
                 <label for="postFilter">Filtrer les posts</label>
                 <select class="form-control" name="postFilter">
-                    <option value="">Choisir</option>
+                    <option value="5">Tous les posts</option>
                     {% for postFilter in varList.postFilterList %}
                         {% set selectedPostFilter = '' %}
                         {% if varList.postFilterValue == postFilter.value %}
@@ -46,14 +46,14 @@
                             <div class="container col-12 row justify-content-around p-0">
                                 {% if post.FK_user_id == varList.userAdmin.id %}
                                         <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
-                                            <a class="btn btn-primary" href={{"/admin/post/modification/#{post.id}/#{varList.userAdmin.token}"}}>Modifier</a>
+                                            <a class="btn btn-primary" href={{"/admin/post/modification/#{post.slug}/#{varList.userAdmin.token}"}}>Modifier</a>
                                         </div>
                                         <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
                                             <a class="btn btn-danger admin-delete-post" data-post-id={{"#{post.id}"}} data-token={{"#{varList.userAdmin.token}"}}>Supprimer</a>
                                         </div>
                                 {% else %}
                                         <div class="col-5 col-sm-12 col-lg-12 col-xl-5 mt-3">
-                                            <a class="btn btn-primary" href={{"/admin/post/adminModification/#{post.id}/#{varList.userAdmin.token}"}}>Administrer</a>
+                                            <a class="btn btn-primary" href={{"/admin/post/adminModification/#{post.slug}/#{varList.userAdmin.token}"}}>Administrer</a>
                                         </div>
                                 {% endif %}
                             </div>
