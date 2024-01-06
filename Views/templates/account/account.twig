@@ -27,7 +27,7 @@
                         <p>{{comment.comment_statut_name}}</p>
                     </div>
                     <div class="col-12 mt-3 mb-3 text-center">
-                        <a class="btn btn-primary" href={{"/post/#{comment.FK_post_id}/#{comment.title}"|replace({' ': '-'})}}>Voir Le Post concerné</a>
+                        <a class="btn btn-primary" href={{"/post/#{comment.slug}"}}>Voir Le Post</a>
                     </div>
                     <div class="container mt-3 p-0">
                         <p class="post-date">Posté le 

@@ -5,35 +5,43 @@
 
 {% block content %}
    {% if varList.post is defined %}
-   <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
-        <div class="container col-12">
-            <h3>{{varList.post.title}}</h3>
-            <p>{{varList.post.chapo}}</p>
-        </div>
-    </div>
-    <div class="container m-auto text-center mt-3 row justify-content-around">
-        <div class="card col-12 col-sm-12 col-lg-8 col-xl-8 mt-3 mb-5">
-            {% if varList.post.image is not null %}
-                <img class="card-img-top post-image" src={{"https://mablog.projetformationma.com/public/upload/#{varList.post.id}/#{varList.post.image}"}} alt="Card image cap">
-            {% else %}
-                <img class="card-img-top post-image" src="https://mablog.projetformationma.com/public/assets/img/post.jpg" alt="Card image cap">
-            {% endif %}
-            <div class="card-body">
-                <p class="card-text">{{varList.post.content}}</p>
-                {% if varList.post.modification_date is not null %}
-                    <p class="card-text"><i class="bi bi-calendar"></i> {{ varList.post.modification_date|date("d/m/Y", "Europe/Paris") }}</p>
-                {% else %}
-                    <p class="card-text"><i class="bi bi-calendar"></i> {{ varList.post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
-                {% endif %}
-                <p class="card-text">Ecrit par : {{varList.post.last_name}} {{varList.post.first_name}}</p>
-                {% if varList.userAdmin.FK_type_user_id == 2 and post.FK_user_id == varList.userAdmin.id %}
-                    <div class="col-5">
-                        <a class="btn btn-primary" href={{"/admin/post/modification/#{varList.post.id}/#{varList.post.title}"|replace({' ': '-'})}}>Modifier</a>
-                    </div>
-                {% endif %}
+    <div class="container-fluid bg-light p-3 border m-0 mb-5 row">
+            <div class="container col-12">
+                <h3>{{varList.post.title}}</h3>
+                <p>{{varList.post.chapo}}</p>
             </div>
         </div>
-    </div>
+        <div class="container m-auto text-center mt-3 row justify-content-around">
+            <div class="card col-12 col-sm-12 col-lg-8 col-xl-8 mt-3 mb-5">
+                {% if varList.post.image is not null %}
+                    <img class="card-img-top post-image" src={{"/public/upload/#{varList.post.id}/#{varList.post.image}"}} alt="Card image cap">
+                {% else %}
+                    <img class="card-img-top post-image" src="/public/assets/img/post.jpg" alt="Card image cap">
+                {% endif %}
+                <div class="card-body">
+                    <p class="card-text">{{varList.post.content}}</p>
+                    {% if post.modification_date is not null %}
+                        <p class="card-text post-date mt-3 mb-0">Modifié le {{varList.post.modification_date|date("d/m/Y", "Europe/Paris")}}</p>
+                    {% else %}
+                        <p class="card-text post-date mt-3 mb-0">Posté le {{varList.post.creation_date|date("d/m/Y", "Europe/Paris")}}</p>     
+                    {% endif %}
+                    <p class="card-text">Ecrit par : {{varList.post.last_name}} {{varList.post.first_name}}</p>
+                    {% if varList.userAdmin.FK_type_user_id == 2 %}
+                        {% if varList.post.FK_user_id == varList.userAdmin.id %}
+                            <div class="col-5">
+                                <a class="btn btn-primary" href={{"/admin/post/modification/#{varList.post.id}/#{varList.userAdmin.token}"}}>Modifier</a>
+                            </div>
+                        {% else %}
+                            <div class="col-5">
+                                <a class="btn btn-primary" href={{"/admin/post/adminModification/#{varList.post.id}/#{varList.userAdmin.token}"}}>Administrer</a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    <p class="card-text post-date mb-0">Catégorie : {{varList.post.name}}</p>
+                    <p class="card-text post-date mb-0">Statut : {{varList.post.post_statut_name}}</p>
+                </div>
+            </div>
+        </div>
         {% if varList.commentList is defined %}
             <div class="container text-center mt-3">
                 {% for comment in varList.commentList %}

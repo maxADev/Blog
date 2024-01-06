@@ -14,9 +14,9 @@
         <div class="container m-auto text-center mt-3 row justify-content-around">
             <div class="card col-12 col-sm-12 col-lg-8 col-xl-8 mt-3 mb-5">
                 {% if varList.post.image is not null %}
-                    <img class="card-img-top post-image" src={{"https://mablog.projetformationma.com/public/upload/#{varList.post.id}/#{varList.post.image}"}} alt="Card image cap">
+                    <img class="card-img-top post-image" src={{"/public/upload/#{varList.post.id}/#{varList.post.image}"}} alt="Card image cap">
                 {% else %}
-                    <img class="card-img-top post-image" src="https://mablog.projetformationma.com/public/assets/img/post.jpg" alt="Card image cap">
+                    <img class="card-img-top post-image" src="/public/assets/img/post.jpg" alt="Card image cap">
                 {% endif %}
                 <div class="card-body">
                     <p class="card-text">{{varList.post.content}}</p>
@@ -26,6 +26,8 @@
                         <p class="card-text"><i class="bi bi-calendar"></i> {{ varList.post.creation_date|date("d/m/Y", "Europe/Paris") }}</p>     
                     {% endif %}
                     <p class="card-text">Ecrit par : {{varList.post.last_name}} {{varList.post.first_name}}</p>
+                    <p class="card-text post-date mb-0">Catégorie : {{varList.post.name}}</p>
+                    <p class="card-text post-date mb-0">Statut : {{varList.post.post_statut_name}}</p
                 </div>
             </div>
         </div>
@@ -50,7 +52,7 @@
                                 {% if comment.FK_user_id == varList.user.id %}
                                     <div class="col-12 row mb-3 text-center">
                                         <div class="col-6">
-                                            <a class="btn btn-primary" href={{"/post/#{varList.post.id}/#{varList.post.title}/comment/modification/#{comment.id}/#{varList.user.token}"|replace({' ': '-'})}}>Modifier</a>
+                                            <a class="btn btn-primary" href={{"/post/#{varList.post.slug}/comment/modification/#{comment.id}/#{varList.user.token}"|replace({' ': '-'})}}>Modifier</a>
                                         </div>
                                         <div class="col-6">
                                             <button class="btn btn-danger delete-comment" data-comment-id={{"#{comment.id}"}} data-token={{"#{varList.user.token}"}}>Supprimer</button>
@@ -83,7 +85,7 @@
                                                     <button type="submit" class="btn btn-primary">Valider</button>
                                                 </div>
                                                 <div class="container col-6">
-                                                    <a class="btn btn-danger" href={{"/post/#{varList.post.id}/#{varList.post.title}"|replace({' ': '-'})}}>Annuler</a>
+                                                    <a class="btn btn-danger" href={{"/post/#{varList.post.slug}"}}>Annuler</a>
                                                 </div>
                                             </div>
                                         </form>

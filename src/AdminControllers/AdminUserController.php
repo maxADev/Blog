@@ -63,7 +63,7 @@ class AdminUserController
         }
 
         if ($userSetting === 'list') {
-            $userList = $this->adminUserModel->adminGetUserList();
+            $userList = $this->getUserList();
             $varValue['userList'] = $userList;
         }
 
@@ -94,6 +94,22 @@ class AdminUserController
         return $view;
 
     }//end index()
+
+
+    /**
+     * Get User List
+     *
+     * @return view
+     */
+    public function getUserList()
+    {
+        $this->superGlobal->userIsAdmin();
+
+        $userList = $this->adminUserModel->adminGetUserList();
+
+        return $userList;
+
+    }//end getUserList()
 
 
 }//end class

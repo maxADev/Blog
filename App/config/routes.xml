@@ -9,8 +9,8 @@
   <route url="/account" controller="Account" action="index"></route>
   <route url="/logout" controller="Login" action="logout"></route>
   <route url="/posts" controller="Post" action="postList"></route>
-  <route url="/post/([0-9]+)/([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postId,postTitle"></route>
-  <route url="/post/([0-9]+)/([a-z-A-Z-0-9]+)/comment/modification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postId,postTitle,commentId,token"></route>
+  <route url="/post/([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postSlug"></route>
+  <route url="/post/([a-z-A-Z-0-9]+)/comment/modification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="Post" action="readPost" vars="postSlug,commentId,token"></route>
   <route url="/comment/deletion/([0-9]+)/([a-z-A-Z-0-9]+)" controller="Comment" action="commentDeletion" vars="commentId,token"></route>
   <route url="/admin/login" controller="AdminLogin" action="adminLoginPage"></route>
   <route url="/admin/account" controller="AdminAccount" action="index"></route>
@@ -18,7 +18,8 @@
   <route url="/admin/posts" controller="AdminPost" action="adminPostList"></route>
   <route url="/admin/post/creation" controller="AdminPost" action="adminPostCreation"></route>
   <route url="/admin/post/modification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostModification" vars="postId,token"></route>
-  <route url="/admin/post/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminReadPost" vars="postId,postTitle"></route>
+  <route url="/admin/post/adminModification/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostAdminModification" vars="postId,token"></route>
+  <route url="/admin/readPost/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminReadPost" vars="postSlug"></route>
   <route url="/admin/post/deletion/([0-9]+)/([a-z-A-Z-0-9]+)" controller="AdminPost" action="adminPostDeletion" vars="postId,token"></route>
   <route url="/admin/comments" controller="AdminComment" action="adminCommentList"></route>
   <route url="/admin/comment/([a-z-A-Z-0-9]+)" controller="AdminComment" action="adminCommentList" vars="commentSetting"></route>

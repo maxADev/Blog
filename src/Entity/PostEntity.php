@@ -52,9 +52,30 @@ class PostEntity
 
     /**
      *
+     * @var postSlug post slug
+     */
+    public $postSlug;
+
+
+    /**
+     *
      * @var FKUserId post fk user id
      */
     public $FKUserId;
+
+
+    /**
+     *
+     * @var FKPostStatutId post fk post statut id
+     */
+    public $FKPostStatutId;
+
+
+    /**
+     *
+     * @var FKCategoryId post fk category id
+     */
+    public $FKCategoryId;
 
 
     /**
@@ -138,6 +159,7 @@ class PostEntity
     {
         if (strlen($postTitle) <= 50) {
             $this->postTitle = $postTitle;
+            $this->postSlug = $this->noAccent(str_replace(' ', '-', $postTitle));
         } else {
             $this->error[] = ['type' => 'danger', 'message' => 'Le titre ne doit pas dépasser 50 caractères'];
         }
@@ -220,6 +242,38 @@ class PostEntity
             $this->FKUserId = $FKUserId;
         } else {
             $this->error[] = ['type' => 'danger', 'message' => 'Vous devez être connecté pour créer un post'];
+        }
+
+    }
+
+
+    /**
+     * Add value post fk post statut id
+     *
+     * @return void
+     */
+    public function setPostFKPostStatutId($FKPostStatutId)
+    {
+        if (empty($FKPostStatutId) === false) {
+            $this->FKPostStatutId = $FKPostStatutId;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Vous devez ajouter un statut pour créer un post'];
+        }
+
+    }
+
+
+    /**
+     * Add value post fk post category id
+     *
+     * @return void
+     */
+    public function setPostFKCategoryId($FKCategoryId)
+    {
+        if (empty($FKCategoryId) === false) {
+            $this->FKCategoryId = $FKCategoryId;
+        } else {
+            $this->error[] = ['type' => 'danger', 'message' => 'Vous devez ajouter une catégorie pour créer un post'];
         }
 
     }
@@ -313,6 +367,18 @@ class PostEntity
 
 
     /**
+     * Get value post slug
+     *
+     * @return postSlug
+     */
+    public function getPostSlug()
+    {
+        return $this->postSlug;
+
+    }
+
+
+    /**
      * Get value post fk user id
      *
      * @return FKUserId
@@ -322,6 +388,31 @@ class PostEntity
         return $this->FKUserId;
 
     }
+
+
+    /**
+     * Get value post fk post statut id
+     *
+     * @return FKPostStatutId
+     */
+    public function getPostFKPostStatutId()
+    {
+        return $this->FKPostStatutId;
+
+    }
+
+
+    /**
+     * Get value post fk category id
+     *
+     * @return FKPostStatutId
+     */
+    public function getPostFKCategoryId()
+    {
+        return $this->FKCategoryId;
+
+    }
+
 
     /**
      * Get error
@@ -334,5 +425,48 @@ class PostEntity
 
     }
 
+
+    /**
+     * No accent
+     *
+     * @return string
+     */
+    public function noAccent($value) {
+        $from = array(
+            'à', 'á', 'â', 'ã', 'ä', 'å', 'æ',
+            'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ',
+            'ß', 'ç', 'Ç',
+            'è', 'é', 'ê', 'ë',
+            'È', 'É', 'Ê', 'Ë',
+            'ì', 'í', 'î', 'ï',
+            'Ì', 'Í', 'Î', 'Ï',
+            'ñ', 'Ñ',
+            'ò', 'ó', 'ô', 'õ', 'ö',
+            'Ò', 'Ó', 'Ô', 'Õ', 'Ö',
+            'š', 'Š',
+            'ù', 'ú', 'û', 'ü',
+            'Ù', 'Ú', 'Û', 'Ü',
+            'ý', 'Ý', 'ž', 'Ž'
+           );
+          
+        $to = array(
+            'a', 'a', 'a', 'a', 'a', 'a', 'a', 
+            'A', 'A', 'A', 'A', 'A', 'A', 'A',
+            'B',  'c', 'C',
+            'e', 'e', 'e', 'e',
+            'E', 'E', 'E', 'E',
+            'i', 'i', 'i', 'i',
+            'I', 'I', 'I', 'I', 
+            'n',  'N',
+            'o', 'o', 'o', 'o', 'o',
+            'O', 'O', 'O', 'O', 'O', 
+            's',  'S', 
+            'u', 'u', 'u', 'u', 
+            'U', 'U', 'U', 'U', 
+            'y',  'Y', 'z', 'Z'
+           );
+
+        return str_replace($from, $to, $value);
+    }
 
 }//end class
