@@ -109,12 +109,19 @@ class Router
     {
         $viewVar = [];
         $viewVarValue = [];
+        $http = 'http';
         
         $routeValue = $this->getRoute();
 
-        $cssLink = "https://mablog.projetformationma.com/public/assets/css/style.css";
-        $bootstrapLink = "https://mablog.projetformationma.com/public/assets/css/bootstrap.min.css";
-        $scriptLink = "https://mablog.projetformationma.com/public/assets/script/script.js";
+        if ($_SERVER['HTTPS'] === 'on') {
+            $http = 'https';
+        }
+
+        $urlDomain = $http.'://'.$_SERVER['SERVER_NAME'];
+
+        $cssLink = $urlDomain."/public/assets/css/style.css";
+        $bootstrapLink =  $urlDomain."/public/assets/css/bootstrap.min.css";
+        $scriptLink =  $urlDomain."/public/assets/script/script.js";
 
         $view = 'templates\error\error.twig';
 

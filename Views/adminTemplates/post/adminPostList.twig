@@ -32,9 +32,9 @@
             {% for post in varList.postList %}
                 <div class="card post bg-light col-12 col-sm-5 col-lg-4 col-xl-3 m-1 mt-5 p-0">
                     {% if post.image is not null %}
-                        <img class="card-img-top post-image" src={{"https://mablog.projetformationma.com/public/upload/#{post.id}/#{post.image}"}} alt="Card image cap">
+                        <img class="card-img-top post-image" src={{"/public/upload/#{post.id}/#{post.image}"}} alt="Card image cap">
                     {% else %}
-                        <img class="card-img-top post-image" src="https://mablog.projetformationma.com/public/assets/img/post.jpg" alt="Card image cap">
+                        <img class="card-img-top post-image" src="/public/assets/img/post.jpg" alt="Card image cap">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{post.title}}</h5>

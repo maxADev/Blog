@@ -183,30 +183,30 @@ class AdminPostController
 
         if ($this->superGlobal->postExist() === true) {
             $postValue = $this->superGlobal->getPost();
-            $varValue['postFilterValue'] = $postValue['postFilter'];
+            $varValue['postFilterValue'] = (int) $postValue['postFilter'];
 
             foreach ($postList as $post) {
-                if ($postValue['postFilter'] === 1) {
+                if ($postValue['postFilter'] == 1) {
                     if ($post['FK_user_id'] == $varValue['userAdmin']['id']) {
                         $newPostList[] = $post;
-                    } 
-                } else if ($postValue['postFilter'] === 2) {
-                    if ($post['FK_post_statut_id'] === 2) {
+                    }
+                } else if ($postValue['postFilter'] == 2) {
+                    if ($post['FK_post_statut_id'] == 2) {
                         $newPostList[] = $post;
                     }
-                } else if ($postValue['postFilter'] === 3) {
-                    if ($post['FK_post_statut_id'] === 1) {
+                } else if ($postValue['postFilter'] == 3) {
+                    if ($post['FK_post_statut_id'] == 1) {
                         $newPostList[] = $post;
                     }
-                } else if ($postValue['postFilter'] === 4) {
-                    if ($post['FK_post_statut_id'] === 3) {
+                } else if ($postValue['postFilter'] == 4) {
+                    if ($post['FK_post_statut_id'] == 3) {
                         $newPostList[] = $post;
                     }
                 } else {
                     $newPostList[] = $post;
                 }
 
-            }
+            }//end if
             $varValue['postList'] = $newPostList;
         }
 
@@ -323,6 +323,8 @@ class AdminPostController
                             'message' => "Votre image n'est pas valide",
                             ];
                 }
+            } else {
+                $postValues->setPostImage($post['image']);
             }
 
             if ($post['title'] !== $postValues->getPostTitle() && $this->adminPostModel->adminCheckPostSlug($postValues->getPostSlug()) !== true) {

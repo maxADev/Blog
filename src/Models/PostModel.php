@@ -28,7 +28,7 @@ class PostModel extends Model
      */
     public function getPostList()
     {
-        $sql = 'SELECT post.id, post.title, post.chapo, post.creation_date, post.modification_date, post.slug, post.FK_user_id, post.FK_post_statut_id, post_statut.post_statut_name, category.name FROM post 
+        $sql = 'SELECT post.id, post.title, post.chapo, post.creation_date, post.modification_date, post.image, post.slug, post.FK_user_id, post.FK_post_statut_id, post_statut.post_statut_name, category.name FROM post 
                 INNER JOIN post_statut on post_statut.id = post.FK_post_statut_id
                 INNER JOIN category on category.id = post.FK_category_id
                 WHERE post.FK_post_statut_id = 2
@@ -76,7 +76,7 @@ class PostModel extends Model
      */
     public function getPostListHome()
     {
-        $sql = 'SELECT post.id, post.title, post.chapo, post.creation_date, post.modification_date, post.slug, post.FK_user_id, post.FK_post_statut_id, post_statut.post_statut_name, category.name FROM post 
+        $sql = 'SELECT post.id, post.title, post.chapo, post.creation_date, post.modification_date, post.image, post.slug, post.FK_user_id, post.FK_post_statut_id, post_statut.post_statut_name, category.name FROM post 
                 INNER JOIN post_statut on post_statut.id = post.FK_post_statut_id
                 INNER JOIN category on category.id = post.FK_category_id
                 WHERE post.FK_post_statut_id = 2

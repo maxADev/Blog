@@ -16,7 +16,7 @@
                 {% set formValue = varList.formSetting[keyFormSetting] %}
                 {% if keyFormSetting == "image" and varList.postValue.image is not null %}
                     <p>Image du post</p>
-                    <img class="card-img-top post-image" src={{"https://mablog.projetformationma.com/public/upload/#{varList.postValue.id}/#{varList.postValue.image}"}} alt="Card image cap">
+                    <img class="card-img-top post-image" src={{"/public/upload/#{varList.postValue.id}/#{varList.postValue.image}"}} alt="Card image cap">
                 {% endif %}
                 {% if varList.postValue[keyFormSetting] is not empty %}
                     <div class="form-group mt-3">
